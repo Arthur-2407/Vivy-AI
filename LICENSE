@@ -91,9 +91,9 @@ from the Licensor:
     clearly identifying it as a Fork of Vivy AI pursuant to this license.
 
 3.3 TRADEMARK AND NAME RESTRICTIONS
-    The name "Vivy AI", the name "Vivy", associated logos, visual identity,
-    trade dress, and any confusingly similar variations are trademarks of the
-    Licensor and are protected regardless of registration status.
+    The names "Vivy AI" and "Vivy", as well as associated logos, visual
+    identity, and trade dress, are project identifiers and claimed trademarks
+    of the Licensor, and are protected regardless of formal registration status.
 
     You may NOT:
       - Name Your Fork, Derivative Work, or any product "Vivy AI", "Vivy",
@@ -267,7 +267,7 @@ beyond the scope of this license, or to report a license violation, contact
 the Licensor directly:
 
     Author:          Satyajeet Aich
-    Email:           [Insert Commercial Email Address / See Repo Contacts]
+    Email:           satyajeetaich123@outlook.com
     Official Repo:   https://github.com/Arthur-2407/Vivy-AI
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -281,12 +281,11 @@ runtimes, and models that are governed under their own separate licenses.
      The `Mate-Engine/` directory and all derivatives of the MateEngine 3D
      runtime are independent works governed separately under the MateEngine
      Pro License (v2.1) and associated third-party asset copyright terms
-     (see `Mate-Engine/LICENSE.md` and `Mate-Engine/LICENSE`).
+     (see `Mate-Engine/LICENSE.md`).
 
 12.2 THIRD-PARTY DEPENDENCIES
-     Included external libraries and weights (such as Llama 3.2 Community
-     License terms, Qwen Apache 2.0 terms, Whisper audio processing libraries,
-     and Unity package integrations) remain subject to their respective terms.
+     All third-party software, libraries, models, assets, and dependencies
+     included with this repository remain subject to their respective licenses.
 
 12.3 LICENSE BOUNDARIES
      Nothing in this Vivy AI License modifies, replaces, overrides, or imposes
