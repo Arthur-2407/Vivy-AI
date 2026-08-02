@@ -75,3 +75,18 @@ Mate-Engine/Assets/StreamingAssets/undreamai-v1.2.5-llamacpp/**/*.dll
 Mate-Engine/Assets/StreamingAssets/undreamai-v1.2.5-llamacpp/**/*.so
 Mate-Engine/Assets/StreamingAssets/undreamai-v1.2.5-llamacpp/**/*.dylib
 *.dylib
+
+# ── Allow all Unity assets (sound effects, Addressable bins, native asset plugins) ──
+!Mate-Engine/Assets/**/*.wav
+!Mate-Engine/Assets/**/*.mp3
+!Mate-Engine/Assets/**/*.flac
+!Mate-Engine/Assets/**/*.m4a
+!Mate-Engine/Assets/**/*.bin
+!Mate-Engine/Assets/**/*.dylib
+!Mate-Engine/Assets/**/*.so
+!Mate-Engine/Assets/**/*.dll
+!Mate-Engine/Assets/**/Contents/MacOS/*
+
+# ── Re-apply exception for >100MB Precompiled CUDA LLM Libraries ──
+Mate-Engine/Assets/StreamingAssets/undreamai-v1.2.5-llamacpp/
+Mate-Engine/Assets/StreamingAssets/undreamai-v1.2.5-llamacpp/**

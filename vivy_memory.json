@@ -3,13 +3,9 @@
   "likes": [],
   "dislikes": [],
   "topics": {
-    "how": 1,
-    "feeling": 1,
-    "today": 1,
-    "what": 2,
-    "watching": 1,
-    "now": 2,
-    "listening": 1
+    "sleeping": 1,
+    "what": 1,
+    "watching": 1
   },
   "events": [],
   "summary": "",
@@ -17,13 +13,13 @@
     "humor": 0.6,
     "playful": 0.7
   },
-  "tone": "neutral",
-  "last_greeting": "Hey there! What are we working on today?",
-  "last_user_time": 1785676485.7635367,
-  "last_reply": "You're listening to a mix of Nightcore tracks, with \"Without Me\" by Sinnon Nightcore playing right now. The audio is loud and intense, layered with fast-paced beats and emotional vocals. The playlist includes other songs like \"Come Back To Me\" and \"Pretty’s on the Inside,\" all mixed together in that signature Nightcore style. It’s got that chaotic, high-energy vibe—like a storm of emotions and rhythm. I mean, it’s pretty wild. 🌪️",
+  "tone": "friendly",
+  "last_greeting": "...mmm... I almost didn't hear the notification.",
+  "last_user_time": 1785696267.0093148,
+  "last_reply": "...oh. You're watching a YouTube playlist titled \"Mix - Nightcore - Dancing Wit... x\". It’s a nightcore dance mix featuring songs like \"Nightcore - Sorry\" by Chino, \"Nightcore - Easy On Me\" (with lyrics), and \"Nightcore - Without Me\" by Sinnon. The playlist description mentions it’s a mix of nightcore tracks, including some with lyrics. The screen shows a dense list of songs, some labeled with artists or lyrics. Bright display, 85% brightness. 😄",
   "arc": {
-    "topic": "i'm",
-    "stage": 2
+    "topic": "expected",
+    "stage": 1
   },
   "relationship": {
     "score": 35,
@@ -34,48 +30,47 @@
     "playfulness": 40.0
   },
   "emotion_vector": {
-    "joy": 57.06,
-    "curiosity": 71.41,
-    "empathy": 73.58,
-    "calmness": 86.0,
-    "excitement": 42.65,
-    "sadness": 6.46,
-    "energy": 56.43,
-    "frustration": 0.0,
-    "confidence": 75.04,
-    "anxiety": 2.4,
-    "focus": 69.83,
-    "playfulness": 62.15,
+    "joy": 55.53,
+    "curiosity": 66.22,
+    "empathy": 67.43,
+    "calmness": 78.96,
+    "excitement": 43.49,
+    "sadness": 8.01,
+    "energy": 51.8,
+    "frustration": 9.05,
+    "confidence": 70.63,
+    "anxiety": 8.9,
+    "focus": 69.92,
+    "playfulness": 66.6,
     "initiative": 75.0,
-    "primary_label": "disgust"
+    "primary_label": "surprise"
   },
   "mood": "relaxed",
   "reply_openings": [
-    "oh",
-    "oh. i'm",
-    "oh— you're",
     "you're",
-    "you're listening"
+    "you're making",
+    "oh",
+    "oh. you're"
   ],
   "long_term_facts": {
-    "user_current_activity": "watching a Nightcore music playlist on YouTube"
+    "user_is_watching": "a YouTube playlist titled 'Mix - Nightcore - Dancing Wit... x' featuring nightcore dance mixes with songs like 'Nightcore - Sorry' by Chino, 'Nightcore - Easy On Me' (with lyrics), and 'Nightcore - Without Me' by Sinnon"
   },
   "temporary_states": {},
-  "current_topic": "general",
+  "current_topic": "anime/manga",
   "subtopic": null,
-  "topic_confidence": 0.7,
+  "topic_confidence": 0.95,
   "topics_list": [],
   "open_questions": [],
   "promises": [],
   "planner_state": {
-    "primary_goal": "information retrieval / web search",
-    "current_topic": "general",
+    "primary_goal": "socializing / casual chat",
+    "current_topic": "anime/manga",
     "momentum": "steady",
     "target_length": "medium"
   },
-  "conversation_goal": "information retrieval / web search",
+  "conversation_goal": "socializing / casual chat",
   "interrupted_topics": [],
-  "conversation_count": 3,
+  "conversation_count": 2,
   "active_symptoms": [],
   "health_concern_level": 0,
   "last_director_mode": "companion",
@@ -98,31 +93,29 @@
   },
   "human_state": "Awake",
   "emotional_beat_active": false,
-  "sleep_wake_attempts": 0,
+  "sleep_wake_attempts": 2,
   "conversation_stack": [
     "general",
-    "anime/manga",
-    "general"
+    "anime/manga"
   ],
   "topic_tracker_state": {
-    "active_topic_id": "topic_3fa600fe",
-    "previous_topic_name": "anime/manga",
+    "active_topic_id": "topic_d488723d",
+    "previous_topic_name": "general",
     "conversation_stack": [
-      "topic_4bb30099",
-      "topic_31f03821",
-      "topic_3fa600fe"
+      "topic_27984d07",
+      "topic_d488723d"
     ],
     "topic_tree": {
-      "topic_4bb30099": {
-        "topic_id": "topic_4bb30099",
+      "topic_27984d07": {
+        "topic_id": "topic_27984d07",
         "name": "general",
-        "creation_time": 1785676113.2340078,
-        "recency_ts": 1785676113.2340078,
+        "creation_time": 1785696206.483094,
+        "recency_ts": 1785696206.483094,
         "importance": 0.5,
         "status": "paused",
         "parent_id": null,
         "subtopics": [
-          "topic_31f03821"
+          "topic_d488723d"
         ],
         "waiting_question": null,
         "expected_reply": null,
@@ -130,31 +123,14 @@
         "confidence": 0.8,
         "turn_count": 1
       },
-      "topic_31f03821": {
-        "topic_id": "topic_31f03821",
+      "topic_d488723d": {
+        "topic_id": "topic_d488723d",
         "name": "anime/manga",
-        "creation_time": 1785676246.576193,
-        "recency_ts": 1785676246.576193,
-        "importance": 0.5,
-        "status": "paused",
-        "parent_id": "topic_4bb30099",
-        "subtopics": [
-          "topic_3fa600fe"
-        ],
-        "waiting_question": null,
-        "expected_reply": null,
-        "completion_conditions": [],
-        "confidence": 0.8,
-        "turn_count": 1
-      },
-      "topic_3fa600fe": {
-        "topic_id": "topic_3fa600fe",
-        "name": "general",
-        "creation_time": 1785676486.4219105,
-        "recency_ts": 1785676486.4219105,
+        "creation_time": 1785696267.556261,
+        "recency_ts": 1785696267.556261,
         "importance": 0.5,
         "status": "active",
-        "parent_id": "topic_31f03821",
+        "parent_id": "topic_27984d07",
         "subtopics": [],
         "waiting_question": null,
         "expected_reply": null,
@@ -164,37 +140,36 @@
       }
     }
   },
-  "circadian_phase": "Evening",
-  "circadian_energy": 0.74,
-  "circadian_tone": "warm",
-  "circadian_sleep": false,
+  "circadian_phase": "LateNight",
+  "circadian_energy": 0.2,
+  "circadian_tone": "quiet",
+  "circadian_sleep": true,
   "affection_level": 35.0,
   "loneliness_level": 0.0,
   "social_drive": "Low / Comfortable",
   "planner_decision": {
     "greeting_style": "relaxed and casual",
     "tone": "warm and friendly",
-    "empathy_level": 0.74,
-    "curiosity_level": 0.71,
+    "empathy_level": 0.67,
+    "curiosity_level": 0.66,
     "depth": "simple",
     "target_length": "medium",
     "question_probability": 0.25,
     "callback_probability": 0.15,
     "topic_continuation": false,
-    "memory_retrieval_string": "Hierarchical Memory Context:\n- Semantic Context: what am i watching now\n- Semantic Context: how are u feeling today\n- Parent Topic Stack: anime/manga",
+    "memory_retrieval_string": "Hierarchical Memory Context:\n- Semantic Context: what am i watching now\n- Semantic Context: what am i listening now\n- Parent Topic Stack: general\n- Episodic Note: I learned that Satyajeet is watching a Nightcore music playlist on YouTube.",
     "internet_context": "",
     "proactive_engagement": false,
-    "system_prompt_directives": "Current Topic: general (Stack: general -> anime/manga -> general). Goal: information retrieval / web search.\nRelationship Stage: Acquaintance (35.0/100). Personalization: familiar and energetic.\nInternal Mood: calmness. Pacing: moderate. Expression: medium.\nSocial Drive: Low / Comfortable. NEVER use clingy language or emotional pressure.\nContinuous Dialogue Rule: Every reply MUST connect directly to what was just said in a natural human conversational flow. Respond directly to the user with warmth, emotional presence, and genuine human companionship. NEVER generate developer logs, internal reasoning, third-person commentary, or analytical explanations like 'Okay, the user just said...' or 'Since I'm supposed to be a companion...'. Internalize your emotional state and relationship level silently, and speak directly to the user as a real human friend without ever voicing internal analyses.\nRetrieved Memory Context:\nHierarchical Memory Context:\n- Semantic Context: what am i watching now\n- Semantic Context: how are u feeling today\n- Parent Topic Stack: anime/manga",
-    "current_topic": "general",
-    "previous_topic": "anime/manga",
+    "system_prompt_directives": "Current Topic: anime/manga (Stack: general -> anime/manga). Goal: socializing / casual chat.\nRelationship Stage: Acquaintance (35.0/100). Personalization: familiar and energetic.\nInternal Mood: calmness. Pacing: moderate. Expression: medium.\nSocial Drive: Low / Comfortable. NEVER use clingy language or emotional pressure.\nContinuous Dialogue Rule: Every reply MUST connect directly to what was just said in a natural human conversational flow. Respond directly to the user with warmth, emotional presence, and genuine human companionship. NEVER generate developer logs, internal reasoning, third-person commentary, or analytical explanations like 'Okay, the user just said...' or 'Since I'm supposed to be a companion...'. Internalize your emotional state and relationship level silently, and speak directly to the user as a real human friend without ever voicing internal analyses.\nRetrieved Memory Context:\nHierarchical Memory Context:\n- Semantic Context: what am i watching now\n- Semantic Context: what am i listening now\n- Parent Topic Stack: general\n- Episodic Note: I learned that Satyajeet is watching a Nightcore music playlist on YouTube.",
+    "current_topic": "anime/manga",
+    "previous_topic": "general",
     "conversation_stack": [
       "general",
-      "anime/manga",
-      "general"
+      "anime/manga"
     ],
-    "topic_depth": 3,
+    "topic_depth": 2,
     "subtopics": [],
-    "conversation_goal": "information retrieval / web search",
+    "conversation_goal": "socializing / casual chat",
     "pending_question": null,
     "expected_user_reply": null,
     "conversation_momentum": "steady",
@@ -209,7 +184,7 @@
       "Offer relevant follow-up question related to current topic stack",
       "Bridge to previous topic if current subtopic resolved"
     ],
-    "agi_cognitive_grounding": "[World Model Grounding]: User 'Partner' is engaged in: General. Environment: Workspace (Presence: Camera OFF, Env Uncertainty: 13%).\n[Active Capabilities]: conversational_empathy (Lvl 2, SR: 88%), code_reasoning (Lvl 4, SR: 99%), multimodal_sensor_fusion (Lvl 2, SR: 85%)\n[Mental Simulation]: Selected Plan A (Empathy/Relational Primary) (Confidence Score: 0.50)",
+    "agi_cognitive_grounding": "[World Model Grounding]: User 'Partner' is engaged in: General. Environment: Workspace (Presence: Camera OFF, Env Uncertainty: 14%).\n[Active Capabilities]: conversational_empathy (Lvl 2, SR: 88%), code_reasoning (Lvl 4, SR: 99%), multimodal_sensor_fusion (Lvl 2, SR: 85%)\n[Mental Simulation]: Selected Plan A (Empathy/Relational Primary) (Confidence Score: 0.50)",
     "tool_invocation_result": {
       "tool_selected": "none",
       "success": true,
@@ -219,111 +194,103 @@
     "blackboard_snapshot": {
       "network_intelligence": {
         "diagnostic_status": "HEALTHY_OPTIMAL_STREAMS",
-        "avg_latency_ms": 46.8,
-        "jitter_ms": 5.89,
+        "avg_latency_ms": 47.6,
+        "jitter_ms": 9.86,
         "packet_loss_pct": 0.0,
         "estimated_bandwidth_mbps": 85.5,
         "active_network_defense": "FRRouting -> GNS3 -> Scapy -> Raw Sockets -> iptables",
-        "tor_circuit_path": "Guard (CH) -> Relay (FI) -> Exit (RO)",
+        "tor_circuit_path": "Guard (DE) -> Relay (FI) -> Exit (IS)",
         "network_routing_mode": "HYBRID_SMART_ROUTING",
-        "current_mac": "A2:30:2F:F9:C9:65",
-        "current_port": 59443,
-        "timestamp": 1785676474.600977
+        "current_mac": "62:2D:B5:E6:C4:B7",
+        "current_port": 61845,
+        "timestamp": 1785696262.584246
       },
       "security_defense": {
         "bouncing_identity": {
-          "l2_src_mac": "A2:30:2F:F9:C9:65",
-          "l2_dst_mac": "5E:8D:9F:B6:9B:9A",
-          "l3_src_ip": "10.254.137.125",
-          "l3_next_hop_ip": "192.168.1.1",
-          "l3_ttl": 128,
-          "l3_checksum": "0x8109",
+          "l2_src_mac": "62:2D:B5:E6:C4:B7",
+          "l2_dst_mac": "EA:02:40:4F:25:76",
+          "l3_src_ip": "10.254.83.182",
+          "l3_next_hop_ip": "10.0.0.1",
+          "l3_ttl": 255,
+          "l3_checksum": "0xba9e",
           "l4_protocol": "TCP",
-          "l4_src_port": 59443,
+          "l4_src_port": 61845,
           "l4_dst_port": 443,
-          "l4_session_id": "VIVY-SESS-441041",
+          "l4_session_id": "VIVY-SESS-1785694779",
           "tool_pipeline": "FRRouting -> GNS3 -> Scapy -> Raw Sockets -> iptables",
-          "pipeline_execution": {
-            "FRRouting": "Updated next-hop routing gateway table to forward via 192.168.1.1 with TTL=128.",
-            "GNS3_EVENG": "Simulated virtual switch MAC address learning table entry: Port 4 -> A2:30:2F:F9:C9:65.",
-            "Scapy": "User-Space Graceful Fallback: Virtual L2 Ethernet frame hopping applied (A2:30:2F:F9:C9:65 -> 5E:8D:9F:B6:9B:9A).",
-            "RawSockets": "User-Space Graceful Fallback: Ephemeral TCP source port cycling active (Port -> 59443, TTL=128).",
-            "nftables_iptables": "User-Space Graceful Fallback: Secure DNS-over-HTTPS (DoH) resolver rotation applied (https://dns.quad9.net/dns-query)."
-          },
-          "last_bounced": 1785676246.8131573,
-          "reason": "security_enforcement (Mix - Nightcore - Without Me ...)"
+          "last_bounced": 1785694779.255273
         },
         "tor_circuit": {
           "active_circuit": "TOR-CIRC-0003",
-          "apparent_origin_ip": "178.175.132.22",
-          "apparent_country": "RO",
-          "path_summary": "Guard (CH) -> Relay (FI) -> Exit (RO)",
-          "last_rotation_time": 1785676021.0023756,
+          "apparent_origin_ip": "185.112.144.60",
+          "apparent_country": "IS",
+          "path_summary": "Guard (DE) -> Relay (FI) -> Exit (IS)",
+          "last_rotation_time": 1785695990.3799665,
           "total_rotations": 3
         },
         "network_mode": "HYBRID_SMART_ROUTING",
         "interval_seconds": 45.0
       },
-      "user_query": "what am i listening now",
+      "user_query": "what am i watching",
       "active_perception": {
         "screen_sharing_active": true,
         "audio_active": true,
         "screen_sharing_explicit": true,
-        "frames_received": 698,
-        "frames_dropped": 381,
+        "frames_received": 129,
+        "frames_dropped": 46,
         "last_frame_age_seconds": 0.0,
-        "current_fps": 7.7,
-        "audio_chunks_received": 26,
-        "last_audio_age_seconds": 2.3,
+        "current_fps": 6.1,
+        "audio_chunks_received": 5,
+        "last_audio_age_seconds": 0.7,
         "last_audio_rms": 0.0,
         "audio_event_type": "silence",
-        "current_app_type": "Web Browser (YouTube - playing 'Mix - Nightcore - Without Me ...')",
+        "current_app_type": "Web Browser (YouTube - playing 'Mix - Nightcore - Dancing Wit... x')",
         "ocr_available": false,
         "last_ocr_chars": 0,
         "vision_model_used": false,
         "vision_confidence": 0.7,
         "audio_confidence": 0.7,
-        "session_uptime_seconds": 1668.0,
-        "written_at": 1785676485.67814,
+        "session_uptime_seconds": 1486.0,
+        "written_at": 1785696266.9357452,
         "video_receiving": true,
-        "video_fps": 7.7,
+        "video_fps": 6.1,
         "video_resolution": "1280x672",
         "video_latency_ms": 0.0,
-        "video_last_timestamp": 1785676485.6776361,
+        "video_last_timestamp": 1785696266.9357452,
         "audio_receiving": true,
         "audio_sample_rate": 16000,
         "audio_channels": 1,
-        "audio_last_timestamp": 1785676483.4222283,
+        "audio_last_timestamp": 1785696266.1946712,
         "vision_running": false,
-        "vision_inference_time_ms": 1132.1,
+        "vision_inference_time_ms": 1605.4,
         "vision_latest_caption": "",
         "audio_model_running": true,
         "audio_detected_speech": false,
         "audio_detected_music": false,
         "audio_detected_sound_events": [],
         "audio_model_confidence": 0.9,
-        "cursor_x": 1304,
-        "cursor_y": 1061,
+        "cursor_x": 1362,
+        "cursor_y": 1065,
         "cursor_state": "arrow",
         "active_window_title": "Vivy AI Core Neural Interface and 5 more pages - Personal 2 - Microsoft​ Edge",
         "active_window_class": "Chrome_WidgetWin_1",
         "active_window_rect": [
-          946,
+          953,
           0,
-          1920,
+          1927,
           1159
         ],
         "mouse_button_state": "none",
         "cursor_hovering_active_window": true,
-        "relative_cursor_x": 0.368,
-        "relative_cursor_y": 0.915,
+        "relative_cursor_x": 0.42,
+        "relative_cursor_y": 0.919,
         "active_process_name": "msedge.exe",
         "last_ocr_text": "",
-        "highlighted_region_text": "€ GB https//wwwyoutube.com/watch?v=Dwa MNARXIxUBlist= ROXSeXFZISyKUindex=2\n\n= @yolibe” Search\n\nSinnon Nightcore - Come Back To Me (Official MV)\n\nBr gaec®@\nQ 9g\n\n: ® Sign in\n\nMix - Nightcore -\n\nithout Me ...\n\nx\nMines are playlists YouTube makes for you\nfe\"%Q Nightcore - Without Me .\n¢ - (Lyties)\nSinnon Nightcore\nd Sinnon Nightcore -\n» Come Back To Me...\nNore ? 5\n— Sinnon Nightcore\nBT MED Pretty’s on the inside\n(feat. Chloe Adams)...\nSinnon Nightcore\n‘4 Nightcore - Sasha\nw barra: Sloan Older (Lyri",
-        "highlighted_region_context": "€ GB https//wwwyoutube.com/watch?v=Dwa MNARXIxUBlist= ROXSeXFZISyKUindex=2\n\n= @yolibe” Search\n\nSinnon Nightcore - Come Back To Me (Official MV)\n\nBr gaec®@\nQ 9g\n\n: ® Sign in\n\nMix - Nightcore -\n\nithout Me ...\n\nx\nMines are playlists YouTube makes for you\nfe\"%Q Nightcore - Without Me .\n¢ - (Lyties)\nSinnon Nightcore\nd Sinnon Nightcore -\n» Come Back To Me...\nNore ? 5\n— Sinnon Nightcore\nBT MED Pretty’s on the inside\n(feat. Chloe Adams)...\nSinnon Nightcore\n‘4 Nightcore - Sasha\nw barra: Sloan Older (Lyrics)\nTETRA i gricore Nation\na Nightcore - Easy On Me\n‘ {Lyrics}\n3:0\nEasyOn Sinnon Nightcore .\n\nNightcore - She\n\nMyc v",
-        "audio_event_description": "Web knowledge retrieved for 'Web Browser (YouTube - playing 'Mix - Nightcore - Without Me ...')': - **WhatsApp Web**: Log in to WhatsApp Web for simple, reliable and private messaging on your desktop. Send and receive messages and files with ease, all for free.\n- **WhatsApp | S",
+        "highlighted_region_text": "Nightcore - Sasha Sloan - Older (L: X\n\n€ GG https://wwwyoutube.com/watch?v=ePsiAz—-skY&list= RDKYQH7CmLKBQ&index=5,\n\nSearch\n\n= Wyoulube™\n\na\n\nNightcore - Sasha Sloan - Older (Lyrics)\n\nQ g\n\nBr G14 & @- Qu v\n\n® Sign in\n\nMix - Nightcore - Dancing Wit...\n\nMixes are playlists YouTube makes for you\n\n(a BQ Nightcore - Sasha .\n» 2%, Sloan - Older (Lyrics)\nNightcore Nation\na “@ Nightcore - Sorry\n(Lyrics)\nChino\na Nightcore - Easy On Me\nee -(yics)\nau Sinnon Nightcore\nNightcore - Happy Now\n\nIILyries\nViolet\n\n",
+        "highlighted_region_context": "Nightcore - Sasha Sloan - Older (L: X\n\n€ GG https://wwwyoutube.com/watch?v=ePsiAz—-skY&list= RDKYQH7CmLKBQ&index=5,\n\nSearch\n\n= Wyoulube™\n\na\n\nNightcore - Sasha Sloan - Older (Lyrics)\n\nQ g\n\nBr G14 & @- Qu v\n\n® Sign in\n\nMix - Nightcore - Dancing Wit...\n\nMixes are playlists YouTube makes for you\n\n(a BQ Nightcore - Sasha .\n» 2%, Sloan - Older (Lyrics)\nNightcore Nation\na “@ Nightcore - Sorry\n(Lyrics)\nChino\na Nightcore - Easy On Me\nee -(yics)\nau Sinnon Nightcore\nNightcore - Happy Now\n\nIILyries\nViolet\n\nx\n\nNightcare - Without Me\ni a\nSet - (Lyrics)\nSinnon Nightcore .\n\nMy Mix\n1 Nightcore, nig,",
+        "audio_event_description": "Screen share audio: loud sound — speech or loud media.",
         "screen_audio_transcript": "",
-        "ocr_confidence": 0.8943820224719101,
+        "ocr_confidence": 0.88,
         "audio_transcript_confidence": 1.0,
         "scene_layout": {
           "node_type": "global_scene",
@@ -339,8 +306,8 @@
               1280,
               672
             ],
-            "app_focus": "Web Browser (YouTube - playing 'Mix - Nightcore - Without Me ...')",
-            "env_detail": "You are viewing a YouTube page playing a video/song titled 'Mix - Nightcore - Without Me ...'."
+            "app_focus": "Web Browser (YouTube - playing 'Mix - Nightcore - Dancing Wit... x')",
+            "env_detail": "You are viewing a YouTube page playing a video/song titled 'Mix - Nightcore - Dancing Wit... x'."
           },
           "zones": [
             {
@@ -352,11 +319,11 @@
                 53
               ],
               "hsv_color": [
-                0.4,
-                0.557,
-                0.831
+                0.399,
+                0.559,
+                0.835
               ],
-              "ocr_text": "Baci.",
+              "ocr_text": "Nightcore - Sasha Sloan - Older X",
               "role": "navigation_and_tabs"
             },
             {
@@ -368,13 +335,13 @@
                 618
               ],
               "hsv_color": [
-                0.333,
-                0.004,
-                0.953
+                0.067,
+                0.116,
+                0.847
               ],
-              "ocr_text": "& G (a \\. = Sinnon Nightcore - Come Back To Me (Official MV) Q : Sign in } 2 Check it out! Mix - Nightcore - Without Me ... Mixes are playlists YouTube makes for you <3 Nightcore - Without Me - (Lyrics) Sinnon Nightcore Sinnon Nightcore - Come Back To Me... Sinnon Nightcore Pretty's on the Inside (feat. Chloe Adams)... Sinnon Nightcore Nightcore - Sasha Sloan - Older (Lyrics) Nightcore Nation Nightcore - Easy On Me - (Lyrics) Sinnon Nightcore Mix - Sinnon Nightcore - She",
+              "ocr_text": "< ‘aA RDKYqH /CmLkBQ&index=5 & Baw v Mix - Nightcore - Dancing Wit... Mixes are playlists YouTube makes for you - Sinnon - Happy Now [[ Lyrics Nightcore - Without Me - (Lyrics) Sinnon Nighicore My Mix ‘Sinnon Nightcor",
               "density": "dense with content",
-              "brightness": 95.29411764705881,
+              "brightness": 84.70588235294117,
               "role": "primary_workspace"
             }
           ],
@@ -405,20 +372,20 @@
                 ],
                 "has_text": true,
                 "density": "dense with content",
-                "brightness": 95.29411764705881
+                "brightness": 84.70588235294117
               }
             ]
           },
           "highlighted_text_node": {
             "node_type": "highlighted_region",
-            "text": "€ GB https//wwwyoutube.com/watch?v=Dwa MNARXIxUBlist= ROXSeXFZISyKUindex=2\n\n= @yolibe” Search\n\nSinnon Nightcore - Come Back To Me (Official MV)\n\nBr gaec®@\nQ 9g\n\n: ® Sign in\n\nMix - Nightcore -\n\nithout Me ...\n\nx\nMines are playlists YouTube makes for you\nfe\"%Q Nightcore - Without Me .\n¢ - (Lyties)\nSinnon Nightcore\nd Sinnon Nightcore -\n» Come Back To Me...\nNore ? 5\n— Sinnon Nightcore\nBT MED Pretty’s on the inside\n(feat. Chloe Adams)...\nSinnon Nightcore\n‘4 Nightcore - Sasha\nw barra: Sloan Older (Lyrics)\nTETRA i gricore Nation\na Nightcore - Easy On Me\n‘ {Lyrics}\n3:0\nEasyOn Sinnon Nightcore .\n\nNightcore - She\n\nMyc v",
-            "context": "€ GB https//wwwyoutube.com/watch?v=Dwa MNARXIxUBlist= ROXSeXFZISyKUindex=2\n\n= @yolibe” Search\n\nSinnon Nightcore - Come Back To Me (Official MV)\n\nBr gaec®@\nQ 9g\n\n: ® Sign in\n\nMix - Nightcore -\n\nithout Me ...\n\nx\nMines are playlists YouTube makes for you\nfe\"%Q Nightcore - Without Me .\n¢ - (Lyties)\nSinnon Nightcore\nd Sinnon Nightcore -\n» Come Back To Me...\nNore ? 5\n— Sinnon Nightcore\nBT MED Pretty’s on the inside\n(feat. Chloe Adams)...\nSinnon Nightcore\n‘4 Nightcore - Sasha\nw barra: Sloan Older (Lyrics)\nTETRA i gricore Nation\na Nightcore - Easy On Me\n‘ {Lyrics}\n3:0\nEasyOn Sinnon Nightcore .\n\nNightcore - She\n\nMyc v",
+            "text": "Nightcore - Sasha Sloan - Older (L: X\n\n€ GG https://wwwyoutube.com/watch?v=ePsiAz—-skY&list= RDKYQH7CmLKBQ&index=5,\n\nSearch\n\n= Wyoulube™\n\na\n\nNightcore - Sasha Sloan - Older (Lyrics)\n\nQ g\n\nBr G14 & @- Qu v\n\n® Sign in\n\nMix - Nightcore - Dancing Wit...\n\nMixes are playlists YouTube makes for you\n\n(a BQ Nightcore - Sasha .\n» 2%, Sloan - Older (Lyrics)\nNightcore Nation\na “@ Nightcore - Sorry\n(Lyrics)\nChino\na Nightcore - Easy On Me\nee -(yics)\nau Sinnon Nightcore\nNightcore - Happy Now\n\nIILyries\nViolet\n\nx\n\nNightcare - Without Me\ni a\nSet - (Lyrics)\nSinnon Nightcore .\n\nMy Mix\n1 Nightcore, nig,",
+            "context": "Nightcore - Sasha Sloan - Older (L: X\n\n€ GG https://wwwyoutube.com/watch?v=ePsiAz—-skY&list= RDKYQH7CmLKBQ&index=5,\n\nSearch\n\n= Wyoulube™\n\na\n\nNightcore - Sasha Sloan - Older (Lyrics)\n\nQ g\n\nBr G14 & @- Qu v\n\n® Sign in\n\nMix - Nightcore - Dancing Wit...\n\nMixes are playlists YouTube makes for you\n\n(a BQ Nightcore - Sasha .\n» 2%, Sloan - Older (Lyrics)\nNightcore Nation\na “@ Nightcore - Sorry\n(Lyrics)\nChino\na Nightcore - Easy On Me\nee -(yics)\nau Sinnon Nightcore\nNightcore - Happy Now\n\nIILyries\nViolet\n\nx\n\nNightcare - Without Me\ni a\nSet - (Lyrics)\nSinnon Nightcore .\n\nMy Mix\n1 Nightcore, nig,",
             "role": "active_user_selection"
           }
         },
         "audio_language": "unknown",
         "audio_speaker_id": "speaker_0",
-        "audio_music_title": "Mix - Nightcore - Without Me ...",
+        "audio_music_title": "Mix - Nightcore - Dancing Wit... x",
         "audio_playback_state": "playing",
         "audio_sound_effects": [],
         "camera_active": false,
@@ -446,282 +413,286 @@
         "camera_vlm_caption": "",
         "temporal_history": [
           {
-            "timestamp": 1785676298.6256073,
-            "time_str": "18:41:38",
-            "change": "highlighted text: 'YB CP sSinnon Nightcore- Come Bs x @ The Great Mage Retums After 400: X | +\n\n‘ourube.comsy\n\n= Gdyoulube\n\ngentle chaln\n\nfe |\n\nSinnon Nightcore - Come Back To Me (Official MV}\n\nMix - Nightcore - Without Me ... x\n\na gal Nightcore - Without Me\na - (Lyrics)\n\na\n\nMe\n\n- (lyrics)\n\nshee\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nNightcore - Easy On Me\n\nMix - Sinnon\nNightcore - She\n\n='"
+            "timestamp": 1785694948.7842379,
+            "time_str": "23:52:28",
+            "change": "focused window changed to 'Nightcore - Rockabye/Diamonds (Mashup) (Switching Vocals) - (Lyrics) - YouTube and 1 more page - Personal - Microsoft​ Edge'"
           },
           {
-            "timestamp": 1785676299.5204937,
-            "time_str": "18:41:39",
-            "change": "focused window changed to 'Sinnon Nightcore - Come Back To Me (Official MV) - YouTube and 1 more page - Personal - Microsoft​ Edge'"
+            "timestamp": 1785694953.8431513,
+            "time_str": "23:52:33",
+            "change": "focused window changed to 'Nightcore - Sasha Sloan - Older (Lyrics) - YouTube and 1 more page - Personal - Microsoft​ Edge'"
           },
           {
-            "timestamp": 1785676299.6285274,
-            "time_str": "18:41:39",
-            "change": "highlighted text: 'YB CP sSinnon Nightcore- Come Bs x @ The Great Mage Retums After 400: X | +\n\n‘ourube.comsy\n\n= Gdyoulube\n\nSinnon Nightcore - Come Back To Me (Official MV}\n\nMix - Nightcore - Without Me ... x\n\na gal Nightcore - Without Me\na - (Lyrics)\n\na\n\nMe\n\n- (lyrics)\n\nshee\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nNightcore - Easy On Me\n\nMix - Sinnon\nNightcore - She\n\n='"
+            "timestamp": 1785694956.8746946,
+            "time_str": "23:52:36",
+            "change": "focused window changed to 'Nightcore - Dancing With Your Ghost (Lyrics) - Timebelle - YouTube and 1 more page - Personal - Microsoft​ Edge'"
           },
           {
-            "timestamp": 1785676301.7062266,
-            "time_str": "18:41:41",
-            "change": "highlighted text: 'VBC) Sinnon Nightcore -Come Be X @ The Great Mage Retums After 400: X | - - oo x\n\n* chat\n\nkel\n\n‘ourube.comsy\n\n< O fxs\n\nQ Q $  @ Signin\n\n= Gdyoulube\n\nMix - Nightcore - Without Me ... x\n\na gal Nightcore - Without Me\na - (Lyrics) |\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\nfe |\n\nSinnon Nightcore - Come Back To Me (Official MV} Pex | Nighoore. She .\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nMe\n\nNightcore - Easy On Me\n- (lyrics)\n\nshee'"
+            "timestamp": 1785694958.8950396,
+            "time_str": "23:52:38",
+            "change": "focused window changed to 'The Great Mage Returns After 4000 Years Chapter 95 - Read Online | Asura Scans and 1 more page - Personal - Microsoft​ Edge'"
           },
           {
-            "timestamp": 1785676302.894786,
-            "time_str": "18:41:42",
-            "change": "highlighted text: 'VBC) Sinnon Nightcore -Come Be X @ The Great Mage Retums After 400: X | - - oo x\n\nGrr @ & & @- Trcmm v\n\n© CO A aps iim\n\nyoutube Sears Q Q :  @swn\n\nsayourube.com, Duval! oP Xx dl st=2 yb\n\nMix - Nightcore - Without Me ...\n\na ya Nightcore - Without Me\na - (Lyrics)\n\n=\n\nSinnon Nightcore -\nCome Back To Me...\n\ngira9\"\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\nyer Migncee\n\ngentle chain\n\nSinnon Nightcore - Come Back To Me (Official MV}\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\nNy tis\n\nNightcore -'"
+            "timestamp": 1785694964.9602253,
+            "time_str": "23:52:44",
+            "change": "focused window changed to 'Vivy - Antigravity IDE - VivyAvatarStreamer.cs'"
           },
           {
-            "timestamp": 1785676303.9670966,
-            "time_str": "18:41:43",
-            "change": "highlighted text: 'YB CP sSinnon Nightcore- Come Bs x @ The Great Mage Retums After 400: X | +\n\n‘ourube.comsy\n\n= Gdyoulube\n\na gal Nightcore - Without Me\na - (Lyrics)\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\na\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nMe\n\nNightcore - Easy On Me\n- (lyrics)\n\nshee\n\nMix - Nightcore - Without Me ...\n\nMix-- Sinnon\n\nSinnon Nightcore - Come Back To Me (Official MV} Pex | Nightoore - She\n\n='"
-          },
-          {
-            "timestamp": 1785676304.9889846,
-            "time_str": "18:41:44",
-            "change": "highlighted text: 'YB CP sSinnon Nightcore- Come Bs x @ The Great Mage Retums After 400: X | +\n\n‘ourube.comsy\n\n= Gdyoulube\n\n4\n\nSinnon Nightcore - Come Back To Me (Official MV}\n\nMix - Nightcore - Without Me ... x\n\na gal Nightcore - Without Me\na - (Lyrics)\n\na\n\nMe\n\n- (lyrics)\n\nshee\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nNightcore - Easy On Me\n\nMix - Sinnon\nNightcore - She\n\n='"
-          },
-          {
-            "timestamp": 1785676306.0625284,
-            "time_str": "18:41:46",
-            "change": "highlighted text: 'VBC) Sinnon Nightcore -Come Be X @ The Great Mage Retums After 400: X | - - oo x\n\n* chat\n\nkel\n\n‘ourube.comsy\n\n< O fxs\n\nQ Q $  @ Signin\n\n= Gdyoulube\n\nMix - Nightcore - Without Me ... x\n\na gal Nightcore - Without Me\na - (Lyrics) |\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\nBinding you\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nMe\n\nNightcore - Easy On Me\n- (lyrics)\n\nshee\n\nSinnon Nightcore - Come Back To Me (Official MV} Pex | Nighoore. She .'"
-          },
-          {
-            "timestamp": 1785676307.1108522,
-            "time_str": "18:41:47",
-            "change": "highlighted text: 'YB CP sSinnon Nightcore- Come Bs x @ The Great Mage Retums After 400: X | +\n\n‘ourube.comsy\n\n= Gdyoulube\n\nBinding you\n\nSinnon Nightcore - Come Back To Me (Official MV}\n\nMix - Nightcore - Without Me ... x\n\na gal Nightcore - Without Me\na - (Lyrics)\n\na\n\nMe\n\n- (lyrics)\n\nshee\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nNightcore - Easy On Me\n\nMix - Sinnon\nNightcore - She\n\n='"
-          },
-          {
-            "timestamp": 1785676308.1527517,
-            "time_str": "18:41:48",
-            "change": "highlighted text: 'VBC) Sinnon Nightcore -Come Be X @ The Great Mage Retums After 400: X | - - oo x\n© CO aps jourube.coms cr ot chat v\n= Gdyoulube Q g $  @ signin\n\nMix - Nightcore - Without Me ... x\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nMe\n\nNightcore - Easy On Me\n- (lyrics)\n\nshee\n\nSinnon Nightcore - Come Back To Me (Official MV} Pex | Nighoore. She\n\na gal Nightcore - Without Me\na - (Lyrics) |'"
-          },
-          {
-            "timestamp": 1785676309.1949813,
-            "time_str": "18:41:49",
-            "change": "highlighted text: 'YB CP sSinnon Nightcore- Come Bs x @ The Great Mage Retums After 400: X | +\n\n‘ourube.comsy\n\n= Gdyoulube\n\na gal Nightcore - Without Me\na - (Lyrics)\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\na\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nMe\n\nNightcore - Easy On Me\n- (lyrics)\n\nshee\n\nMix - Nightcore - Without Me ...\n\nMix-- Sinnon\n\nSinnon Nightcore - Come Back To Me (Official MV} Pex | Nightoore - She\n\n='"
-          },
-          {
-            "timestamp": 1785676310.2200797,
-            "time_str": "18:41:50",
-            "change": "highlighted text: 'YB CP sSinnon Nightcore- Come Bs x @ The Great Mage Retums After 400: X | +\n\n‘ourube.comsy\n\n= Gdyoulube\n\na gal Nightcore - Without Me\na - (Lyrics)\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\nBinding you\n\na\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nMe\n\nNightcore - Easy On Me\n- (lyrics)\n\nshee\n\n|\n\nMix - Nightcore - Without Me ...\n\nMix-- Sinnon\n\nSinnon Nightcore - Come Back To Me (Official MV} Pex | Nightoore - She\n\n='"
-          },
-          {
-            "timestamp": 1785676313.396768,
-            "time_str": "18:41:53",
-            "change": "highlighted text: 'YB CP sSinnon Nightcore- Come Bs x @ The Great Mage Retums After 400: X | +\n\n‘ourube.comsy\n\n= Gdyoulube\n\na gal Nightcore - Without Me\na - (Lyrics)\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\nBinding you\n\na\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nMe\n\nNightcore - Easy On Me\n- (lyrics)\n\nshee\n\nfe |\n\nMix - Nightcore - Without Me ...\n\nMix-- Sinnon\n\nSinnon Nightcore - Come Back To Me (Official MV} Pex | Nightoore - She\n\n='"
-          },
-          {
-            "timestamp": 1785676316.5679083,
-            "time_str": "18:41:56",
-            "change": "highlighted text: 'VBC) Sinnon Nightcore -Come Be X @ The Great Mage Retums After 400: X | - - oo x\n\n* chat\n\nkel\n\n‘ourube.comsy\n\n< O fxs\n\nQ Q $  @ Signin\n\n= Gdyoulube\n\nMix - Nightcore - Without Me ... x\n\na gal Nightcore - Without Me\na - (Lyrics) |\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\nBinding you\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nMe\n\nNightcore - Easy On Me\n- (lyrics)\n\nshee\n\n> |\n\nSinnon Nightcore - Come Back To Me (Official MV} Pex | Nighoore. She .'"
-          },
-          {
-            "timestamp": 1785676318.6445992,
-            "time_str": "18:41:58",
-            "change": "highlighted text: 'VBC) Sinnon Nightcore -Come Be X @ The Great Mage Retums After 400: X | - - oo x\n\n* chat\n\nkel\n\n‘ourube.comsy\n\n< O fxs\n\nQ Q $  @ Signin\n\n= Gdyoulube\n\nMix - Nightcore - Without Me ... x\n\na gal Nightcore - Without Me\na - (Lyrics) |\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\nBlading you\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nMe\n\nNightcore - Easy On Me\n- (lyrics)\n\nshee\n\n> |\n\nSinnon Nightcore - Come Back To Me (Official MV} Pex | Nighoore. She .'"
-          },
-          {
-            "timestamp": 1785676319.648849,
-            "time_str": "18:41:59",
-            "change": "highlighted text: 'YB CP sSinnon Nightcore- Come Bs x @ The Great Mage Retums After 400: X | +\n\n‘ourube.comsy\n\n= Gdyoulube\n\na gal Nightcore - Without Me\na - (Lyrics)\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\na\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nMe\n\nNightcore - Easy On Me\n- (lyrics)\n\nshee\n\nMix - Nightcore - Without Me ...\n\nMix-- Sinnon\n\nSinnon Nightcore - Come Back To Me (Official MV} Pex | Nightoore - She\n\n='"
-          },
-          {
-            "timestamp": 1785676320.6677969,
-            "time_str": "18:42:00",
-            "change": "highlighted text: 'YB CP sSinnon Nightcore- Come Bs x @ The Great Mage Retums After 400: X | +\n\n‘ourube.comsy\n\n= Gdyoulube\n\nBinding you\n\nfe |\n\nSinnon Nightcore - Come Back To Me (Official MV}\n\nMix - Nightcore - Without Me ... x\n\na gal Nightcore - Without Me\na - (Lyrics)\n\na\n\nMe\n\n- (lyrics)\n\nshee\n\nSinnon Nightcore -\nf) Come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams}...\n\nAY Nighteore - Sasha\nSloan - Older (Lyrics)\n\nNightcore - Easy On Me\n\nMix - Sinnon\nNightcore - She\n\n='"
-          },
-          {
-            "timestamp": 1785676321.6654663,
-            "time_str": "18:42:01",
-            "change": "highlighted text: 'Ya Cl) Sinnon Nightcore- Come Be x @ The Great Mage Retums After 400 x | +\n\n<o4 wrstch?o= Dual! UePS x. &l ste 2085 8s Gy BEBO. t\n\n= Goulbe + Q 2g F  @sinn\n\ny 1 Nighteore - Without Me\n- Corie\n\nSinnion Nightcore -\nfy Come Back To Me...\n\n10\n\nPretty's on the Inside\n(feat. Chloe Adams)...\n\n2¥ Nighteore - Sasha\nSloan - Older (Lyrics)\nNy\n\nNightcore - Easy On Me\n- (lyrics)\n\nMix - Sinnon\nNightcore - She\n\nSinnon Nightcore - Come Back To Me (Official MV)\n\n»'"
-          },
-          {
-            "timestamp": 1785676322.613292,
-            "time_str": "18:42:02",
+            "timestamp": 1785694972.0185683,
+            "time_str": "23:52:52",
             "change": "focused window changed to 'Vivy AI Core Neural Interface and 5 more pages - Personal 2 - Microsoft​ Edge'"
           },
           {
-            "timestamp": 1785676322.613292,
-            "time_str": "18:42:02",
-            "change": "highlighted text: 'YA) sinnon Nightcore- Come Be  @ The Great Mage Retums After 400% | +\n\n& GG azps/fonmmyoutubecoms\n\nfav NOR Sel at=\n\n= youlube”™\n\n»\n\n‘Q_Nightoore - Without Me\n- (Lyrics)\n\nSiena\" MI\n\nR Sinnon Nightcore -\n) Come Back To Me...\n\nore\nPretty's on the Inside\n{feat. Chloe Adams)...\n\nSiena MI\n\nro 4 3 Nightcore - Sasha\n. Sloan - Older (Lyrics)\n\nation\nB Nightcore - Easy On Me\n~ (Lyrics)\n\nsenor 4\n\nMix - Sinnon\nNightcore - she\n\nSinnon Nightcore - Come Back To Me (Official MV}'"
-          },
-          {
-            "timestamp": 1785676323.662832,
-            "time_str": "18:42:03",
-            "change": "highlighted text: 'YC) sinnon Nightcore- Come Be x @ The Great Mage Retums After 400° | + - a\n\n© GO & hnps /Aweyoutube.com/ wet\n\nfav NCR xh Sel at=\n\n= Byoulube” Search Q\n\nMix - Nightcore - Without Me ...\n\nce\n\nx\n\n»\n\ni Nightcore - Without Me\n~ (Lytics)\nsenor\n\nR Sinnon Nightcore -\n) Come Back To Me...\n\nenor\n\nPretty's on the Inside\n{feat. Chloe Adams)...\n\nsirno MI\n\n2} Nightcore - sasha\nSloan - Older (Lyrics)\n\nation\n\nZ Nightoore - Easy On Me\n~ (Lytics)\n\nMix - Sinnon\nNightcore - she\n\nSinnon Nightcore - Come Back To Me ('"
-          },
-          {
-            "timestamp": 1785676324.596002,
-            "time_str": "18:42:04",
-            "change": "highlighted text: 'YA) sinnon Nightcore- Come Be  @ The Great Mage Retums After 400% | +\n\n& GG azps/fonmmyoutubecoms\n\nfav NOR Sel at=\n\n= youlube”™\n\nSinnon Nightcore - Come Back To Me (Official MV}\n\ng <a Nightcore - without Me\n~ (Lyrics)\n\nSinnon Nightcore -\nHY come Back To Me...\n\nPretty's on the Inside\n{feat. Chloe Adams)...\ngiro\" MI\n\n2) Nightcore - Sasha\n3 - Older (Lyrics)\n\nation\nE Nightcore - Easy On Me\n~ (Lyrics)\n\nsenor 4\n\nMix - Sinnon\nNightcore - she\n\n='"
-          },
-          {
-            "timestamp": 1785676325.6441703,
-            "time_str": "18:42:05",
-            "change": "highlighted text: 'YB) sinnon Nightcore- Come Be x @ The Great Mage Retums After 400: X | + - 23\n\n* chat\n\nQ Q $ — @ Signin\n\n< O fxs\n\nourube.com?\n\n= Goulube’\n\n\"ae Nighteare - Without Me\n~ (Lyrics)\nsivrar Migescee\n\nSinnon Nightcore -\nA) Come Back To Me...\n\nee Pretty's on the Inside\n(feat. Chloe Adams)...\nghras 2\n\n™ Nightcare - Sasha\n\nr *\neas | Sloan - Older (Lyrics)\nNy ais\n\nNightcore - Easy On Me\n- (lyrics)\nsina Mi\n\nMix - Sinnon\nNightcore - she\n\nSinnon Nightcore - Come Back To Me (Official MV}'"
-          },
-          {
-            "timestamp": 1785676326.7232764,
-            "time_str": "18:42:06",
-            "change": "highlighted text: 'YB) sinnon Nightcore- Come Be x @ The Great Mage Retums After 400: X | + - 23\n\n© CO A aps fm\n\nszyourube.com, Duval WoPXy 8 st=2 L&I\n\nyoutube’\n\nQ gQ t @® signia\n\nMix - Nightcore - Without Me ...\n\nx\n\nSinnon Nightcore -\nCome Back To Me...\n\nSivan Nigncease\n\nPretty's on the Inside\n(feat. Chloe Adams}...\n\nsie\n\nNightcore - Sasha\nSloan - Older (Lyrics)\nNg tio\n\nNightcore - Easy On Me\n- (lyrics)\n\nSinnon Nightcore - Come Back To Me (Official MV} Pow | Nighoore. She\n\nga Nightcore - Without Me\nbal - (Lyries)'"
-          },
-          {
-            "timestamp": 1785676327.9131157,
-            "time_str": "18:42:07",
-            "change": "highlighted text: 'YEA) sinnon Nightcore- Come Be x @ The Great Mage Retums After 400: X | + - 23\n\n© GG anps favenyourubecor val NeoPM ye dl t= LA\n\nQ gQ t @® signia\n\nyoutube’\n\nx\n\nSinnon Nightcore -\nCome Back To Me...\n\ngirna” MI\n\naf\nae\n\noor\nPretty's on the Inside\n(feat. Chloe Adams)...\n\nSieg\n\nro bs oh > Nighteore - Sasha\n\n> a Sloan - Older (Lyrics)\nBali\n2 Nightcore - Easy On Me.\n- (Lyrics)\nsinao\" Mignone\n\nSinnon Nightcore - Come Back To Me (Official MV) aa Nightoors She\n\ny “ai Nightcore - Without Me\n~ (Lyrics)\nsi-a'"
-          },
-          {
-            "timestamp": 1785676328.841192,
-            "time_str": "18:42:08",
-            "change": "focused window changed to 'Sinnon Nightcore - Come Back To Me (Official MV) - YouTube and 1 more page - Personal - Microsoft​ Edge'"
-          },
-          {
-            "timestamp": 1785676328.841192,
-            "time_str": "18:42:08",
+            "timestamp": 1785694987.2076073,
+            "time_str": "23:53:07",
             "change": "mouse click: left_click"
           },
           {
-            "timestamp": 1785676329.0750494,
-            "time_str": "18:42:09",
-            "change": "application changed to 'Web Browser (YouTube - playing 'Sinnon Nightcore - Come Baci')'"
+            "timestamp": 1785695300.7952075,
+            "time_str": "23:58:20",
+            "change": "focused window changed to 'Vivy - Antigravity IDE - VivyAvatarStreamer.cs'"
           },
           {
-            "timestamp": 1785676329.0750494,
-            "time_str": "18:42:09",
-            "change": "highlighted text: 'YC) sinnon Nightcore- Come Be x @ The Great Mage Retums Ater 400: X | + - 23\n\n€& GB anps sAvwewyoutube.com, he NORX 3 Sl st= ANS:\n\nySidindle\n\nyoutube’\n\nQ gQ t ® signin\n\nx\n\nSinnon Nightcore -\nCome Back To Me...\n\ngirna” MI\n\nPretty's on the Inside\n(feat. Chloe Adams)...\n\nsea\n\nNighteore - Sasha\nSloan - Older (Lyrics)\n\nEB) Nightcore - Easy On Me\n~ (Lyrics)\n\nsiraae Niger .\n\nSinnon Nightcore - Come Back To Me (Official MV) Pox, Nightoors She\n\ng \"A Nightcore - without Me\nfal - (Lyties)\nsirno\" Mignsooee\n'"
-          },
-          {
-            "timestamp": 1785676330.1556828,
-            "time_str": "18:42:10",
-            "change": "application changed to 'Web Browser (YouTube - playing '(1). Sinnon Nightcore - Come Baci')'"
-          },
-          {
-            "timestamp": 1785676330.1556828,
-            "time_str": "18:42:10",
-            "change": "highlighted text: 'YC) sinnon Nightcore- Come Be x @ The Great Mage Retums Ater 400: X | + - 23\n\nGG anys save\n\nyoutube.com,\n\n= youtube’\n\n* Q Q £  ® sin\n\nMix - Nightcore - Without Me ...\n\nSinnon Nightcore -\nCome Back To Me...\n\nPretty's on the Inside\n(feat. Chloe Adams)...\n\nsea\n\nNighteore - Sasha\nSloan - Older (Lyrics)\nation\n\nEB) Nightcore - Easy On Me\n~ (Lyrics)\n\nSinnon Nightcore - Come Back To Me (Official MV}\n\nMix - Sinnon\nNightcore - she\n\ny “a Nightcore - Without Me\nfal - (Lyties)\nsirno\" Mignsooee\n\nGy & B&Q Tom '"
-          },
-          {
-            "timestamp": 1785676331.303198,
-            "time_str": "18:42:11",
-            "change": "highlighted text: 'YC) sinnon Nightcore- Come Be x @ The Great Mage Retums Ater 400: X | + - 23\n\nyoutube.com,\n\nGG anys save\n\n= youtube’\n\n* Q Q £  ® sin\n\nMix - Nightcore - Without Me ...\n\nSinnon Nightcore -\nCome Back To Me...\n\nPretty's on the Inside\n(feat. Chloe Adams)...\n\nsea\n\nNighteore - Sasha\nSloan - Older (Lyrics)\nation\n\nEB) Nightcore - Easy On Me\n~ (Lyrics)\n\nSinnon Nightcore - Come Back To Me (Official MV) Pox, Nightoors She\n\ny “a Nightcore - Without Me\nfal - (Lyties)\nsirno\" Mignsooee\n\nGy & B&Q Tom v'"
-          },
-          {
-            "timestamp": 1785676332.3328705,
-            "time_str": "18:42:12",
-            "change": "highlighted text: 'YC) sinnon Nightcore- Come Be x @ The Great Mage Retums Ater 400: X | +\n\n€& GB anps sAvwewyoutube.com, 7 he NORX 3 Sl st= ANS:\n\nySidindle\n\nyoutube’\n\nSinnon Nightcore - Come Back To Me (Official MV}\n\n- 2\n\nGy & B&Q Tom v\n\nQ gQ t ® signin\n\nx\n\ny “a Nightcore - Without Me\n~ (Lyrics)\nsienar Migrscoee\n\nSinnon Nightcore -\nCome Back To Me...\n\ngirna” MI\n\naif\nae\n\nPretty's on the Inside\n(feat. Chloe Adams)...\n\nsea\n\nNighteore - Sasha\nSloan - Older (Lyrics)\n\nEB) Nightcore - Easy On Me\n~ (Lyrics)\n\nsiraae Niger'"
-          },
-          {
-            "timestamp": 1785676333.5047522,
-            "time_str": "18:42:13",
-            "change": "highlighted text: 'YB) sinnon Nightcore- Come Be x @ The Great Mage Retums After 400: X | + - 23\n\n© CO A aps fm\n\nszyourube.com, Duval WoPXy 8 st=2 L&I\n\nyoutube’\n\nQ gQ t @® signia\n\nMix - Nightcore - Without Me ...\n\nx\n\nSinnon Nightcore -\nCome Back To Me...\n\nSivan Nigncease\n\nPretty's on the Inside\n(feat. Chloe Adams}...\n\nsie\n\nNightcore - Sasha\nSloan - Older (Lyrics)\nNg tio\n\nNightcore - Easy On Me\n- (lyrics)\n\nSinnon Nightcore - Come Back To Me (Official MV} Pow | Nighoore. She\n\n_ ga Nightcore - without Me\nKal - (Lyrie'"
-          },
-          {
-            "timestamp": 1785676334.5530136,
-            "time_str": "18:42:14",
-            "change": "application changed to 'Web Browser (YouTube - playing 'Sinnon Nightcore - Come Bac X')'"
-          },
-          {
-            "timestamp": 1785676334.5530136,
-            "time_str": "18:42:14",
-            "change": "highlighted text: 'YB) sinnon Nightcore- Come Be x @ The Great Mage Retums After 400: X | +\n\na\n\nGry B & & QTc\n\n= ©oulube' Q 2g £ Osim\nMix - Nightcore - Without Me .. x\n\n\"ae Nighteare - Without Me\n~ (Lyrics)\nsivrar Migescee\n\nSinnon Nightcore -\nCome Back To Me...\n\nrn\n\nPretty's on the Inside\n(feat. Chloe Adams}...\n\nsie\n\n?\\ Nighteore - Sasha\nSloan - Older (Lyrics)\nation\n\nEd Nightoore - Easy On Me\n- (lyrics)\n\nMix-- Sinnon\n\nSinnon Nightcore - Come Back To Me (Official MV} Nightcore - She\n\nx'"
-          },
-          {
-            "timestamp": 1785676337.9507735,
-            "time_str": "18:42:17",
+            "timestamp": 1785695352.3676744,
+            "time_str": "23:59:12",
             "change": "mouse click: left_click"
           },
           {
-            "timestamp": 1785676380.455624,
-            "time_str": "18:43:00",
-            "change": "screen sharing stopped"
+            "timestamp": 1785695489.8770971,
+            "time_str": "00:01:29",
+            "change": "focused window changed to 'Arthur-2407/Vivy-AI: Local-first AI companion with AGI cognitive architecture, multimodal perception, voice cloning, live 3D avatar, and anonymous internet intelligence — fully private, zero cloud. and 5 more pages - Personal 2 - Microsoft​ Edge'"
           },
           {
-            "timestamp": 1785676401.6710374,
-            "time_str": "18:43:21",
+            "timestamp": 1785695490.8879476,
+            "time_str": "00:01:30",
+            "change": "mouse click: left_click"
+          },
+          {
+            "timestamp": 1785695504.0129235,
+            "time_str": "00:01:44",
+            "change": "focused window changed to 'Vivy - Antigravity IDE - VivyAvatarStreamer.cs'"
+          },
+          {
+            "timestamp": 1785695514.1131747,
+            "time_str": "00:01:54",
+            "change": "focused window changed to 'The Great Mage Returns After 4000 Years Chapter 95 - Read Online | Asura Scans and 1 more page - Personal - Microsoft​ Edge'"
+          },
+          {
+            "timestamp": 1785695585.9386916,
+            "time_str": "00:03:05",
+            "change": "focused window changed to 'Vivy AI Core Neural Interface and 5 more pages - Personal 2 - Microsoft​ Edge'"
+          },
+          {
+            "timestamp": 1785695585.9386916,
+            "time_str": "00:03:05",
+            "change": "mouse click: left_click"
+          },
+          {
+            "timestamp": 1785695652.6591482,
+            "time_str": "00:04:12",
+            "change": "focused window changed to 'The Great Mage Returns After 4000 Years Chapter 95 - Read Online | Asura Scans and 1 more page - Personal - Microsoft​ Edge'"
+          },
+          {
+            "timestamp": 1785695653.670205,
+            "time_str": "00:04:13",
+            "change": "focused window changed to 'The Great Mage Returns After 4000 Years Chapter 96 - Read Online | Asura Scans and 1 more page - Personal - Microsoft​ Edge'"
+          },
+          {
+            "timestamp": 1785695655.6895852,
+            "time_str": "00:04:15",
+            "change": "focused window changed to 'Vivy - Antigravity IDE - VivyAvatarStreamer.cs'"
+          },
+          {
+            "timestamp": 1785695671.870334,
+            "time_str": "00:04:31",
+            "change": "focused window changed to 'Vivy - Antigravity IDE - avatar_bridge.py'"
+          },
+          {
+            "timestamp": 1785695699.1918526,
+            "time_str": "00:04:59",
+            "change": "focused window changed to 'Vivy - Antigravity IDE - file:///d:/Vivy/Mate-Engine/Assets/MATE%20ENGINE%20-%20Scripts/VivyBridge/VivyAvatarStreamer.cs (Agent) (VivyAvatarStreamer.cs)'"
+          },
+          {
+            "timestamp": 1785695701.210755,
+            "time_str": "00:05:01",
+            "change": "focused window changed to 'Vivy - Antigravity IDE - VivyAvatarStreamer.cs'"
+          },
+          {
+            "timestamp": 1785695719.3920202,
+            "time_str": "00:05:19",
+            "change": "focused window changed to 'The Great Mage Returns After 4000 Years Chapter 96 - Read Online | Asura Scans and 1 more page - Personal - Microsoft​ Edge'"
+          },
+          {
+            "timestamp": 1785696068.0980103,
+            "time_str": "00:11:08",
+            "change": "mouse click: left_click"
+          },
+          {
+            "timestamp": 1785696069.115653,
+            "time_str": "00:11:09",
+            "change": "focused window changed to 'The Great Mage Returns After 4000 Years Chapter 97 - Read Online | Asura Scans and 1 more page - Personal - Microsoft​ Edge'"
+          },
+          {
+            "timestamp": 1785696072.148832,
+            "time_str": "00:11:12",
+            "change": "focused window changed to 'Vivy - Antigravity IDE - VivyAvatarStreamer.cs'"
+          },
+          {
+            "timestamp": 1785696088.320106,
+            "time_str": "00:11:28",
+            "change": "mouse click: left_click"
+          },
+          {
+            "timestamp": 1785696099.4137998,
+            "time_str": "00:11:39",
+            "change": "focused window changed to 'Settings'"
+          },
+          {
+            "timestamp": 1785696100.4248078,
+            "time_str": "00:11:40",
+            "change": "focused window changed to 'Vivy - Antigravity IDE - VivyAvatarStreamer.cs'"
+          },
+          {
+            "timestamp": 1785696100.4248078,
+            "time_str": "00:11:40",
+            "change": "mouse click: left_click"
+          },
+          {
+            "timestamp": 1785696106.4853947,
+            "time_str": "00:11:46",
+            "change": "focused window changed to 'Vivy - Antigravity IDE - .gitignore'"
+          },
+          {
+            "timestamp": 1785696128.7312036,
+            "time_str": "00:12:08",
             "change": "focused window changed to 'Mate-Engine - Mate Engine Main - Windows, Mac, Linux - Unity 6.3 LTS (6000.3.19f1) <DX11>'"
           },
           {
-            "timestamp": 1785676403.6949992,
-            "time_str": "18:43:23",
+            "timestamp": 1785696186.3445473,
+            "time_str": "00:13:06",
             "change": "focused window changed to 'Vivy AI Core Neural Interface and 5 more pages - Personal 2 - Microsoft​ Edge'"
           },
           {
-            "timestamp": 1785676414.819835,
-            "time_str": "18:43:34",
+            "timestamp": 1785696232.8227806,
+            "time_str": "00:13:52",
             "change": "mouse click: left_click"
           },
           {
-            "timestamp": 1785676425.9346476,
-            "time_str": "18:43:45",
-            "change": "focused window changed to 'Vivy - Antigravity IDE - address_bouncer.py'"
+            "timestamp": 1785696237.8740585,
+            "time_str": "00:13:57",
+            "change": "focused window changed to 'The Great Mage Returns After 4000 Years Chapter 97 - Read Online | Asura Scans and 1 more page - Personal - Microsoft​ Edge'"
           },
           {
-            "timestamp": 1785676464.3331573,
-            "time_str": "18:44:24",
-            "change": "focused window changed to 'Mate-Engine - Mate Engine Main - Windows, Mac, Linux - Unity 6.3 LTS (6000.3.19f1) <DX11>'"
+            "timestamp": 1785696239.891089,
+            "time_str": "00:13:59",
+            "change": "focused window changed to 'Nightcore - Easy On Me - (Lyrics) - YouTube and 1 more page - Personal - Microsoft​ Edge'"
           },
           {
-            "timestamp": 1785676467.281213,
-            "time_str": "18:44:27",
+            "timestamp": 1785696243.9285817,
+            "time_str": "00:14:03",
+            "change": "mouse click: left_click"
+          },
+          {
+            "timestamp": 1785696245.9555962,
+            "time_str": "00:14:05",
+            "change": "focused window changed to 'Nightcore - Sasha Sloan - Older (Lyrics) - YouTube and 1 more page - Personal - Microsoft​ Edge'"
+          },
+          {
+            "timestamp": 1785696246.9647439,
+            "time_str": "00:14:06",
             "change": "focused window changed to 'Vivy AI Core Neural Interface and 5 more pages - Personal 2 - Microsoft​ Edge'"
           },
           {
-            "timestamp": 1785676467.281213,
-            "time_str": "18:44:27",
+            "timestamp": 1785696246.9647439,
+            "time_str": "00:14:06",
+            "change": "mouse click: left_click"
+          },
+          {
+            "timestamp": 1785696250.950656,
+            "time_str": "00:14:10",
+            "change": "focused window changed to 'Nightcore - Sasha Sloan - Older (Lyrics) - YouTube and 1 more page - Personal - Microsoft​ Edge'"
+          },
+          {
+            "timestamp": 1785696250.950656,
+            "time_str": "00:14:10",
             "change": "screen sharing started"
           },
           {
-            "timestamp": 1785676468.5587344,
-            "time_str": "18:44:28",
-            "change": "highlighted text: 'YEA) sinnon Nightcore- Come Be x @ The Great Mage Retums After 400: X | + - 23\n\n© GG anps favenyourubecor\n\nval’ NoRX x &l st=8 yi\n\nyoutube’\n\n_ ga Nightcore - without Me\nie - (Lyrics)\nsinao\" Mignone\n; 58\n\nSinnon Nightcore -\nCome Back To Me...\n\ngirna” MI\n\noor\nPretty's on the Inside\n(feat. Chloe Adams)...\n\nSieg\n\nNighteore - Sasha\nSloan - Older (Lyrics)\n\n2 Nightoore - Easy On Me\n- (lyrics)\n\nSiraar Mieco\n\nSinnon Nightcore - Come Back To Me (Official MV) aa Nightoors She\n\nx\n\nx\n\nGv @ & & Q@- Tom v\nQ gQ'"
+            "timestamp": 1785696252.1287327,
+            "time_str": "00:14:12",
+            "change": "focused window changed to 'Vivy AI Core Neural Interface and 5 more pages - Personal 2 - Microsoft​ Edge'"
           },
           {
-            "timestamp": 1785676469.6973999,
-            "time_str": "18:44:29",
-            "change": "highlighted text: '€ GB https//wwwyoutube.com/watch?v=Dwa MNARXIxUBlist= ROXSeXFZISyKUindex=2\n\n= @yolibe” Search\n\nSinnon Nightcore - Come Back To Me (Official MV)\n\nBr gaec®@\nQ 9g\n\n: ® Sign in\n\nMix - Nightcore -\n\nithout Me ...\n\nx\nMines are playlists YouTube makes for you\nfe\"%Q Nightcore - Without Me .\n¢ - (Lyties)\nSinnon Nightcore\nd Sinnon Nightcore -\n» Come Back To Me...\nNore ? 5\n— Sinnon Nightcore\nBT MED Pretty’s on the inside\n(feat. Chloe Adams)...\nSinnon Nightcore\n‘4 Nightcore - Sasha\nw barra: Sloan Older (Lyri'"
-          },
-          {
-            "timestamp": 1785676469.7136822,
-            "time_str": "18:44:29",
-            "change": "application changed to 'Web Browser (YouTube - playing 'Sinnon Nightcore - Come Bac')'"
-          },
-          {
-            "timestamp": 1785676470.7917774,
-            "time_str": "18:44:30",
-            "change": "application changed to 'Web Browser (YouTube - playing 'Mix - Nightcore - Without Me ...')'"
-          },
-          {
-            "timestamp": 1785676471.5241647,
-            "time_str": "18:44:31",
+            "timestamp": 1785696252.1287327,
+            "time_str": "00:14:12",
             "change": "mouse click: left_click"
+          },
+          {
+            "timestamp": 1785696252.4633327,
+            "time_str": "00:14:12",
+            "change": "highlighted text: 'CD) Nightcore~ Sasha Sloan - Olé\n\n€ CG & httpsy/wwwyoutube.com/watch?v=ePslAz--skYBllist=RDkYgH7CmLKBQBiindex=5\n\n= dyoulube™ Search\n\nNightcore - Sasha Sloan - Older (Lyrics)\n\nBr G16 *& @o~ Qa v\nQ Q H @ Signin\n\nMix - Nightcore - Dancing Wit...\n\nMixes are playlists YouTube makes for you\n\n$2) Nightcore - Sasha .\n. ee , Sloan - Older (Lyrics)\nNightcore Nation\naa “@) Nightcore - Sorry |\na. (lyrics)\nchino\n\nNightcore - Easy On Me\n(yrics)\nSinnon Nightcore\n\nx\n\nNightcore - Happy Now\n{iLyries\n\nViolet\n\nNigh'"
+          },
+          {
+            "timestamp": 1785696252.4817703,
+            "time_str": "00:14:12",
+            "change": "application changed to 'file explorer or settings panel'"
+          },
+          {
+            "timestamp": 1785696253.7353902,
+            "time_str": "00:14:13",
+            "change": "application changed to 'Web Browser (YouTube - playing 'Mix - Nightcore - Dancing Wit...')'"
+          },
+          {
+            "timestamp": 1785696254.5256898,
+            "time_str": "00:14:14",
+            "change": "audio activity: loud_audio"
+          },
+          {
+            "timestamp": 1785696258.9463894,
+            "time_str": "00:14:18",
+            "change": "highlighted text: 'Nightcore ~ Sasha Sloan - Older (L_\n\n€ CG & httpsy/wwwyoutube.com/watch?v=ePslAz--skYBllist=RDkYgH7CmLKBQBiindex=5\n\n= dyoulube™ Search\n\nNightcore - Sasha Sloan - Older (Lyrics)\n\nBr G16 *& @o~ Qa v\nQ Q H @ Signin\n\nMix - Nightcore - Dancing Wit...\n\nMixes are playlists YouTube makes for you\n\n$2) Nightcore - Sasha .\n. ee , Sloan - Older (Lyrics)\nNightcore Nation\naa “@) Nightcore - Sorry |\na. (lyrics)\nchino\n\nNightcore - Easy On Me\n(yrics)\nSinnon Nightcore\n\nx\n\nNightcore - Happy Now\n{iLyries\n\nViolet\n\nN'"
+          },
+          {
+            "timestamp": 1785696258.9643078,
+            "time_str": "00:14:18",
+            "change": "application changed to 'Web Browser (YouTube - playing 'Mix - Nightcore - Dancing Wit... x')'"
+          },
+          {
+            "timestamp": 1785696262.362039,
+            "time_str": "00:14:22",
+            "change": "highlighted text: 'Nightcore - Sasha Sloan - Older (L: X\n\n€ GG https://wwwyoutube.com/watch?v=ePsiAz—-skY&list= RDKYQH7CmLKBQ&index=5,\n\nSearch\n\n= Wyoulube™\n\na\n\nNightcore - Sasha Sloan - Older (Lyrics)\n\nQ g\n\nBr G14 & @- Qu v\n\n® Sign in\n\nMix - Nightcore - Dancing Wit...\n\nMixes are playlists YouTube makes for you\n\n(a BQ Nightcore - Sasha .\n» 2%, Sloan - Older (Lyrics)\nNightcore Nation\na “@ Nightcore - Sorry\n(Lyrics)\nChino\na Nightcore - Easy On Me\nee -(yics)\nau Sinnon Nightcore\nNightcore - Happy Now\n\nIILyries\nViolet\n\n'"
           }
         ],
-        "prompt_latest_context": "[Multimodal Perception Log — What Vivy is observing in the background]\nScreen share just started showing Web Browser (YouTube - playing 'Innon [ Nightcore~ Come Back To: x'). Latest: [App Detected]: Web Browser (YouTube - playing 'Innon [ Nightcore~ Come Back To: x')\nYou are viewing a YouTube page play Background audio: loud_audio.\n[Earlier activity summary] • 00:50:05: User sent text: want to go for a coffee\n• 00:50:06: Vivy responded with emotion: joy\n• 11:23:56: User sent text: how re u feeling today\n• 11:24:06: Vivy responded with emotion: joy\n• 11:28:17: User sent text: how about going on a coffee\n• 11:28:17: Vivy responded with emotion: joy\n• 00:36:41: User sent text: how are u\n• 00:36:59: Vivy responded with emotion: sadness\n• 00:37:22: User sent text: i want someone to talk\n• 00:37:29: Vivy responded with emotion: sadness\n[Recent observations, newest first]\n[18:40:46] (user_action) User sent text: what am i watching now\n[18:40:45] (screen_capture) [App Detected]: unknown application\n\n[Visual Context]: dark display (47% brightness), dense with content, sidebar or panel visible on the left\n\n[OCR Text Extracted]:\nfey Chat v\na Q : @ Sign in\n\nMix - Nightcore - Without Me ...\nMi\n\nNightcore - Without Me\n(Lyrics)\nINNoN Ni\nSinnon Nightcore -\nCome Back To Me...\nSinnon Nightcore\nPretty's on the Inside\nChloe Adams)...\nore\nNightcore - Sasha\nSloan - Older (Lyrics)\nNightcore Nation\nNightcore - Easy On Me\ni -\n\nSinnon Nighicore - Come Back To Me (Official MV)\n[18:40:45] (system) Application switch: User transitioned from Web Browser (YouTube - playing 'Innon [ Nightcore~ Come Back To: x') to unknown application.\n[18:40:44] (screen_capture) [App Detected]: Web Browser (YouTube - playing 'Innon [ Nightcore~ Come Back To: x')\nYou are viewing a YouTube page playing a video/song titled 'Innon [ Nightcore~ Come Back To: x'.\n\n[Visual Context]: dark display (45% brightness), dense with content, sidebar or panel visible on the left\n\n[OCR Text Extracted]:\nInnon [ Nightcore~ Come Back To: x\n\n= G (a B w) | = @ ae\n\n= Search Q Q :\n\n(2) Signin }\nra ~\n\nMix - Nightcore - Without Me ...\n\nMixes are playlists YouTube makes for you\n\n<3 Nightcore - Without Me\n- (Lyrics)\nSinnon Nightcore\nSinnon Nightcore -\nCome Back To Me...\nSinnon Nightcore\n\nPretty's on the Inside\n(feat. Chloe Adams)...\nSinnon Nightcore\nNightcore - Sasha\n- Older\nNightcore Nation\n\nNightcore - Easy On Me\n- (Lyrics)\nSinnon Nightcore\n\n@\n\n[partially readable: 4]\n\nSinnon Nightcore - Come Back To Me (Official MV)\n\nMix - Sinnon\nNightcore - She\n[18:40:44] (system) Typing stopped: User paused or finished typing.",
-        "prompt_characters_added": 2584,
-        "prompt_last_inject_timestamp": 1785676246.1380255,
+        "prompt_latest_context": "[Multimodal Perception Log — What Vivy is observing in the background]\n[Earlier activity summary] • 18:40:51: Screen text (OCR): fy Chat v  a  Q 3 @ Sign in  Mix - Nightcore - Without Me ...  ii ‘ouTube  Nightcore - Without Me (Lyrics) INNON Ni Sinnon Nightcore - Come Back To Me... Sinnon Nightcore Pretty's on the Inside Chloe Adams)... INNnGN Nightcore Nightcore - Sasha Sloan\n[Recent observations, newest first]\n[00:13:16] (user_action) User sent text: are u sleeping",
+        "prompt_characters_added": 471,
+        "prompt_last_inject_timestamp": 1785696196.3100252,
         "last_speech_transcript": "Transcribed voice text",
         "last_speech_timestamp": 1785612277.045298,
-        "_grounding_context": "[Perception State — ACTIVE]\n  Audio: ✓ active (silence, confidence 70%)\n  Music playing: \"Mix - Nightcore - Without Me ...\"\n  Audio description: Web knowledge retrieved for 'Web Browser (YouTube - playing 'Mix - Nightcore - Without Me ...')': - **WhatsApp Web**: Log in to WhatsApp Web for simple, reliable and private messaging on your desktop. Send and receive messages and files with ease, all for free.\n- **WhatsApp | S\n\n[User Presence & Gaze Perception State]\n  Camera status: ✗ INACTIVE (User camera is turned OFF)\n  Face detection: ✗ No face detected\n  User visibility: ✗ User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
-        "_diagnostic_answer": "PERCEPTION_FACT: Audio: ✓ silence"
+        "_grounding_context": "[Perception State — ACTIVE]\n  Screen sharing: ✓ ON  (129 frames received, last live)\n  Frame rate: 6.1 FPS\n  Detected application: Web Browser (YouTube - playing 'Mix - Nightcore - Dancing Wit... x')\n  Focused Application/Window: \"Vivy AI Core Neural Interface and 5 more pages - Personal 2 - Microsoft​ Edge\" (Note: This is Vivy's own chat dashboard; the user is currently typing to Vivy)\n  Active Window Bounds: [953, 0, 1927, 1159]\n  Cursor Position: x=1362, y=1065\n  Relative Position inside Window: x=0.42, y=0.919 (0.0 to 1.0 coordinates)\n  Cursor Shape/State: arrow\n  Cursor Hover State: Hovering inside the focused window\n  Vision confidence: 70%\n  Screen context: ✓ available (601 chars)\n\n[User Presence & Gaze Perception State]\n  Camera status: ✗ INACTIVE (User camera is turned OFF)\n  Face detection: ✗ No face detected\n  User visibility: ✗ User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
+        "_diagnostic_answer": "PERCEPTION_FACT: Screen share is active (129 frames received), but confidence is still building (70%) | App detected: Web Browser (YouTube - playing 'Mix - Nightcore - Dancing Wit... x')"
       },
       "active_learning_schedule": [],
+      "model_adaptation_status": {
+        "last_cycle": 1785696212.1898289,
+        "samples_consolidated": 18,
+        "adapter_file": "lora_delta_adapter_1785696212.pt"
+      },
       "active_hypotheses": [],
       "heartbeats": {
-        "NetworkIntelligenceSubsystem": 1785676474.600977,
-        "AddressBouncer + TorManager": 1785676474.600977,
-        "CognitiveCore": 1785676486.4942331,
-        "PerceptionManager": 1785676486.4942331,
-        "LearningEngine": 1785676261.5177433
+        "NetworkIntelligenceSubsystem": 1785696262.584246,
+        "AddressBouncer + TorManager": 1785696262.584246,
+        "CognitiveCore": 1785696267.632903,
+        "PerceptionManager": 1785696267.632903,
+        "LearningEngine": 1785696212.1189835,
+        "ContinualModelAdaptationEngine": 1785696212.1898289
       }
     }
   },
   "growth_diary": [
-    "I learned that Satyajeet is watching a Nightcore music playlist on YouTube.",
-    "I observed Satyajeet listening to a Nightcore music playlist on YouTube and learned about the songs and their emotional impact."
+    "I helped Satyajeet understand what he was watching by describing the YouTube playlist and its contents."
   ],
   "reflections": [
-    "[18:38:39] Topic 'general' turn evaluated (Score: 0.97). Turn passed cognitive evaluation.",
-    "[18:41:01] Topic 'anime/manga' turn evaluated (Score: 0.97). Turn passed cognitive evaluation.",
-    "[18:45:02] Topic 'general' turn evaluated (Score: 0.94). Turn passed cognitive evaluation."
+    "[00:13:32] Topic 'general' turn evaluated (Score: 0.97). Turn passed cognitive evaluation.",
+    "[00:14:43] Topic 'anime/manga' turn evaluated (Score: 0.97). Turn passed cognitive evaluation."
   ]
 }
