@@ -1607,17 +1607,18 @@ def get_avatar_frame():
             _shmem.seek(0)
             import struct
             data_len, frame_index = struct.unpack("<II", _shmem.read(8))
-            shmem_available = True
             
-            if frame_index != last_index and 0 < data_len <= 2 * 1024 * 1024 - 8:
-                data = _shmem.read(data_len)
-                from flask import Response
-                resp = Response(data, mimetype="image/jpeg")
-                resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-                resp.headers["Pragma"]        = "no-cache"
-                resp.headers["Expires"]       = "0"
-                resp.headers["X-Frame-Index"] = str(frame_index)
-                return resp
+            if 0 < data_len <= 2 * 1024 * 1024 - 8:
+                shmem_available = True
+                if frame_index != last_index:
+                    data = _shmem.read(data_len)
+                    from flask import Response
+                    resp = Response(data, mimetype="image/jpeg")
+                    resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+                    resp.headers["Pragma"]        = "no-cache"
+                    resp.headers["Expires"]       = "0"
+                    resp.headers["X-Frame-Index"] = str(frame_index)
+                    return resp
         except Exception:
             _shmem = None
             shmem_available = False

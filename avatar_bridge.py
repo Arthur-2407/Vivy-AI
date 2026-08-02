@@ -126,9 +126,12 @@ def _save_avatar_frame(base64_str):
         # Save to shared memory (RAM) instantly
         if _shmem is not None:
             try:
+                # Write image payload first starting at offset 8
+                _shmem.seek(8)
+                _shmem.write(img_data)
+                # Atomically commit the header (length & frame index) only after payload is written
                 _shmem.seek(0)
                 _shmem.write(struct.pack("<II", len(img_data), _frame_count))
-                _shmem.write(img_data)
                 _shmem.flush()
             except Exception as e:
                 print(f"[AvatarBridge] Error writing to shared memory: {e}")

@@ -390,6 +390,12 @@ public class VivyAvatarStreamer : MonoBehaviour
             yield break;
         }
 
+        // Ensure camera explicitly renders the newest avatar animation pose into the target RenderTexture before readback
+        if (_streamCam != null && _streamCam.enabled)
+        {
+            _streamCam.Render();
+        }
+
         // Request async GPU readback to avoid blocking main thread
         UnityEngine.Rendering.AsyncGPUReadback.Request(_rt, 0, TextureFormat.RGBA32, (request) => {
             try
