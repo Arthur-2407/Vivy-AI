@@ -281,7 +281,7 @@ runtimes, and models that are governed under their own separate licenses.
      The `Mate-Engine/` directory and all derivatives of the MateEngine 3D
      runtime are independent works governed separately under the MateEngine
      Pro License (v2.1) and associated third-party asset copyright terms
-     (see `Mate-Engine/LICENSE.md`).
+     (see the license files included in the `Mate-Engine/` directory).
 
 12.2 THIRD-PARTY DEPENDENCIES
      All third-party software, libraries, models, assets, and dependencies
