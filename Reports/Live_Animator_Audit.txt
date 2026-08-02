@@ -7749,3 +7749,8 @@
 [1977.77s] Transitioned to State/Clip: PET_IDLE_7 | NormalizedTime: 46.16
 [1989.38s] Transitioned to State/Clip: PET_IDLE_8 | NormalizedTime: 47.43
 --- RUNTIME VALIDATION OBSERVER STARTED ---
+--- RUNTIME VALIDATION OBSERVER STARTED ---
+[Observer] Attached to Animator on: CustomVRM(Clone)
+[0.00s] Transitioned to State/Clip: PET_INTRO | NormalizedTime: 0.00
+[4.62s] Transitioned to State/Clip: PET_DRAGGING | NormalizedTime: 0.02
+[4.89s] Transitioned to State/Clip: PET_INTRO | NormalizedTime: 0.03
