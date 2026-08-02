@@ -149,6 +149,18 @@ public class VivyWebSocketClient : MonoBehaviour
         }
     }
 
+    void OnEnable()
+    {
+        _shouldReconnect = true;
+        if (autoConnect && !_connected)
+            Connect();
+    }
+
+    void OnDisable()
+    {
+        Disconnect();
+    }
+
     void OnDestroy()
     {
         _shouldReconnect = false;
@@ -166,7 +178,7 @@ public class VivyWebSocketClient : MonoBehaviour
     // =====================================================
     public void Connect()
     {
-        if (_connected) return;
+        if (_connected || (_receiveTask != null && !_receiveTask.IsCompleted)) return;
         if (logMessages)
             Debug.Log($"[VivyWS] Socket State Changed: Connecting to {serverUri}...");
         _cts = new CancellationTokenSource();

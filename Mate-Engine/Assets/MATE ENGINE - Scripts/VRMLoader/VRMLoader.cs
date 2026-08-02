@@ -253,6 +253,7 @@ public class VRMLoader : MonoBehaviour
         EnableSkinnedMeshRenderers(currentModel);
         AssignAnimatorController(currentModel);
         InjectComponentsFromPrefab(componentTemplatePrefab, currentModel);
+        EnsureRuntimeVivyComponents(currentModel);
         CleanMissingScripts(currentModel); // Remove null/missing MonoBehaviours from mod bundles
 
         var changer = FindFirstObjectByType<MEValueChanger>();
@@ -514,6 +515,7 @@ public class VRMLoader : MonoBehaviour
 
         if (MEModLoader.Instance != null && mainModel != null)
             MEModLoader.Instance.AssignHandlersForCurrentAvatar(mainModel);
+        EnsureRuntimeVivyComponents(mainModel);
 
         StartCoroutine(ReleaseRamAndUnloadAssetsCo());
         SettingsHandlerUtility.ReloadAllSettingsHandlers();
@@ -572,6 +574,16 @@ public class VRMLoader : MonoBehaviour
     public GameObject GetCurrentModel()
     {
         return currentModel;
+    }
+
+    private void EnsureRuntimeVivyComponents(GameObject target)
+    {
+        if (target == null) return;
+        if (target.GetComponent<VivyEmotionMapper>() == null) target.AddComponent<VivyEmotionMapper>();
+        if (target.GetComponent<VivyLipSync>() == null) target.AddComponent<VivyLipSync>();
+        if (target.GetComponent<VivyWebSocketClient>() == null) target.AddComponent<VivyWebSocketClient>();
+        if (target.GetComponent<VivyAnimationResolver>() == null) target.AddComponent<VivyAnimationResolver>();
+        if (target.GetComponent<VivyAvatarStreamer>() == null) target.AddComponent<VivyAvatarStreamer>();
     }
 }
 public sealed class GltfInstanceDisposer : MonoBehaviour

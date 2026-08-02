@@ -75,6 +75,7 @@ public class VivyAvatarStreamer : MonoBehaviour
     private bool               _cameraReady;
     private int                _frameCount; // Telemetry frame counter
     private bool               _isProcessingFrame; // Async lock flag
+    private float              _lastFrameStartTime; // Auto-recovery timestamp
     private Animator           _lastAnimator;
     private float              _currentFocusFactor = 0f;
 
@@ -87,8 +88,14 @@ public class VivyAvatarStreamer : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!enableStreaming)                               return;
-        if (_wsClient == null || !_wsClient.IsConnected)   return;
+        if (!enableStreaming || !gameObject.activeInHierarchy || !enabled) return;
+        if (_wsClient == null || !_wsClient.IsConnected) return;
+
+        // Auto-recover if an async GPU readback or background encoding task hangs for > 1.0 second
+        if (_isProcessingFrame && Time.time - _lastFrameStartTime > 1.0f)
+        {
+            _isProcessingFrame = false;
+        }
 
         // Lazy camera initialisation — only runs once after first connection
         if (!_cameraReady)
@@ -124,6 +131,7 @@ public class VivyAvatarStreamer : MonoBehaviour
         {
             _nextFrameTime = Time.time + (1f / fps);
             _isProcessingFrame = true;
+            _lastFrameStartTime = Time.time;
             StartCoroutine(CaptureAndSendAsync());
         }
     }
@@ -432,6 +440,18 @@ public class VivyAvatarStreamer : MonoBehaviour
                 _isProcessingFrame = false;
             }
         });
+    }
+
+    void OnEnable()
+    {
+        if (_streamCam != null) _streamCam.enabled = true;
+        _isProcessingFrame = false;
+    }
+
+    void OnDisable()
+    {
+        if (_streamCam != null) _streamCam.enabled = false;
+        _isProcessingFrame = false;
     }
 
     void OnDestroy()

@@ -1597,6 +1597,7 @@ def get_avatar_frame():
         last_index = -1
 
     # Long polling: check up to 20 times (every 5ms) for a new frame index
+    shmem_available = False
     for _ in range(20):
         try:
             if _shmem is None:
@@ -1606,8 +1607,9 @@ def get_avatar_frame():
             _shmem.seek(0)
             import struct
             data_len, frame_index = struct.unpack("<II", _shmem.read(8))
+            shmem_available = True
             
-            if frame_index > last_index and 0 < data_len <= 2 * 1024 * 1024 - 8:
+            if frame_index != last_index and 0 < data_len <= 2 * 1024 * 1024 - 8:
                 data = _shmem.read(data_len)
                 from flask import Response
                 resp = Response(data, mimetype="image/jpeg")
@@ -1618,9 +1620,10 @@ def get_avatar_frame():
                 return resp
         except Exception:
             _shmem = None
+            shmem_available = False
         time.sleep(0.005)
 
-    if last_index != -1:
+    if shmem_available and last_index != -1:
         from flask import Response
         resp = Response(status=204)
         resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
