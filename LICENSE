@@ -1,28 +1,32 @@
                           VIVY AI LICENSE
-                            Version 1.0
+                            Version 1.1
                         Effective: August 2026
 
 Copyright © 2026 Satyajeet Aich. All Rights Reserved.
 
 This license governs the use, reproduction, modification, and distribution
-of the Vivy AI software and all associated files in this repository
-(collectively, "the Software"). By accessing, downloading, cloning, forking,
-or otherwise using the Software, you agree to be fully bound by the terms of
-this license.
+of the Vivy AI original software and associated documentation (collectively,
+"the Software"). By accessing, downloading, cloning, forking, or otherwise
+using the Software, you agree to be fully bound by the terms of this license.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 SECTION 1 — DEFINITIONS
 
-"Software" means the Vivy AI source code, binaries, documentation, assets,
-configuration files, models, and any other materials contained in or
-distributed with this repository.
+"Software" means the Vivy AI source code, binaries, documentation, models,
+configuration files, and original assets created by the Licensor in this
+repository. "Software" explicitly excludes Third-Party Software governed by
+independent licenses as set out in Section 12.
 
 "Licensor" means Satyajeet Aich, the original author and copyright holder of
 the Software.
 
 "You" (or "Your") means any individual or legal entity exercising rights
 granted under this license.
+
+"Official Repository" means the primary public repository published and
+designated by the Licensor for the Software, currently accessible at:
+    https://github.com/Arthur-2407/Vivy-AI
 
 "Fork" means a copy of the Software in which You have made modifications,
 additions, or removals relative to the original, published in Your own
@@ -73,22 +77,18 @@ from the Licensor:
         the Software without the Licensor's written consent.
 
     To inquire about a commercial license, contact the Licensor directly.
-    See Section 9 (Contact) for details.
+    See Section 11 (Contact and Commercial Licensing) for details.
 
 3.2 UNAUTHORIZED REDISTRIBUTION
     You may not re-upload, mirror, re-publish, or redistribute the Software
-    — in original or modified form — to any platform, repository, package
+    — in original or unmodified form — to any platform, repository, package
     registry, file-sharing service, or distribution channel, except as
     explicitly permitted by Section 4 (Fork Conditions).
 
-    When sharing or referencing the Software, You must link exclusively to
-    the official repository:
-
-        https://github.com/Arthur-2407/Vivy-AI    [Official Repository]
-
-    You may not present a copy of the Software as an independent project
-    without clearly identifying it as a Fork of Vivy AI pursuant to this
-    license.
+    When referencing or recommending the Software without modifications,
+    You must link exclusively to the Official Repository. You may not
+    present a copy of the Software as an independent project without
+    clearly identifying it as a Fork of Vivy AI pursuant to this license.
 
 3.3 TRADEMARK AND NAME RESTRICTIONS
     The name "Vivy AI", the name "Vivy", associated logos, visual identity,
@@ -118,7 +118,7 @@ ALL of the following conditions:
       documentation, and any public-facing description of Your Fork:
 
           Copyright © 2026 Satyajeet Aich
-          Based on Vivy AI — https://github.com/Arthur-2407/Vivy-AI
+          Based on Vivy AI (Official Repository)
 
       You must not remove, obscure, or alter this notice in any file.
 
@@ -129,7 +129,7 @@ ALL of the following conditions:
 
   (c) LICENSE PROPAGATION
       Your Fork must be distributed under this same Vivy AI License,
-      Version 1.0, without modification. You may not sublicense Your Fork
+      Version 1.1, without modification. You may not sublicense Your Fork
       under any other license, open-source or otherwise.
 
   (d) LINK TO ORIGIN
@@ -137,7 +137,7 @@ ALL of the following conditions:
       clearly visible statement such as:
 
           "This project is a fork of Vivy AI by Satyajeet Aich.
-           Original repository: https://github.com/Arthur-2407/Vivy-AI"
+           Original Official Repository: https://github.com/Arthur-2407/Vivy-AI"
 
   (e) NON-COMMERCIAL
       Forks remain subject to Section 3.1 (Commercial Use). Publishing a
@@ -152,20 +152,24 @@ ALL of the following conditions:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-SECTION 5 — AI TRAINING PERMISSIONS
+SECTION 5 — AI TRAINING PERMISSIONS AND RESTRICTIONS
 
-The Licensor grants permission for the Software, its source code, and its
-documentation to be used as training data for artificial intelligence and
-machine learning models, subject to the following conditions:
+5.1 ACADEMIC AND NON-COMMERCIAL AI TRAINING
+    The Licensor grants permission for the Software and its source code to be
+    utilized as training or instruction data for artificial intelligence and
+    machine learning research, strictly for non-commercial or academic use,
+    subject to the following conditions:
+      (a) Proper attribution must be retained in any published dataset, paper,
+          or model card that references or utilizes the Software;
+      (b) The trained model may not be distributed under terms that attempt
+          to rescind or contradict this license.
 
-  (a) Attribution must be maintained in any published dataset or model
-      card that references the Software;
-
-  (b) The trained model may not be used for Commercial Use without the
-      Licensor's prior written permission;
-
-  (c) The trained model may not be distributed under terms that contradict
-      this license.
+5.2 COMMERCIAL AI TRAINING PROHIBITED
+    Any utilization, scraping, automated ingestion, or training upon the
+    Software by commercial entities, corporations, or for models intended for
+    commercial exploitation, commercial API access, or proprietary SaaS
+    deployment is STRICTLY PROHIBITED without explicit written consent and a
+    commercial licensing agreement from the Licensor.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -234,13 +238,15 @@ This license and all rights granted hereunder terminate automatically and
 immediately, without notice, if You fail to comply with any term or condition
 of this license.
 
-Upon termination, You must:
-  (a) Cease all use of the Software;
-  (b) Delete all copies of the Software in Your possession or control;
-  (c) Remove any published Fork or Derivative Work from public access within
-      30 days of termination.
+Upon termination, You must immediately:
+  (a) Cease all use and deployment of the Software;
+  (b) Delete all local copies of the Software within Your possession, custody,
+      or direct hardware control;
+  (c) Take all reasonable operational steps to remove, archive, or unpublish
+      any public Fork or Derivative Work under Your direct administrative
+      control within thirty (30) days of termination.
 
-Sections 3, 6, 7, 8, and 10 survive termination of this license.
+Sections 3, 5.2, 6, 7, 8, 10, and 12 survive termination of this license.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -256,11 +262,39 @@ to the exclusive jurisdiction of the courts of India.
 
 SECTION 11 — CONTACT AND COMMERCIAL LICENSING
 
-For commercial licensing inquiries, permissions beyond the scope of this
-license, or to report a license violation, contact the Licensor:
+For commercial licensing inquiries, enterprise AI training usage, permissions
+beyond the scope of this license, or to report a license violation, contact
+the Licensor directly:
 
-    Author:     Satyajeet Aich
-    Repository: https://github.com/Arthur-2407/Vivy-AI
+    Author:          Satyajeet Aich
+    Email:           [Insert Commercial Email Address / See Repo Contacts]
+    Official Repo:   https://github.com/Arthur-2407/Vivy-AI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 12 — THIRD-PARTY SOFTWARE AND SUBMODULES
+
+This repository bundles and integrates independent third-party software,
+runtimes, and models that are governed under their own separate licenses.
+
+12.1 MATEENGINE AVATAR RUNTIME
+     The `Mate-Engine/` directory and all derivatives of the MateEngine 3D
+     runtime are independent works governed separately under the MateEngine
+     Pro License (v2.1) and associated third-party asset copyright terms
+     (see `Mate-Engine/LICENSE.md` and `Mate-Engine/LICENSE`).
+
+12.2 THIRD-PARTY DEPENDENCIES
+     Included external libraries and weights (such as Llama 3.2 Community
+     License terms, Qwen Apache 2.0 terms, Whisper audio processing libraries,
+     and Unity package integrations) remain subject to their respective terms.
+
+12.3 LICENSE BOUNDARIES
+     Nothing in this Vivy AI License modifies, replaces, overrides, or imposes
+     additional commercial or redistribution restrictions upon any third-party
+     software or open-source submodules contained in this repository. This
+     license applies exclusively to the original Vivy AI cognitive, network,
+     multimodal perception, and orchestration architecture authored by the
+     Licensor.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -272,14 +306,14 @@ QUICK REFERENCE SUMMARY
   ✅  Educational / research use       — Permitted
   ✅  Modify for personal use          — Permitted
   ✅  Publish a Fork (renamed)         — Permitted with conditions
-  ✅  Attribution required             — Yes, always
-  ✅  AI training use                  — Permitted with attribution
-  ❌  Commercial use                   — Not permitted without written consent
-  ❌  Re-upload / redistribution       — Not permitted
+  ✅  Academic / non-commercial ML     — Permitted with attribution
+  ❌  Commercial use / monetization    — Not permitted without written consent
+  ❌  Commercial AI model training     — Not permitted without commercial license
+  ❌  Re-upload / mirror unmodified    — Not permitted (Link to Official Repo)
   ❌  Use the name "Vivy AI"           — Not permitted in forks/derivatives
   ❌  Remove copyright notices         — Not permitted
   ❌  Illegal or malicious use         — Not permitted
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-                  VIVY AI LICENSE — Version 1.0 — © 2026 Satyajeet Aich
+                  VIVY AI LICENSE — Version 1.1 — © 2026 Satyajeet Aich
