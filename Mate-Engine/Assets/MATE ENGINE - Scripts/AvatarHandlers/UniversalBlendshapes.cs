@@ -98,13 +98,7 @@ public class UniversalBlendshapes : MonoBehaviour
             float delay = UnityEngine.Random.Range(minBlinkInterval, maxBlinkInterval);
             yield return new WaitForSeconds(delay);
 
-            if (!autoBlinkEnabled) continue;
-            var anim = GetComponent<Animator>();
-            if (anim != null && ((HasBoolParam(anim, "isSleeping") && anim.GetBool("isSleeping")) || 
-                                 (HasBoolParam(anim, "IsSleeping") && anim.GetBool("IsSleeping"))))
-            {
-                continue; // Pause automatic blinking while asleep
-            }
+            if (!autoBlinkEnabled || IsAvatarSleeping()) continue;
 
             int blinks = (UnityEngine.Random.value < 0.2f) ? 2 : 1;
             for (int i = 0; i < blinks; i++)
@@ -143,6 +137,24 @@ public class UniversalBlendshapes : MonoBehaviour
         return false;
     }
 
+    private bool IsAvatarSleeping()
+    {
+        var anim = GetComponent<Animator>();
+        if (anim != null && anim.IsValidAndPlaying())
+        {
+            foreach (var p in anim.parameters)
+            {
+                if (p.type == AnimatorControllerParameterType.Bool &&
+                    (string.Equals(p.name, "isSleeping", System.StringComparison.OrdinalIgnoreCase) ||
+                     string.Equals(p.name, "sleeping", System.StringComparison.OrdinalIgnoreCase)))
+                {
+                    if (anim.GetBool(p.name)) return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private void LateUpdate()
     {
         float now = Time.time;
@@ -160,6 +172,15 @@ public class UniversalBlendshapes : MonoBehaviour
             string key = keys[i];
             float input = valueCache[i] = GetInputValue(i);
             UpdateState(key, input, now, dt);
+        }
+
+        if (IsAvatarSleeping())
+        {
+            if (states.TryGetValue("Blink", out var blinkState))
+            {
+                blinkState.value = Mathf.MoveTowards(blinkState.value, 1f, fadeSpeed * dt);
+                Blink = blinkState.value;
+            }
         }
 
         if (proxy0 != null)

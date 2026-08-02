@@ -24,7 +24,8 @@ public class AvatarSleepController : MonoBehaviour
     [Header("Circadian Energy Rules")]
     [SerializeField] private float currentEnergy = 1.0f;
     [SerializeField] private bool isSleepLocked = false;
-    public bool IsSleepLocked => isSleepLocked;
+    [SerializeField] private bool isManualOverride = false;
+    public bool IsSleepLocked => isSleepLocked || isManualOverride;
 
     private Animator animator;
     private int _resolvedSleepParamHash = 0;
@@ -45,9 +46,11 @@ public class AvatarSleepController : MonoBehaviour
         _resolvedSleepParamHash = Animator.StringToHash("isSleeping"); // default lowercase
         foreach (var p in animator.parameters)
         {
-            if (p.name == "IsSleeping")
+            if (p.type == AnimatorControllerParameterType.Bool && 
+                (string.Equals(p.name, "IsSleeping", System.StringComparison.OrdinalIgnoreCase) ||
+                 string.Equals(p.name, "sleeping", System.StringComparison.OrdinalIgnoreCase)))
             {
-                _resolvedSleepParamHash = Animator.StringToHash("IsSleeping");
+                _resolvedSleepParamHash = Animator.StringToHash(p.name);
                 break;
             }
         }
@@ -74,7 +77,7 @@ public class AvatarSleepController : MonoBehaviour
     {
         if (!enableSleep || !IsAnimatorValid())
         {
-            if (!isSleepLocked)
+            if (!isSleepLocked && !isManualOverride)
                 SetSleeping(false);
             idleTime = 0f;
             return;
@@ -85,7 +88,7 @@ public class AvatarSleepController : MonoBehaviour
 
         if (IsAnyWakeUpBoolTrue())
         {
-            if (!isSleepLocked)
+            if (!isSleepLocked && !isManualOverride)
                 WakeUp();
             return;
         }
@@ -101,16 +104,16 @@ public class AvatarSleepController : MonoBehaviour
         else
         {
             idleTime = 0f;
-            if (!isSleepLocked)
+            if (!isSleepLocked && !isManualOverride)
                 SetSleeping(false);
         }
 
-        if (isSleeping && !allowed && !isSleepLocked)
+        if (isSleeping && !allowed && !isSleepLocked && !isManualOverride)
         {
             SetSleeping(false);
             idleTime = 0f;
         }
-        else if (isSleepLocked && !isSleeping)
+        else if ((isSleepLocked || isManualOverride) && !isSleeping)
         {
             SetSleeping(true);
         }
@@ -151,11 +154,13 @@ public class AvatarSleepController : MonoBehaviour
         if (sleepState)
         {
             enableSleep = true;
+            isManualOverride = true;
             idleTime = sleepTimer;
             SetSleeping(true);
         }
         else
         {
+            isManualOverride = false;
             if (isSleepLocked)
             {
                 Debug.LogWarning("[AvatarSleepController] Cannot awaken: Sleep mode is locked due to low circadian energy (< 40%).");
@@ -167,21 +172,27 @@ public class AvatarSleepController : MonoBehaviour
 
     void SetSleeping(bool value)
     {
-        if (isSleeping == value)
-            return;
         isSleeping = value;
         if (IsAnimatorValid())
         {
             if (_resolvedSleepParamHash != 0)
                 animator.SetBool(_resolvedSleepParamHash, value);
-            else
-                animator.SetBool("isSleeping", value);
+            foreach (var p in animator.parameters)
+            {
+                if (p.type == AnimatorControllerParameterType.Bool &&
+                    (string.Equals(p.name, "isSleeping", System.StringComparison.OrdinalIgnoreCase) ||
+                     string.Equals(p.name, "sleeping", System.StringComparison.OrdinalIgnoreCase)))
+                {
+                    animator.SetBool(p.name, value);
+                }
+            }
         }
     }
 
     public void WakeUp()
     {
         if (isSleepLocked) return;
+        isManualOverride = false;
         SetSleeping(false);
         idleTime = 0f;
     }
