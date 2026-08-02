@@ -1,0 +1,106 @@
+=== DEEP FORENSIC AUDIT ===
+Controller: AvatarAnimatorControllerV2
+Runtime Animator Found: NO
+--------------------------------------------------
+
+STATE: Idle0
+Layer: Base Layer
+1. Does the state exist? YES
+2. Is Motion assigned? YES
+3. Is Motion NULL? NO
+4. Which AnimationClip is assigned? HUS_IDLE01
+5. Does the AnimationClip asset actually exist? YES
+   Clip GUID: 99edc70e367b7c2429ddcde1e98f550a
+6. Is the clip imported correctly? UNKNOWN (Not a Model, maybe native .anim)
+7. Is the clip Humanoid or Generic? N/A (.anim format)
+10-16. Runtime Checks: NOT IN PLAY MODE
+   Layer weight (Default): 0
+15. Is an Avatar Mask suppressing it? NO
+17. Is Write Defaults causing the pose to freeze? NO (False)
+18. Is the state's Speed set to 0? NO (Speed=1)
+19. Is Time Parameter enabled incorrectly? NO
+
+STATE: Idle1
+Layer: Base Layer
+1. Does the state exist? YES
+2. Is Motion assigned? YES
+3. Is Motion NULL? NO
+4. Which AnimationClip is assigned? HUS_IDLE01
+5. Does the AnimationClip asset actually exist? YES
+   Clip GUID: 99edc70e367b7c2429ddcde1e98f550a
+6. Is the clip imported correctly? UNKNOWN (Not a Model, maybe native .anim)
+7. Is the clip Humanoid or Generic? N/A (.anim format)
+10-16. Runtime Checks: NOT IN PLAY MODE
+   Layer weight (Default): 0
+15. Is an Avatar Mask suppressing it? NO
+17. Is Write Defaults causing the pose to freeze? NO (False)
+18. Is the state's Speed set to 0? NO (Speed=1)
+19. Is Time Parameter enabled incorrectly? NO
+
+STATE: IdleHappy
+Layer: Base Layer
+1. Does the state exist? YES
+2. Is Motion assigned? YES
+3. Is Motion NULL? NO
+4. Which AnimationClip is assigned? Idle
+5. Does the AnimationClip asset actually exist? YES
+   Clip GUID: f47b3b98baf71c841b40792fbdc3a374
+6. Is the clip imported correctly? UNKNOWN (Not a Model, maybe native .anim)
+7. Is the clip Humanoid or Generic? N/A (.anim format)
+10-16. Runtime Checks: NOT IN PLAY MODE
+   Layer weight (Default): 0
+15. Is an Avatar Mask suppressing it? NO
+17. Is Write Defaults causing the pose to freeze? NO (False)
+18. Is the state's Speed set to 0? NO (Speed=1)
+19. Is Time Parameter enabled incorrectly? NO
+
+STATE: IdleCheer
+Layer: Base Layer
+1. Does the state exist? YES
+2. Is Motion assigned? YES
+3. Is Motion NULL? NO
+4. Which AnimationClip is assigned? Idle
+5. Does the AnimationClip asset actually exist? YES
+   Clip GUID: f47b3b98baf71c841b40792fbdc3a374
+6. Is the clip imported correctly? UNKNOWN (Not a Model, maybe native .anim)
+7. Is the clip Humanoid or Generic? N/A (.anim format)
+10-16. Runtime Checks: NOT IN PLAY MODE
+   Layer weight (Default): 0
+15. Is an Avatar Mask suppressing it? NO
+17. Is Write Defaults causing the pose to freeze? NO (False)
+18. Is the state's Speed set to 0? NO (Speed=1)
+19. Is Time Parameter enabled incorrectly? NO
+
+STATE: IdleSad
+Layer: Base Layer
+1. Does the state exist? YES
+2. Is Motion assigned? YES
+3. Is Motion NULL? NO
+4. Which AnimationClip is assigned? Idle
+5. Does the AnimationClip asset actually exist? YES
+   Clip GUID: f47b3b98baf71c841b40792fbdc3a374
+6. Is the clip imported correctly? UNKNOWN (Not a Model, maybe native .anim)
+7. Is the clip Humanoid or Generic? N/A (.anim format)
+10-16. Runtime Checks: NOT IN PLAY MODE
+   Layer weight (Default): 0
+15. Is an Avatar Mask suppressing it? NO
+17. Is Write Defaults causing the pose to freeze? NO (False)
+18. Is the state's Speed set to 0? NO (Speed=1)
+19. Is Time Parameter enabled incorrectly? NO
+
+STATE: IdleAngry
+Layer: Base Layer
+1. Does the state exist? YES
+2. Is Motion assigned? YES
+3. Is Motion NULL? NO
+4. Which AnimationClip is assigned? Idle
+5. Does the AnimationClip asset actually exist? YES
+   Clip GUID: f47b3b98baf71c841b40792fbdc3a374
+6. Is the clip imported correctly? UNKNOWN (Not a Model, maybe native .anim)
+7. Is the clip Humanoid or Generic? N/A (.anim format)
+10-16. Runtime Checks: NOT IN PLAY MODE
+   Layer weight (Default): 0
+15. Is an Avatar Mask suppressing it? NO
+17. Is Write Defaults causing the pose to freeze? NO (False)
+18. Is the state's Speed set to 0? NO (Speed=1)
+19. Is Time Parameter enabled incorrectly? NO
