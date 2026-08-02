@@ -1,0 +1,27 @@
+{
+  "enabled": true,
+  "version": "1.0.0",
+  "confidence_threshold": 0.85,
+  "safety_threshold": 0.90,
+  "max_buffer_size": 1000,
+  "canary_percentage": 0.1,
+  "rollback_enabled": true,
+  "audit_log_path": "shared/evolution_audit.json",
+  "telemetry_log_path": "shared/evolution_telemetry.json",
+  "state_path": "shared/evolution_state.json",
+  "hardware": {
+    "telemetry_device": "cpu",
+    "learning_device": "cpu",
+    "allow_gpu_for_evolution": false
+  },
+  "self_play": {
+    "enabled": true,
+    "quiet_phases": ["Night", "LateNight", "PreDawn"],
+    "max_cycles": 10
+  },
+  "adaptation": {
+    "learning_rate": 0.05,
+    "exploration_rate": 0.1,
+    "decay": 0.99
+  }
+}

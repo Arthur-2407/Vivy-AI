@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vivy AI — Developer Runtime Diagnostic Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #090c10;
+            --card-bg: rgba(22, 27, 34, 0.75);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent-blue: #00f2fe;
+            --accent-cyan: #4facfe;
+            --accent-pink: #ff007f;
+            --accent-green: #00ff87;
+            --accent-yellow: #ffb703;
+            --accent-red: #ff4757;
+            --text-main: #f0f6fc;
+            --text-sub: #8b949e;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 242, 254, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(255, 0, 127, 0.05) 0px, transparent 50%);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .header-title h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-pink));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title p {
+            font-size: 0.82rem;
+            color: var(--text-sub);
+            margin-top: 2px;
+        }
+
+        .toggle-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-btn.active {
+            background: rgba(0, 255, 135, 0.15);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            box-shadow: 0 0 15px rgba(0, 255, 135, 0.3);
+        }
+
+        .toggle-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-red);
+        }
+
+        .toggle-btn.active .toggle-indicator {
+            background: var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            padding: 14px 18px;
+            border-radius: 10px;
+        }
+
+        .metric-card .label {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-card .value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-top: 4px;
+            font-family: var(--font-mono);
+            color: var(--accent-blue);
+        }
+
+        .metric-card .value.alert {
+            color: var(--accent-red);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 1100px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        .panel {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 520px;
+            overflow-y: auto;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 10px;
+            margin-bottom: 4px;
+        }
+
+        .panel-header h2 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-sub);
+        }
+
+        .badge.green { background: rgba(0, 255, 135, 0.15); color: var(--accent-green); }
+        .badge.red { background: rgba(255, 71, 87, 0.15); color: var(--accent-red); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            font-family: var(--font-mono);
+        }
+
+        th {
+            text-align: left;
+            padding: 8px 10px;
+            color: var(--text-sub);
+            border-bottom: 1px solid var(--card-border);
+            font-weight: 500;
+        }
+
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-main);
+            word-break: break-all;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .code-box {
+            background: #0d1117;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 12px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: #7ee787;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .trace-step {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid var(--accent-cyan);
+            padding: 10px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 8px;
+        }
+
+        .trace-step .step-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .trace-step .step-body {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-main);
+        }
+
+        .defect-flag {
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid var(--accent-red);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+        }
+
+        .defect-flag .defect-title {
+            font-weight: 700;
+            color: var(--accent-red);
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .defect-flag .defect-body {
+            font-size: 0.78rem;
+            color: var(--text-main);
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-title">
+            <h1>🛡️ Vivy AI — Developer Runtime Diagnostic Dashboard</h1>
+            <p>Full-Stack Real-Time Pipeline Instrumentation & Forensic Evidence Engine</p>
+        </div>
+        <button id="toggleBtn" class="toggle-btn" onclick="toggleDiagnostics()">
+            <div class="toggle-indicator"></div>
+            <span id="toggleText">Diagnostic Mode: OFF</span>
+        </button>
+    </div>
+
+    <div class="metrics-bar">
+        <div class="metric-card">
+            <div class="label">System Uptime</div>
+            <div id="metricUptime" class="value">0s</div>
+        </div>
+        <div class="metric-card">
+            <div class="label">Camera Frame FPS</div>
+            <div id="metricFPS" class="value">0.0</div>
+        </div>
+        <div class="metric-card">
+            <div class="label">Frames Processed</div>
+            <div id="metricFrames" class="value">0</div>
+        </div>
+        <div class="metric-card">
+            <div class="label">WS Packets Streamed</div>
+            <div id="metricPackets" class="value">0</div>
+        </div>
+        <div class="metric-card">
+            <div class="label">Active Defect Flags</div>
+            <div id="metricDefects" class="value alert">0</div>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <!-- Panel 1: Live Perception Pipeline -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>📷 Live Perception Pipeline</h2>
+                <span id="perceptionBadge" class="badge">STANDBY</span>
+            </div>
+            <div id="perceptionContent">
+                <table>
+                    <tr><th>Metric</th><th>Value</th></tr>
+                    <tr><td>Camera Source</td><td id="pCamSource">-</td></tr>
+                    <tr><td>Resolution</td><td id="pResolution">-</td></tr>
+                    <tr><td>Frame Latency</td><td id="pLatency">-</td></tr>
+                    <tr><td>Faces Tracked</td><td id="pFaces">-</td></tr>
+                    <tr><td>Objects Tracked</td><td id="pObjects">-</td></tr>
+                    <tr><td>Gaze Direction</td><td id="pGaze">-</td></tr>
+                    <tr><td>OCR Text Snippet</td><td id="pOcr">-</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Panel 2: Live WebSocket Packet Monitor -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>⚡ Live WebSocket Monitor (ws://8765)</h2>
+                <span class="badge green">LISTENING</span>
+            </div>
+            <table>
+                <thead>
+                    <tr><th>Time</th><th>Dir</th><th>Type</th><th>Bytes</th><th>Ser (ms)</th></tr>
+                </thead>
+                <tbody id="wsTableBody">
+                    <tr><td colspan="5">No WebSocket packets recorded yet.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Panel 3: Live Animation & Avatar Monitor -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>🎭 Live Animation & Animator State</h2>
+                <span class="badge green">UNITY LINK</span>
+            </div>
+            <table>
+                <tr><th>Parameter</th><th>Value</th></tr>
+                <tr><td>Current Animation</td><td id="animCurrent">Idle</td></tr>
+                <tr><td>Animator Layer</td><td id="animLayer">0 (Base)</td></tr>
+                <tr><td>Blend Weight</td><td id="animWeight">1.0</td></tr>
+                <tr><td>Transition Progress</td><td id="animProgress">100%</td></tr>
+                <tr><td>Animator State</td><td id="animState">Playing</td></tr>
+            </table>
+        </div>
+
+        <!-- Panel 4: Prompt Inspection Sandbox -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>🔍 Prompt Inspection Pipeline</h2>
+                <span class="badge">STEP-BY-STEP</span>
+            </div>
+            <div id="promptTraceBox">
+                <p style="color: var(--text-sub); font-size: 0.85rem;">Ask Vivy a question ("What is in my hand?", "Where am I looking?") to inspect prompt transformations.</p>
+            </div>
+        </div>
+
+        <!-- Panel 5: Fallback Detector & Automated Defect Log -->
+        <div class="panel" style="grid-column: 1 / -1;">
+            <div class="panel-header">
+                <h2>🚨 Fallback Detector & Root Cause Defect Tracker</h2>
+                <span id="defectBadge" class="badge red">0 DEFECTS</span>
+            </div>
+            <div id="fallbackBox">
+                <p style="color: var(--text-sub); font-size: 0.85rem;">Fallback detector active. Any perception fallbacks triggered during valid vision state will be automatically flagged as defects here.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isEnabled = false;
+
+        async function fetchStatus() {
+            try {
+                const res = await fetch('/api/developer-diagnostic/status');
+                const json = await res.json();
+                if (json.success && json.data) {
+                    renderDashboard(json.data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch diagnostic status:", err);
+            }
+        }
+
+        async function toggleDiagnostics() {
+            try {
+                const res = await fetch('/api/developer-diagnostic/toggle', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({enable: !isEnabled})
+                });
+                const json = await res.json();
+                if (json.success) {
+                    isEnabled = json.enabled;
+                    updateToggleUI();
+                    fetchStatus();
+                }
+            } catch (err) {
+                console.error("Failed to toggle diagnostic mode:", err);
+            }
+        }
+
+        function updateToggleUI() {
+            const btn = document.getElementById('toggleBtn');
+            const txt = document.getElementById('toggleText');
+            if (isEnabled) {
+                btn.classList.add('active');
+                txt.innerText = 'Diagnostic Mode: ON';
+            } else {
+                btn.classList.remove('active');
+                txt.innerText = 'Diagnostic Mode: OFF';
+            }
+        }
+
+        function renderDashboard(data) {
+            isEnabled = data.enabled;
+            updateToggleUI();
+
+            // Render Metrics
+            document.getElementById('metricUptime').innerText = `${data.uptime_seconds || 0}s`;
+            document.getElementById('metricFPS').innerText = data.latest_frame?.fps || '0.0';
+            document.getElementById('metricFrames').innerText = data.stats?.total_frames_processed || 0;
+            document.getElementById('metricPackets').innerText = data.stats?.total_ws_packets || 0;
+            document.getElementById('metricDefects').innerText = data.stats?.active_defects_count || 0;
+
+            // Render Perception
+            const frame = data.latest_frame || {};
+            document.getElementById('pCamSource').innerText = frame.camera_source || 'Standby';
+            document.getElementById('pResolution').innerText = frame.resolution || '-';
+            document.getElementById('pLatency').innerText = frame.latency_ms ? `${frame.latency_ms} ms` : '-';
+            document.getElementById('pFaces').innerText = frame.face_detection?.face_count || 0;
+            document.getElementById('pObjects').innerText = frame.object_detection?.object_count || 0;
+            document.getElementById('pGaze').innerText = frame.gaze_estimation?.pupil_look_target ? 'Tracking' : 'Standby';
+            document.getElementById('pOcr').innerText = frame.ocr_text?.text || 'None';
+
+            const percBadge = document.getElementById('perceptionBadge');
+            if (frame.fps > 0) {
+                percBadge.innerText = 'LIVE STREAM';
+                percBadge.className = 'badge green';
+            } else {
+                percBadge.innerText = 'STANDBY';
+                percBadge.className = 'badge';
+            }
+
+            // Render WebSocket Packets
+            const wsBody = document.getElementById('wsTableBody');
+            if (data.recent_packets && data.recent_packets.length > 0) {
+                wsBody.innerHTML = data.recent_packets.map(p => `
+                    <tr>
+                        <td>${p.time_str}</td>
+                        <td style="color: ${p.direction === 'OUTGOING' ? '#00ff87' : '#00f2fe'}">${p.direction}</td>
+                        <td>${p.message_type}</td>
+                        <td>${p.payload_size_bytes}</td>
+                        <td>${p.serialization_ms || p.deserialization_ms || 0}</td>
+                    </tr>
+                `).join('');
+            } else {
+                wsBody.innerHTML = '<tr><td colspan="5">No WebSocket packets recorded yet.</td></tr>';
+            }
+
+            // Render Animation State
+            const anim = data.latest_animation || {};
+            document.getElementById('animCurrent').innerText = anim.current_animation || 'Idle';
+            document.getElementById('animLayer').innerText = anim.animator_layer !== undefined ? anim.animator_layer : '0 (Base)';
+            document.getElementById('animWeight').innerText = anim.blend_weight || '1.0';
+            document.getElementById('animProgress').innerText = `${(anim.transition_progress || 1.0) * 100}%`;
+            document.getElementById('animState').innerText = anim.animator_state || 'Playing';
+
+            // Render Prompt Trace
+            const prompt = data.latest_prompt || {};
+            const promptBox = document.getElementById('promptTraceBox');
+            if (prompt.user_query) {
+                promptBox.innerHTML = `
+                    <div class="trace-step">
+                        <div class="step-title">1. User Perception Query</div>
+                        <div class="step-body">"${prompt.user_query}"</div>
+                    </div>
+                    <div class="trace-step">
+                        <div class="step-title">2. Multimodal Perception Context Injected</div>
+                        <div class="step-body">${prompt.context_builder_output || 'No context injected'}</div>
+                    </div>
+                    <div class="trace-step">
+                        <div class="step-title">3. Raw LLM Candidate Response</div>
+                        <div class="step-body">${prompt.raw_llm_response || '-'}</div>
+                    </div>
+                    <div class="trace-step">
+                        <div class="step-title">4. Final Filtered Spoken Response</div>
+                        <div class="step-body" style="color: var(--accent-green); font-weight: 600;">"${prompt.final_spoken_response}"</div>
+                    </div>
+                `;
+            }
+
+            // Render Defect Flags
+            const defectBox = document.getElementById('fallbackBox');
+            const defects = data.active_defects || [];
+            document.getElementById('defectBadge').innerText = `${defects.length} DEFECTS`;
+            if (defects.length > 0) {
+                defectBox.innerHTML = defects.map(d => `
+                    <div class="defect-flag">
+                        <div class="defect-title">
+                            <span>🚨 ${d.defect_id} (${d.time_str})</span>
+                            <span>Location: ${d.location}</span>
+                        </div>
+                        <div class="defect-body">
+                            <strong>Root Cause:</strong> ${d.root_cause_summary}<br>
+                            <strong>Evidence:</strong> ${JSON.stringify(d.runtime_evidence)}
+                        </div>
+                    </div>
+                `).join('');
+            } else if (data.recent_fallbacks && data.recent_fallbacks.length > 0) {
+                defectBox.innerHTML = `<p style="color: var(--accent-green); font-size: 0.85rem;">✓ ${data.recent_fallbacks.length} fallback events recorded cleanly without defects.</p>`;
+            }
+        }
+
+        // Poll API every 1.5s
+        setInterval(fetchStatus, 1500);
+        fetchStatus();
+    </script>
+</body>
+</html>

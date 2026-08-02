@@ -1,0 +1,83 @@
+{
+  "timestamp": "2026-08-02 16:28:37",
+  "overall_health_score_pct": 91.67,
+  "readiness_state": "Development (Pending Repairs)",
+  "stage_results": {
+    "Stage 1": {
+      "status": "PASS",
+      "files": 459,
+      "syntax_errors": 0
+    },
+    "Stage 2": {
+      "status": "PASS",
+      "components_discovered": 24
+    },
+    "Stage 3": {
+      "status": "PASS",
+      "shared_state_files": 4
+    },
+    "Stage 4": {
+      "status": "PASS",
+      "deps_verified": 17
+    },
+    "Stage 5": {
+      "status": "FAIL",
+      "errors": [
+        "Internet Intelligence test error: name 'os' is not defined"
+      ]
+    },
+    "Stage 6": {
+      "status": "PASS",
+      "latency_s": 3.5948867797851562
+    },
+    "Stage 7": {
+      "status": "PASS",
+      "mode": "standard",
+      "cycles": 50,
+      "duration_s": 0.025528907775878906
+    },
+    "Stage 8": {
+      "status": "PASS"
+    },
+    "Stage 9": {
+      "status": "PASS",
+      "cpu_percent": 11.9,
+      "ram_percent": 62.5,
+      "ram_used_gb": 14.77
+    },
+    "Stage 10": {
+      "status": "PASS",
+      "active_threads": 10
+    },
+    "Stage 11_12": {
+      "status": "PASS",
+      "auto_repairs": []
+    },
+    "Stage 13": {
+      "status": "PASS",
+      "compliance_chain": [
+        "Perception Layer",
+        "Cognition Layer",
+        "Expression Layer",
+        "Feedback Loop",
+        "Memory System",
+        "Emotional Engine",
+        "Conversation Logic",
+        "Network Verification & Intelligence Layer (Step 1)",
+        "Tor & Scapy L2-L4 Bouncing Gateway (Step 2: FRRouting -> GNS3 -> Scapy -> Sockets -> iptables)",
+        "DuckDuckGo & Universal Multi-Source Retrieval (Step 3)"
+      ]
+    }
+  },
+  "auto_repair_actions": [],
+  "performance_metrics": {
+    "individual_module_test_latency_s": 29.10262393951416,
+    "pipeline_integration_latency_s": 3.5948867797851562,
+    "cpu_percent": 11.9,
+    "ram_percent": 62.5
+  },
+  "errors": [
+    "Internet Intelligence test error: name 'os' is not defined"
+  ],
+  "warnings": []
+}

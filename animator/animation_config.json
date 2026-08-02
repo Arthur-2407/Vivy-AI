@@ -1,0 +1,55 @@
+{
+  "_comment": "Vivy Animation Config — Modular Multi-Layer Mapping.",
+  "enabled": true,
+  "cooldown_seconds": {
+    "Base Layer": 3.0,
+    "Face Layer": 1.0,
+    "Gesture Layer": 2.0,
+    "Procedural Layer": 0.5
+  },
+
+  "emotion_layers": {
+    "joy": {
+      "Base Layer": ["IdleHappy", "IdleCheer"],
+      "Face Layer": ["SmileBig", "Laugh"],
+      "Gesture Layer": ["WaveHand"],
+      "Procedural Layer": ["HappyBreathing", "FastBlink"]
+    },
+    "sadness": {
+      "Base Layer": ["IdleSad"],
+      "Face Layer": ["Frown", "Cry", "TearUp"],
+      "Gesture Layer": [],
+      "Procedural Layer": ["SadBreathing", "SlowBlink"]
+    },
+    "anger": {
+      "Base Layer": ["IdleAngry", "HandsCrossed"],
+      "Face Layer": ["AngryFace"],
+      "Gesture Layer": [],
+      "Procedural Layer": ["HeavyBreathing", "FastBlink"]
+    },
+    "surprise": {
+      "Base Layer": ["IdleSurprise"],
+      "Face Layer": ["WideEyes"],
+      "Gesture Layer": [],
+      "Procedural Layer": ["GaspBreathing"]
+    },
+    "fear": {
+      "Base Layer": [],
+      "Face Layer": ["ScaredFace"],
+      "Gesture Layer": ["ProtectBody"],
+      "Procedural Layer": ["NervousBreathing"]
+    },
+    "disgust": {
+      "Base Layer": [],
+      "Face Layer": ["DisgustFace"],
+      "Gesture Layer": [],
+      "Procedural Layer": ["NormalBreathing"]
+    },
+    "neutral": {
+      "Base Layer": ["Idle0", "Idle1"],
+      "Face Layer": ["NeutralFace"],
+      "Gesture Layer": [],
+      "Procedural Layer": ["NormalBreathing", "NormalBlink", "WeightShift"]
+    }
+  }
+}

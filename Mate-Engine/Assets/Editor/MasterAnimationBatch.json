@@ -1,0 +1,388 @@
+{
+    "items": [
+        {
+            "id": "Idle0",
+            "trigger": "Idle0",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim"
+        },
+        {
+            "id": "Idle1",
+            "trigger": "Idle1",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim"
+        },
+        {
+            "id": "IdleHappy",
+            "trigger": "IdleHappy",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "IdleCheer",
+            "trigger": "IdleCheer",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "IdleSad",
+            "trigger": "IdleSad",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "IdleAngry",
+            "trigger": "IdleAngry",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "IdleSurprise",
+            "trigger": "IdleSurprise",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "Dance0",
+            "trigger": "Dance0",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_DANCING/ME_02/HUSBANDO/HUS_DANCE_01.anim"
+        },
+        {
+            "id": "Dance1",
+            "trigger": "Dance1",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_DANCING/ME_02/HUSBANDO/HUS_DANCE_01.anim"
+        },
+        {
+            "id": "Dance2",
+            "trigger": "Dance2",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_DANCING/ME_02/HUSBANDO/HUS_DANCE_02.anim"
+        },
+        {
+            "id": "Dance3",
+            "trigger": "Dance3",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_DANCING/ME_02/HUSBANDO/HUS_DANCE_03.anim"
+        },
+        {
+            "id": "Dance4",
+            "trigger": "Dance4",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_DANCING/ME_02/HUSBANDO/HUS_DANCE_04.anim"
+        },
+        {
+            "id": "Sleeping",
+            "trigger": "Sleeping",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_SLEEPING/PET_SLEEPING.anim"
+        },
+        {
+            "id": "Dragging",
+            "trigger": "Dragging",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_DRAGGING.anim"
+        },
+        {
+            "id": "Laugh",
+            "trigger": "Laugh",
+            "layer": "Face Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim"
+        },
+        {
+            "id": "HappyBreathing",
+            "trigger": "HappyBreathing",
+            "layer": "Procedural Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/FACE_LAYER/PET_HAPPY.anim"
+        },
+        {
+            "id": "RelaxedStanding",
+            "trigger": "RelaxedStanding",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "FormalStanding",
+            "trigger": "FormalStanding",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "CasualStanding",
+            "trigger": "CasualStanding",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "ConfidentStanding",
+            "trigger": "ConfidentStanding",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "ShyStanding",
+            "trigger": "ShyStanding",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "StretchWhileIdle",
+            "trigger": "StretchWhileIdle",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "SleepingBreathing",
+            "trigger": "SleepingBreathing",
+            "layer": "Procedural Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_SLEEPING/PET_SLEEPING.anim"
+        },
+        {
+            "id": "Talking",
+            "trigger": "Talking",
+            "layer": "Face Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim"
+        },
+        {
+            "id": "Laughing",
+            "trigger": "Laughing",
+            "layer": "Face Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim"
+        },
+        {
+            "id": "Point",
+            "trigger": "Point",
+            "layer": "Gesture Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_SHY_POINT.anim"
+        },
+        {
+            "id": "HappyBounce",
+            "trigger": "HappyBounce",
+            "layer": "Gesture Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim"
+        },
+        {
+            "id": "SitChair",
+            "trigger": "SitChair",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+        },
+        {
+            "id": "SitFloor",
+            "trigger": "SitFloor",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+        },
+        {
+            "id": "SitCrossLeg",
+            "trigger": "SitCrossLeg",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+        },
+        {
+            "id": "SitRelaxed",
+            "trigger": "SitRelaxed",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+        },
+        {
+            "id": "SitFormal",
+            "trigger": "SitFormal",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+        },
+        {
+            "id": "SitEdge",
+            "trigger": "SitEdge",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+        },
+        {
+            "id": "SitSofa",
+            "trigger": "SitSofa",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+        },
+        {
+            "id": "SitGaming",
+            "trigger": "SitGaming",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+        },
+        {
+            "id": "SitThinking",
+            "trigger": "SitThinking",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+        },
+        {
+            "id": "SitReading",
+            "trigger": "SitReading",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+        },
+        {
+            "id": "NormalWalk",
+            "trigger": "NormalWalk",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        },
+        {
+            "id": "SlowWalk",
+            "trigger": "SlowWalk",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        },
+        {
+            "id": "FastWalk",
+            "trigger": "FastWalk",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        },
+        {
+            "id": "HappyWalk",
+            "trigger": "HappyWalk",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        },
+        {
+            "id": "SadWalk",
+            "trigger": "SadWalk",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        },
+        {
+            "id": "AngryWalk",
+            "trigger": "AngryWalk",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        },
+        {
+            "id": "ConfidentWalk",
+            "trigger": "ConfidentWalk",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        },
+        {
+            "id": "ShyWalk",
+            "trigger": "ShyWalk",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        },
+        {
+            "id": "InjuredWalk",
+            "trigger": "InjuredWalk",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        },
+        {
+            "id": "WalkBackwards",
+            "trigger": "WalkBackwards",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        },
+        {
+            "id": "CrouchIdle",
+            "trigger": "CrouchIdle",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "WalkCrouch",
+            "trigger": "WalkCrouch",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        },
+        {
+            "id": "SleepStanding",
+            "trigger": "SleepStanding",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "SleepSitting",
+            "trigger": "SleepSitting",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+        },
+        {
+            "id": "CuteDance",
+            "trigger": "CuteDance",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim"
+        },
+        {
+            "id": "IdleDance",
+            "trigger": "IdleDance",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "VictoryDance",
+            "trigger": "VictoryDance",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim"
+        },
+        {
+            "id": "TalkingConv",
+            "trigger": "TalkingConv",
+            "layer": "Gesture Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim"
+        },
+        {
+            "id": "LaughWhileTalking",
+            "trigger": "LaughWhileTalking",
+            "layer": "Gesture Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim"
+        },
+        {
+            "id": "PickUp",
+            "trigger": "PickUp",
+            "layer": "Gesture Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/PickUp.anim"
+        },
+        {
+            "id": "Pull",
+            "trigger": "Pull",
+            "layer": "Gesture Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_DRAG.anim"
+        },
+        {
+            "id": "SitUp",
+            "trigger": "SitUp",
+            "layer": "Base Layer",
+            "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+        },
+        {
+            "id": "WalkFitness",
+            "trigger": "WalkFitness",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        },
+        {
+            "id": "IdleCuriosity",
+            "trigger": "IdleCuriosity",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "LonelyIdleBehavior",
+            "trigger": "LonelyIdleBehavior",
+            "layer": "Base Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim"
+        },
+        {
+            "id": "FingerMovement",
+            "trigger": "FingerMovement",
+            "layer": "Procedural Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        },
+        {
+            "id": "EarMovement",
+            "trigger": "EarMovement",
+            "layer": "Procedural Layer",
+            "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim"
+        }
+    ]
+}

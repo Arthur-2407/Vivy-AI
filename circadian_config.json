@@ -1,0 +1,177 @@
+{
+  "_comment": "Vivy AI — Circadian Intelligence System Configuration",
+  "_comment2": "All time values are 'HH:MM' strings (24-hour format). All deltas are floats.",
+
+  "enabled": true,
+  "sleep_enabled": true,
+
+  "time_blocks": {
+    "Morning":      { "start": "06:00", "end": "09:00" },
+    "LateMorning":  { "start": "09:00", "end": "12:00" },
+    "Afternoon":    { "start": "12:00", "end": "15:00" },
+    "LateAfternoon":{ "start": "15:00", "end": "18:00" },
+    "Evening":      { "start": "18:00", "end": "21:00" },
+    "Night":        { "start": "21:00", "end": "00:00" },
+    "LateNight":    { "start": "00:00", "end": "03:00" },
+    "PreDawn":      { "start": "03:00", "end": "06:00" }
+  },
+
+  "phase_modulation": {
+    "Morning": {
+      "tone":                "energetic",
+      "emotion_deltas": {
+        "curiosity":         0.15,
+        "happiness":         0.10,
+        "confidence":        0.10,
+        "playfulness":       0.12,
+        "affection":         0.00,
+        "calmness":         -0.05,
+        "embarrassment":     0.00
+      },
+      "initiative_delta":    0.20,
+      "energy":              0.85,
+      "voice_speed_delta":   0.08,
+      "voice_warmth_delta":  0.00,
+      "avatar_energy":       0.90
+    },
+    "LateMorning": {
+      "tone":                "engaged",
+      "emotion_deltas": {
+        "curiosity":         0.10,
+        "happiness":         0.08,
+        "confidence":        0.08,
+        "playfulness":       0.05,
+        "affection":         0.02,
+        "calmness":          0.00,
+        "embarrassment":     0.00
+      },
+      "initiative_delta":    0.12,
+      "energy":              0.80,
+      "voice_speed_delta":   0.05,
+      "voice_warmth_delta":  0.05,
+      "avatar_energy":       0.80
+    },
+    "Afternoon": {
+      "tone":                "focused",
+      "emotion_deltas": {
+        "curiosity":         0.05,
+        "happiness":         0.00,
+        "confidence":        0.05,
+        "playfulness":       0.00,
+        "affection":         0.00,
+        "calmness":          0.05,
+        "embarrassment":     0.00
+      },
+      "initiative_delta":    0.00,
+      "energy":              0.70,
+      "voice_speed_delta":   0.00,
+      "voice_warmth_delta":  0.00,
+      "avatar_energy":       0.70
+    },
+    "LateAfternoon": {
+      "tone":                "neutral",
+      "emotion_deltas": {
+        "curiosity":         0.00,
+        "happiness":         0.02,
+        "confidence":        0.00,
+        "playfulness":       0.05,
+        "affection":         0.03,
+        "calmness":          0.03,
+        "embarrassment":     0.00
+      },
+      "initiative_delta":   -0.03,
+      "energy":              0.72,
+      "voice_speed_delta":  -0.02,
+      "voice_warmth_delta":  0.08,
+      "avatar_energy":       0.70
+    },
+    "Evening": {
+      "tone":                "warm",
+      "emotion_deltas": {
+        "curiosity":         0.00,
+        "happiness":         0.05,
+        "confidence":        0.00,
+        "playfulness":       0.08,
+        "affection":         0.10,
+        "calmness":          0.08,
+        "embarrassment":     0.00
+      },
+      "initiative_delta":   -0.05,
+      "energy":              0.74,
+      "voice_speed_delta":  -0.03,
+      "voice_warmth_delta":  0.15,
+      "avatar_energy":       0.70
+    },
+    "Night": {
+      "tone":                "reflective",
+      "emotion_deltas": {
+        "curiosity":        -0.10,
+        "happiness":         0.02,
+        "confidence":       -0.05,
+        "playfulness":      -0.05,
+        "affection":         0.15,
+        "calmness":          0.12,
+        "embarrassment":     0.00
+      },
+      "initiative_delta":   -0.15,
+      "energy":              0.45,
+      "voice_speed_delta":  -0.08,
+      "voice_warmth_delta":  0.20,
+      "avatar_energy":       0.40
+    },
+    "LateNight": {
+      "tone":                "quiet",
+      "emotion_deltas": {
+        "curiosity":        -0.15,
+        "happiness":        -0.05,
+        "confidence":       -0.08,
+        "playfulness":      -0.10,
+        "affection":         0.05,
+        "calmness":          0.15,
+        "embarrassment":     0.00
+      },
+      "initiative_delta":   -0.25,
+      "energy":              0.20,
+      "voice_speed_delta":  -0.12,
+      "voice_warmth_delta":  0.10,
+      "avatar_energy":       0.20
+    },
+    "PreDawn": {
+      "tone":                "minimal",
+      "emotion_deltas": {
+        "curiosity":        -0.20,
+        "happiness":        -0.08,
+        "confidence":       -0.10,
+        "playfulness":      -0.12,
+        "affection":         0.00,
+        "calmness":          0.18,
+        "embarrassment":     0.00
+      },
+      "initiative_delta":   -0.30,
+      "energy":              0.10,
+      "voice_speed_delta":  -0.15,
+      "voice_warmth_delta":  0.05,
+      "avatar_energy":       0.10
+    }
+  },
+
+  "energy_curve": {
+    "interpolation":              "cosine",
+    "transition_window_minutes":  30
+  },
+
+  "sleep": {
+    "active_phases":          ["LateNight", "PreDawn"],
+    "reduce_initiative":      true,
+    "reduce_proactivity":     true
+  },
+
+  "hardware_policy": {
+    "cpu_workloads":          ["dialogue", "memory", "circadian", "emotion", "scheduling", "text", "ocr"],
+    "gpu_workloads":          ["avatar", "vision", "lip_sync", "image_gen", "large_model"],
+    "cpu_threshold_percent":  80,
+    "gpu_threshold_percent":  80,
+    "hysteresis_seconds":     10,
+    "default_llm_device":     "gpu"
+  }
+}

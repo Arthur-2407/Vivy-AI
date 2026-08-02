@@ -1,0 +1,58 @@
+{
+  "_comment": "Vivy AI — Unity Runtime Configuration File. Edit this file to change Unity component behavior at runtime.",
+
+  "connection": {
+    "server_uri": "ws://127.0.0.1:8765",
+    "reconnect_delay": 3.0,
+    "auto_connect": true,
+    "log_messages": true
+  },
+
+  "status_parameters": {
+    "thinking_param": "isThinking",
+    "speaking_param": "isSpeaking"
+  },
+
+  "streamer": {
+    "enable_streaming": true,
+    "width": 640,
+    "height": 640,
+    "render_scale": 1.0,
+    "fps": 60,
+    "jpeg_quality": 90,
+    "field_of_view": 35.0
+  },
+
+  "emotion_mapper": {
+    "transition_speed": 3.0,
+    "max_expression_intensity": 0.85,
+    "log_emotion_changes": true
+  },
+
+  "lip_sync": {
+    "phoneme_duration": 0.07,
+    "viseme_intensity": 0.75,
+    "smooth_speed": 12.0
+  },
+
+  "mouse_tracking": {
+    "enable_mouse_tracking": true,
+    "head_yaw_limit": 45.0,
+    "head_pitch_limit": 30.0,
+    "head_smoothness": 10.0,
+    "spine_smoothness": 25.0,
+    "eye_yaw_limit": 12.0,
+    "eye_pitch_limit": 12.0
+  },
+
+  "feature_flags": {
+    "procedural_breathing": true,
+    "procedural_blinking": true,
+    "procedural_saccades": true,
+    "procedural_weight_shift": true,
+    "emotion_layers": true,
+    "behavior_tree": true,
+    "structured_logging": true,
+    "error_recovery": true
+  }
+}

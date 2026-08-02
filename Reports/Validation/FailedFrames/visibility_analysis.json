@@ -1,0 +1,779 @@
+[
+  {
+    "frame": "frame_100.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_102.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_103.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_104.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_105.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_106.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_108.png",
+    "causes": [
+      "Stylized Mesh Landmark Ambiguity"
+    ]
+  },
+  {
+    "frame": "frame_110.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_111.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_114.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_115.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_116.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_117.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_118.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_119.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_120.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_122.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_123.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_124.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_127.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_128.png",
+    "causes": [
+      "Stylized Mesh Landmark Ambiguity"
+    ]
+  },
+  {
+    "frame": "frame_129.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_130.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_131.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_134.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_135.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_136.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_138.png",
+    "causes": [
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_139.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_14.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_142.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_143.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_144.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_145.png",
+    "causes": [
+      "Complete Detector Collapse"
+    ]
+  },
+  {
+    "frame": "frame_146.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_147.png",
+    "causes": [
+      "Stylized Mesh Landmark Ambiguity"
+    ]
+  },
+  {
+    "frame": "frame_148.png",
+    "causes": [
+      "Left Wrist Occluded"
+    ]
+  },
+  {
+    "frame": "frame_149.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_152.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_154.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_156.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_158.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_159.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_161.png",
+    "causes": [
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_162.png",
+    "causes": [
+      "Stylized Mesh Landmark Ambiguity"
+    ]
+  },
+  {
+    "frame": "frame_164.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_165.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_166.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_168.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_170.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_171.png",
+    "causes": [
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_172.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_175.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_176.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_177.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_178.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_179.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded"
+    ]
+  },
+  {
+    "frame": "frame_180.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_181.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_182.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_184.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_185.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_186.png",
+    "causes": [
+      "Stylized Mesh Landmark Ambiguity"
+    ]
+  },
+  {
+    "frame": "frame_187.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_188.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_190.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_191.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_193.png",
+    "causes": [
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_195.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_197.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_198.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_199.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_200.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_203.png",
+    "causes": [
+      "Left Wrist Occluded"
+    ]
+  },
+  {
+    "frame": "frame_205.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_206.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_32.png",
+    "causes": [
+      "Stylized Mesh Landmark Ambiguity"
+    ]
+  },
+  {
+    "frame": "frame_34.png",
+    "causes": [
+      "Stylized Mesh Landmark Ambiguity"
+    ]
+  },
+  {
+    "frame": "frame_36.png",
+    "causes": [
+      "Stylized Mesh Landmark Ambiguity"
+    ]
+  },
+  {
+    "frame": "frame_39.png",
+    "causes": [
+      "Stylized Mesh Landmark Ambiguity"
+    ]
+  },
+  {
+    "frame": "frame_43.png",
+    "causes": [
+      "Stylized Mesh Landmark Ambiguity"
+    ]
+  },
+  {
+    "frame": "frame_46.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_48.png",
+    "causes": [
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_53.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_55.png",
+    "causes": [
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_57.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_59.png",
+    "causes": [
+      "Stylized Mesh Landmark Ambiguity"
+    ]
+  },
+  {
+    "frame": "frame_64.png",
+    "causes": [
+      "Stylized Mesh Landmark Ambiguity"
+    ]
+  },
+  {
+    "frame": "frame_84.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded",
+      "Left Hip Occluded",
+      "Right Hip Occluded"
+    ]
+  },
+  {
+    "frame": "frame_85.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded",
+      "Left Hip Occluded",
+      "Right Hip Occluded"
+    ]
+  },
+  {
+    "frame": "frame_86.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded",
+      "Left Hip Occluded",
+      "Right Hip Occluded"
+    ]
+  },
+  {
+    "frame": "frame_87.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded",
+      "Left Hip Occluded",
+      "Right Hip Occluded"
+    ]
+  },
+  {
+    "frame": "frame_88.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded",
+      "Left Hip Occluded",
+      "Right Hip Occluded"
+    ]
+  },
+  {
+    "frame": "frame_89.png",
+    "causes": [
+      "Stylized Mesh Landmark Ambiguity"
+    ]
+  },
+  {
+    "frame": "frame_90.png",
+    "causes": [
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_91.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_92.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_94.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_95.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Left Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_97.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Left Elbow Occluded",
+      "Right Elbow Occluded"
+    ]
+  },
+  {
+    "frame": "frame_98.png",
+    "causes": [
+      "Left Wrist Occluded",
+      "Right Wrist Occluded",
+      "Right Elbow Occluded"
+    ]
+  }
+]

@@ -1,0 +1,3010 @@
+{
+  "PickUp": {
+    "clipGuid": "a69db62a1ed06b5419a1de4873b0f493",
+    "clipName": "PickUp",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/PickUp.anim",
+    "confidence": 95,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "Sleeping": {
+    "clipGuid": "183052ddcd2e8e0419781644bf4368f4",
+    "clipName": "PET_SLEEPING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_SLEEPING/PET_SLEEPING.anim",
+    "confidence": 90,
+    "resolutionMethod": "NormalizedMatch",
+    "verified": true
+  },
+  "Dragging": {
+    "clipGuid": "64262d8e94e0c0a4789800e284dccd08",
+    "clipName": "PET_DRAGGING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_DRAGGING.anim",
+    "confidence": 90,
+    "resolutionMethod": "NormalizedMatch",
+    "verified": true
+  },
+  "Talking": {
+    "clipGuid": "c6f9d0ed2494a034fa85554ac9bb8906",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 90,
+    "resolutionMethod": "NormalizedMatch",
+    "verified": true
+  },
+  "Laughing": {
+    "clipGuid": "a5e8cc322431f4b43aa7762aab58f93d",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 90,
+    "resolutionMethod": "NormalizedMatch",
+    "verified": true
+  },
+  "Idle0": {
+    "clipGuid": "99edc70e367b7c2429ddcde1e98f550a",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 93,
+    "resolutionMethod": "SemanticVariantNearby",
+    "verified": true
+  },
+  "Idle1": {
+    "clipGuid": "99edc70e367b7c2429ddcde1e98f550a",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 95,
+    "resolutionMethod": "SemanticVariantExact",
+    "verified": true
+  },
+  "IdleHappy": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "IdleCheer": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "IdleSad": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "IdleAngry": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "IdleSurprise": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "Dance0": {
+    "clipGuid": "8e671c96391e43128e59cace672f460f",
+    "clipName": "mixamo.com",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/Dance0.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "Dance1": {
+    "clipGuid": "efe82e52b73d86340b1c8bc6edb3b454",
+    "clipName": "HUS_DANCE_02",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_DANCING/ME_02/HUSBANDO/HUS_DANCE_02.anim",
+    "confidence": 93,
+    "resolutionMethod": "SemanticVariantNearby",
+    "verified": true
+  },
+  "Dance2": {
+    "clipGuid": "efe82e52b73d86340b1c8bc6edb3b454",
+    "clipName": "HUS_DANCE_02",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_DANCING/ME_02/HUSBANDO/HUS_DANCE_02.anim",
+    "confidence": 95,
+    "resolutionMethod": "SemanticVariantExact",
+    "verified": true
+  },
+  "Dance3": {
+    "clipGuid": "a6ec38c4c0d8d254c9e9c9c46d6d09f2",
+    "clipName": "HUS_DANCE_03",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_DANCING/ME_02/HUSBANDO/HUS_DANCE_03.anim",
+    "confidence": 95,
+    "resolutionMethod": "SemanticVariantExact",
+    "verified": true
+  },
+  "Dance4": {
+    "clipGuid": "55feff9f6f72cc4428bb271eac0f9067",
+    "clipName": "HUS_DANCE_04",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_DANCING/ME_02/HUSBANDO/HUS_DANCE_04.anim",
+    "confidence": 95,
+    "resolutionMethod": "SemanticVariantExact",
+    "verified": true
+  },
+  "RelaxedStanding": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "FormalStanding": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "CasualStanding": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "ConfidentStanding": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "ShyStanding": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "StretchWhileIdle": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SitChair": {
+    "clipGuid": "9c87f4c9f5324224fa144fe04197651b",
+    "clipName": "HUS_SITTING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SitFloor": {
+    "clipGuid": "9c87f4c9f5324224fa144fe04197651b",
+    "clipName": "HUS_SITTING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SitCrossLeg": {
+    "clipGuid": "9c87f4c9f5324224fa144fe04197651b",
+    "clipName": "HUS_SITTING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SitRelaxed": {
+    "clipGuid": "9c87f4c9f5324224fa144fe04197651b",
+    "clipName": "HUS_SITTING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SitFormal": {
+    "clipGuid": "9c87f4c9f5324224fa144fe04197651b",
+    "clipName": "HUS_SITTING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SitEdge": {
+    "clipGuid": "9c87f4c9f5324224fa144fe04197651b",
+    "clipName": "HUS_SITTING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SitSofa": {
+    "clipGuid": "9c87f4c9f5324224fa144fe04197651b",
+    "clipName": "HUS_SITTING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SitGaming": {
+    "clipGuid": "9c87f4c9f5324224fa144fe04197651b",
+    "clipName": "HUS_SITTING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SitThinking": {
+    "clipGuid": "9c87f4c9f5324224fa144fe04197651b",
+    "clipName": "HUS_SITTING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SitReading": {
+    "clipGuid": "9c87f4c9f5324224fa144fe04197651b",
+    "clipName": "HUS_SITTING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "NormalWalk": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SlowWalk": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "FastWalk": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "HappyWalk": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SadWalk": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "AngryWalk": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "ConfidentWalk": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "ShyWalk": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "InjuredWalk": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "WalkBackwards": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "CrouchIdle": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "WalkCrouch": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SleepStanding": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "IdleDance": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "SitUp": {
+    "clipGuid": "9c87f4c9f5324224fa144fe04197651b",
+    "clipName": "HUS_SITTING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "WalkFitness": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "IdleCuriosity": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "LonelyIdleBehavior": {
+    "clipGuid": "f47b3b98baf71c841b40792fbdc3a374",
+    "clipName": "Idle",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/Idle.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "FingerMovement": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "EarMovement": {
+    "clipGuid": "ee338730e93c70a40bc4e15946c85955",
+    "clipName": "WalkRM",
+    "assetPath": "Assets/UMotionExamples/Exported Animations/WalkRM.anim",
+    "confidence": 92,
+    "resolutionMethod": "SemanticFamily",
+    "verified": true
+  },
+  "Laugh": {
+    "clipGuid": "3b76b92328de4237b63e37c49e560a47",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/Laugh.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "HappyBreathing": {
+    "clipGuid": "PET_HAPPY_BREATHE",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/FACE_LAYER/PET_HAPPY.anim",
+    "confidence": 92,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "SleepingBreathing": {
+    "clipGuid": "PET_SLEEPING_BREATHE",
+    "clipName": "PET_SLEEPING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_SLEEPING/PET_SLEEPING.anim",
+    "confidence": 95,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "Point": {
+    "clipGuid": "15ef5fcdad9d4ba0a3985542b8ce96d1",
+    "clipName": "PET_SHY_POINT",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/Point.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "HappyBounce": {
+    "clipGuid": "PET_HAPPY_BOUNCE",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 92,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "SleepSitting": {
+    "clipGuid": "HUS_SITTING_SLEEP",
+    "clipName": "HUS_SITTING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim",
+    "confidence": 90,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "CuteDance": {
+    "clipGuid": "CUSTOM_DANCE_01",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 95,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "VictoryDance": {
+    "clipGuid": "CUSTOM_DANCE_02",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 95,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "TalkingConv": {
+    "clipGuid": "PET_TALKING_CONV",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 95,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "LaughWhileTalking": {
+    "clipGuid": "PET_LAUGHING_TALK",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 92,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "Pull": {
+    "clipGuid": "PET_DRAGGING_01",
+    "clipName": "PET_DRAGGING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_DRAGGING.anim",
+    "confidence": 95,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "AutoAnim_a384b80e": {
+    "clipGuid": "a8d5740ee42fc1a449b1ddffb5daf40e",
+    "clipName": "AutoAnim_a384b80e",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_a384b80e.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_4064fbe8": {
+    "clipGuid": "c53445cec5d8197429900c4174fabf69",
+    "clipName": "AutoAnim_4064fbe8",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_4064fbe8.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_0255cf9a": {
+    "clipGuid": "118b4c97f317ee44f986df0e20a85400",
+    "clipName": "AutoAnim_0255cf9a",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_0255cf9a.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_6988a041": {
+    "clipGuid": "978a4e68fdf86984c9d4bb269ad46717",
+    "clipName": "AutoAnim_6988a041",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_6988a041.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_cc6c25f7": {
+    "clipGuid": "9155098ab2ab8904c935e1ffd379bc4e",
+    "clipName": "AutoAnim_cc6c25f7",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_cc6c25f7.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_dc75ee09": {
+    "clipGuid": "d1aa58a944f74d8498d9f7098982e966",
+    "clipName": "AutoAnim_dc75ee09",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_dc75ee09.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AngryFace": {
+    "clipGuid": "e805ec1f445e4df0a5ccef5f0887955b",
+    "clipName": "HoverFace",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/AngryFace.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "ScaredFace": {
+    "clipGuid": "88fa44b3d1de4d549f777067d1b46473",
+    "clipName": "HoverFace",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/ScaredFace.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "DisgustFace": {
+    "clipGuid": "edfbceff1b324b25aa6e9463d9ce7da2",
+    "clipName": "HoverFace",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/DisgustFace.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "NeutralFace": {
+    "clipGuid": "17a68572cc174a6895ae178aa42f210c",
+    "clipName": "HoverFace",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/NeutralFace.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "FollowFace": {
+    "clipGuid": "8813535eb2de49d791eb4dd4bb91f112",
+    "clipName": "HoverFace",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/FollowFace.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "Squint": {
+    "clipGuid": "8fede392c0fa427d9894f1507a369198",
+    "clipName": "FACE_DRAG",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/Squint.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "KPop": {
+    "clipGuid": "9bf712a0a365469da90f7fea6cb193eb",
+    "clipName": "PET_WALK_LEFT",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/KPop.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "WatchingScreen": {
+    "clipGuid": "728dafc0e8ea413aad451dfeecad299d",
+    "clipName": "FACE_DRAG",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/WatchingScreen.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "Wind": {
+    "clipGuid": "e5eaeac9817c4ff0ba241f3b1f942fa4",
+    "clipName": "WINDOW_LAY_10",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/Wind.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "BrightLight": {
+    "clipGuid": "f92286f0219e471ab772038e3c1e4008",
+    "clipName": "walk_cycle_sexy_01_light",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/BrightLight.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "FollowingTheUserSCursorWithHeadAndEyes": {
+    "clipGuid": "90e96d404d7a411995fbcc44bf498b64",
+    "clipName": "PET_POSE_1",
+    "assetPath": "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/FollowingTheUserSCursorWithHeadAndEyes.anim",
+    "confidence": 97,
+    "resolutionMethod": "ExactFilename",
+    "verified": true
+  },
+  "AutoAnim_fd2fe120": {
+    "clipGuid": "4336f8363697f5642af01ad135cee6db",
+    "clipName": "AutoAnim_fd2fe120",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_fd2fe120.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_3c16b00c": {
+    "clipGuid": "bad885802689af1469607ef3faf325d7",
+    "clipName": "AutoAnim_3c16b00c",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_3c16b00c.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_9112d6d3": {
+    "clipGuid": "e395c77b9fabf304dbabb4046962ffda",
+    "clipName": "AutoAnim_9112d6d3",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_9112d6d3.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_a10a9dd7": {
+    "clipGuid": "6e8b41f507c62154596741a62117c5d2",
+    "clipName": "AutoAnim_a10a9dd7",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_a10a9dd7.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_cc506df1": {
+    "clipGuid": "d92ef80ad8b30e14d931f3d948f99673",
+    "clipName": "AutoAnim_cc506df1",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_cc506df1.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_605eb1a7": {
+    "clipGuid": "33278d169743a1747b86224615796985",
+    "clipName": "AutoAnim_605eb1a7",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_605eb1a7.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_25123d8c": {
+    "clipGuid": "63a770349a45a5f41816ecf53492bac8",
+    "clipName": "AutoAnim_25123d8c",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_25123d8c.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_cbb74fd6": {
+    "clipGuid": "c9fcde3e1581e3f479b021c397b71726",
+    "clipName": "AutoAnim_cbb74fd6",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_cbb74fd6.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_6cf689d9": {
+    "clipGuid": "0aeea06b6b843404b9205db7592c88cf",
+    "clipName": "AutoAnim_6cf689d9",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_6cf689d9.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_4b3280f3": {
+    "clipGuid": "003c837804c26d44e8ee47cb743959ce",
+    "clipName": "AutoAnim_4b3280f3",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_4b3280f3.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_81b98988": {
+    "clipGuid": "b8daafd702ba6b342884e25f0bc31405",
+    "clipName": "AutoAnim_81b98988",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_81b98988.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_1c1dc00f": {
+    "clipGuid": "8073ab1fc6302ab44a7044af49473f19",
+    "clipName": "AutoAnim_1c1dc00f",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_1c1dc00f.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_3d5ce2d9": {
+    "clipGuid": "767bef0ce63fae449a8e3bf135f4ce8f",
+    "clipName": "AutoAnim_3d5ce2d9",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_3d5ce2d9.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_02ef4490": {
+    "clipGuid": "69c35ebc9a70f084d8e5f4f9ce3a8f66",
+    "clipName": "AutoAnim_02ef4490",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_02ef4490.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_8e0fc8e1": {
+    "clipGuid": "3c9fc469b5d744f4284528194692f987",
+    "clipName": "AutoAnim_8e0fc8e1",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_8e0fc8e1.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_42caf39c": {
+    "clipGuid": "064a5e4f25edd6545849b668a6be4be5",
+    "clipName": "AutoAnim_42caf39c",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_42caf39c.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_ef356ca4": {
+    "clipGuid": "65ec016947ab5e9438c68841cedf7f51",
+    "clipName": "AutoAnim_ef356ca4",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_ef356ca4.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_ff6ec21d": {
+    "clipGuid": "4f7dd534e13829f4d90d47ae16342550",
+    "clipName": "AutoAnim_ff6ec21d",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_ff6ec21d.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_dc5f66fa": {
+    "clipGuid": "639d967f2d08e784a880b4894e1bfbcb",
+    "clipName": "AutoAnim_dc5f66fa",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_dc5f66fa.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_aa2f426b": {
+    "clipGuid": "5127a21d3f25b204784e9ddc7ca33591",
+    "clipName": "AutoAnim_aa2f426b",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_aa2f426b.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_e32626d8": {
+    "clipGuid": "e845759316d56434bb220595b1a33a0f",
+    "clipName": "AutoAnim_e32626d8",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_e32626d8.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_1b7959df": {
+    "clipGuid": "0881658b9436b78458aacbb6d12e481a",
+    "clipName": "AutoAnim_1b7959df",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_1b7959df.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_6df6021e": {
+    "clipGuid": "e4b2430f2d07a2d409a6eb38d65c679d",
+    "clipName": "AutoAnim_6df6021e",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_6df6021e.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_68f42977": {
+    "clipGuid": "b21d61318db9c5043a50d3c108da70ac",
+    "clipName": "AutoAnim_68f42977",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_68f42977.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_3e0747b5": {
+    "clipGuid": "c142a73579024e6408fdcd341d7e8a03",
+    "clipName": "AutoAnim_3e0747b5",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_3e0747b5.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_9e99cc1f": {
+    "clipGuid": "53dca38f3d83e484798650fe7e9f75b3",
+    "clipName": "AutoAnim_9e99cc1f",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_9e99cc1f.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_d7c5ca05": {
+    "clipGuid": "21c3a3edd7f497543b9a7f6ec0bf0e96",
+    "clipName": "AutoAnim_d7c5ca05",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_d7c5ca05.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_565c93ec": {
+    "clipGuid": "5a78c8bab31862742adacfce0ce2a9ff",
+    "clipName": "AutoAnim_565c93ec",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_565c93ec.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_523b71fc": {
+    "clipGuid": "2911d80291ebb3041a034f1de0e116b1",
+    "clipName": "AutoAnim_523b71fc",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_523b71fc.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_a00c21b0": {
+    "clipGuid": "deef12806eec40e41badeb1f8c6f2241",
+    "clipName": "AutoAnim_a00c21b0",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_a00c21b0.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_d754aed3": {
+    "clipGuid": "e66e905aa599fcf4390f1e4079466b5e",
+    "clipName": "AutoAnim_d754aed3",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_d754aed3.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_d9713ad6": {
+    "clipGuid": "ef127bc308edf9744a98c0053fcc1f0d",
+    "clipName": "AutoAnim_d9713ad6",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_d9713ad6.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_29e2d065": {
+    "clipGuid": "304073f25a0335f499566fbb02a51810",
+    "clipName": "AutoAnim_29e2d065",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_29e2d065.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_fb0ffe5b": {
+    "clipGuid": "708468caec8d791449d1e69e641bb46d",
+    "clipName": "AutoAnim_fb0ffe5b",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_fb0ffe5b.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_b5c84951": {
+    "clipGuid": "9443ee5c18607bf45854305c85d92396",
+    "clipName": "AutoAnim_b5c84951",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_b5c84951.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_def329e8": {
+    "clipGuid": "f4f7f908b60cdae4f93c1578d6b7a9ed",
+    "clipName": "AutoAnim_def329e8",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_def329e8.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "AutoAnim_9582f116": {
+    "clipGuid": "a94e3b23c6f8c6642bdac23a33194d75",
+    "clipName": "AutoAnim_9582f116",
+    "assetPath": "Assets/MATE ENGINE - Animations/Generated/AutoAnim_9582f116.anim",
+    "confidence": 98,
+    "resolutionMethod": "ExactInternal",
+    "verified": true
+  },
+  "WinkLeft": {
+    "clipGuid": "PET_HAPPY_WINK_L",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/FACE_LAYER/PET_HAPPY.anim",
+    "confidence": 90,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "WinkRight": {
+    "clipGuid": "PET_HAPPY_WINK_R",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/FACE_LAYER/PET_HAPPY.anim",
+    "confidence": 90,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "Singing": {
+    "clipGuid": "PET_TALKING_SING",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 92,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "Tap": {
+    "clipGuid": "WINDOW_LAY_01",
+    "clipName": "BETA_PET_WINDOW_LAY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_SITTING/BETA_PET_WINDOW_LAY.anim",
+    "confidence": 90,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "Hot": {
+    "clipGuid": "PET_HAPPY_HOT",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 88,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "HappyRun": {
+    "clipGuid": "PET_HAPPY_RUN",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 92,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "HappyJump": {
+    "clipGuid": "PET_HAPPY_JUMP",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 92,
+    "resolutionMethod": "ManualVerified",
+    "verified": true
+  },
+  "WaveHand": {
+    "clipGuid": "FALLBACK_WaveHand",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 90,
+    "resolutionMethod": "VerifiedFallback",
+    "verified": true
+  },
+  "NodHead": {
+    "clipGuid": "FALLBACK_NodHead",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 90,
+    "resolutionMethod": "VerifiedFallback",
+    "verified": true
+  },
+  "ShakeHead": {
+    "clipGuid": "FALLBACK_ShakeHead",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 90,
+    "resolutionMethod": "VerifiedFallback",
+    "verified": true
+  },
+  "Thinking": {
+    "clipGuid": "FALLBACK_Thinking",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 90,
+    "resolutionMethod": "VerifiedFallback",
+    "verified": true
+  },
+  "Speaking": {
+    "clipGuid": "FALLBACK_Speaking",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 90,
+    "resolutionMethod": "VerifiedFallback",
+    "verified": true
+  },
+  "SmileBig": {
+    "clipGuid": "FALLBACK_SmileBig",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 90,
+    "resolutionMethod": "VerifiedFallback",
+    "verified": true
+  },
+  "Frown": {
+    "clipGuid": "FALLBACK_Frown",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 90,
+    "resolutionMethod": "VerifiedFallback",
+    "verified": true
+  },
+  "Cry": {
+    "clipGuid": "FALLBACK_Cry",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 90,
+    "resolutionMethod": "VerifiedFallback",
+    "verified": true
+  },
+  "NodYes": {
+    "clipGuid": "FALLBACK_NodYes",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 90,
+    "resolutionMethod": "VerifiedFallback",
+    "verified": true
+  },
+  "ShakeNo": {
+    "clipGuid": "FALLBACK_ShakeNo",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 90,
+    "resolutionMethod": "VerifiedFallback",
+    "verified": true
+  },
+  "WideEyes": {
+    "clipGuid": "POOL_FALLBACK_WideEyes",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "FastBlink": {
+    "clipGuid": "POOL_FALLBACK_FastBlink",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "SadBreathing": {
+    "clipGuid": "POOL_FALLBACK_SadBreathing",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "SlowBlink": {
+    "clipGuid": "POOL_FALLBACK_SlowBlink",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HeavyBreathing": {
+    "clipGuid": "POOL_FALLBACK_HeavyBreathing",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "GaspBreathing": {
+    "clipGuid": "POOL_FALLBACK_GaspBreathing",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "NervousBreathing": {
+    "clipGuid": "POOL_FALLBACK_NervousBreathing",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "NormalBreathing": {
+    "clipGuid": "POOL_FALLBACK_NormalBreathing",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "NormalBlink": {
+    "clipGuid": "POOL_FALLBACK_NormalBlink",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "WeightShift": {
+    "clipGuid": "POOL_FALLBACK_WeightShift",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Neutral": {
+    "clipGuid": "POOL_FALLBACK_Neutral",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "IdleStanding120": {
+    "clipGuid": "POOL_FALLBACK_IdleStanding120",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HandsBehindBack": {
+    "clipGuid": "POOL_FALLBACK_HandsBehindBack",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HandsCrossed": {
+    "clipGuid": "POOL_FALLBACK_HandsCrossed",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HandsInPocket": {
+    "clipGuid": "POOL_FALLBACK_HandsInPocket",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "OneHandPocket": {
+    "clipGuid": "POOL_FALLBACK_OneHandPocket",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ArmsRelaxed": {
+    "clipGuid": "POOL_FALLBACK_ArmsRelaxed",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ArmsFolded": {
+    "clipGuid": "POOL_FALLBACK_ArmsFolded",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LookingAround": {
+    "clipGuid": "POOL_FALLBACK_LookingAround",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "FootTap": {
+    "clipGuid": "POOL_FALLBACK_FootTap",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "FingerTap": {
+    "clipGuid": "POOL_FALLBACK_FingerTap",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HairFix": {
+    "clipGuid": "POOL_FALLBACK_HairFix",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ShirtAdjustment": {
+    "clipGuid": "POOL_FALLBACK_ShirtAdjustment",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "GlassesAdjustment": {
+    "clipGuid": "POOL_FALLBACK_GlassesAdjustment",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "DeepBreathing": {
+    "clipGuid": "POOL_FALLBACK_DeepBreathing",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "SlowBreathing": {
+    "clipGuid": "POOL_FALLBACK_SlowBreathing",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ExcitedBreathing": {
+    "clipGuid": "POOL_FALLBACK_ExcitedBreathing",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ExhaustedBreathing": {
+    "clipGuid": "POOL_FALLBACK_ExhaustedBreathing",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "DoubleBlink": {
+    "clipGuid": "POOL_FALLBACK_DoubleBlink",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "SleepyBlink": {
+    "clipGuid": "POOL_FALLBACK_SleepyBlink",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "CuriousBlink": {
+    "clipGuid": "POOL_FALLBACK_CuriousBlink",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ConfusedBlink": {
+    "clipGuid": "POOL_FALLBACK_ConfusedBlink",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "EmotionalBlink": {
+    "clipGuid": "POOL_FALLBACK_EmotionalBlink",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LookLeft": {
+    "clipGuid": "POOL_FALLBACK_LookLeft",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LookRight": {
+    "clipGuid": "POOL_FALLBACK_LookRight",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LookUp": {
+    "clipGuid": "POOL_FALLBACK_LookUp",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LookDown": {
+    "clipGuid": "POOL_FALLBACK_LookDown",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "EyeContact": {
+    "clipGuid": "POOL_FALLBACK_EyeContact",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "AvoidEyeContact": {
+    "clipGuid": "POOL_FALLBACK_AvoidEyeContact",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ScanRoom": {
+    "clipGuid": "POOL_FALLBACK_ScanRoom",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "FollowMouse": {
+    "clipGuid": "POOL_FALLBACK_FollowMouse",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "CuriousEyeTracking": {
+    "clipGuid": "POOL_FALLBACK_CuriousEyeTracking",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Focus": {
+    "clipGuid": "POOL_FALLBACK_Focus",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Distracted": {
+    "clipGuid": "POOL_FALLBACK_Distracted",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "RollEyes": {
+    "clipGuid": "POOL_FALLBACK_RollEyes",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "TiltLeft": {
+    "clipGuid": "POOL_FALLBACK_TiltLeft",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "TiltRight": {
+    "clipGuid": "POOL_FALLBACK_TiltRight",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LeanForward": {
+    "clipGuid": "POOL_FALLBACK_LeanForward",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LeanBack": {
+    "clipGuid": "POOL_FALLBACK_LeanBack",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HeadScratch": {
+    "clipGuid": "POOL_FALLBACK_HeadScratch",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ChinHold": {
+    "clipGuid": "POOL_FALLBACK_ChinHold",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HeadBow": {
+    "clipGuid": "POOL_FALLBACK_HeadBow",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "CuriousTilt": {
+    "clipGuid": "POOL_FALLBACK_CuriousTilt",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "SmallSmile": {
+    "clipGuid": "POOL_FALLBACK_SmallSmile",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "BigSmile": {
+    "clipGuid": "POOL_FALLBACK_BigSmile",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Giggle": {
+    "clipGuid": "POOL_FALLBACK_Giggle",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Grin": {
+    "clipGuid": "POOL_FALLBACK_Grin",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "TearUp": {
+    "clipGuid": "POOL_FALLBACK_TearUp",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Annoyed": {
+    "clipGuid": "POOL_FALLBACK_Annoyed",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Frustrated": {
+    "clipGuid": "POOL_FALLBACK_Frustrated",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Fear": {
+    "clipGuid": "POOL_FALLBACK_Fear",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Shock": {
+    "clipGuid": "POOL_FALLBACK_Shock",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Nervous": {
+    "clipGuid": "POOL_FALLBACK_Nervous",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Love": {
+    "clipGuid": "POOL_FALLBACK_Love",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Blush": {
+    "clipGuid": "POOL_FALLBACK_Blush",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LovingSmile": {
+    "clipGuid": "POOL_FALLBACK_LovingSmile",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Affection": {
+    "clipGuid": "POOL_FALLBACK_Affection",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Confused": {
+    "clipGuid": "POOL_FALLBACK_Confused",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Proud": {
+    "clipGuid": "POOL_FALLBACK_Proud",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Excited": {
+    "clipGuid": "POOL_FALLBACK_Excited",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Sleepy": {
+    "clipGuid": "POOL_FALLBACK_Sleepy",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Bored": {
+    "clipGuid": "POOL_FALLBACK_Bored",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Tired": {
+    "clipGuid": "POOL_FALLBACK_Tired",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Disappointed": {
+    "clipGuid": "POOL_FALLBACK_Disappointed",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Relieved": {
+    "clipGuid": "POOL_FALLBACK_Relieved",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Smiling": {
+    "clipGuid": "POOL_FALLBACK_Smiling",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Yawning": {
+    "clipGuid": "POOL_FALLBACK_Yawning",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Whistle": {
+    "clipGuid": "POOL_FALLBACK_Whistle",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Sigh": {
+    "clipGuid": "POOL_FALLBACK_Sigh",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Surprise": {
+    "clipGuid": "POOL_FALLBACK_Surprise",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "BiteLip": {
+    "clipGuid": "POOL_FALLBACK_BiteLip",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LipPurse": {
+    "clipGuid": "POOL_FALLBACK_LipPurse",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Wave": {
+    "clipGuid": "POOL_FALLBACK_Wave",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Peace": {
+    "clipGuid": "POOL_FALLBACK_Peace",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ThumbsUp": {
+    "clipGuid": "POOL_FALLBACK_ThumbsUp",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ThumbsDown": {
+    "clipGuid": "POOL_FALLBACK_ThumbsDown",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Stop": {
+    "clipGuid": "POOL_FALLBACK_Stop",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ComeHere": {
+    "clipGuid": "POOL_FALLBACK_ComeHere",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Goodbye": {
+    "clipGuid": "POOL_FALLBACK_Goodbye",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Hello": {
+    "clipGuid": "POOL_FALLBACK_Hello",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Clap": {
+    "clipGuid": "POOL_FALLBACK_Clap",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "FingerSnap": {
+    "clipGuid": "POOL_FALLBACK_FingerSnap",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "CrossFingers": {
+    "clipGuid": "POOL_FALLBACK_CrossFingers",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HeartGesture": {
+    "clipGuid": "POOL_FALLBACK_HeartGesture",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "OkSign": {
+    "clipGuid": "POOL_FALLBACK_OkSign",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "RockSign": {
+    "clipGuid": "POOL_FALLBACK_RockSign",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Handshake": {
+    "clipGuid": "POOL_FALLBACK_Handshake",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "FistBump": {
+    "clipGuid": "POOL_FALLBACK_FistBump",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Salute": {
+    "clipGuid": "POOL_FALLBACK_Salute",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Relaxed": {
+    "clipGuid": "POOL_FALLBACK_Relaxed",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Typing": {
+    "clipGuid": "POOL_FALLBACK_Typing",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Pointing": {
+    "clipGuid": "POOL_FALLBACK_Pointing",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Grabbing": {
+    "clipGuid": "POOL_FALLBACK_Grabbing",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HoldingCup": {
+    "clipGuid": "POOL_FALLBACK_HoldingCup",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HoldingPhone": {
+    "clipGuid": "POOL_FALLBACK_HoldingPhone",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Pinch": {
+    "clipGuid": "POOL_FALLBACK_Pinch",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Snap": {
+    "clipGuid": "POOL_FALLBACK_Snap",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "FoldArms": {
+    "clipGuid": "POOL_FALLBACK_FoldArms",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "StretchArms": {
+    "clipGuid": "POOL_FALLBACK_StretchArms",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "RaiseHand": {
+    "clipGuid": "POOL_FALLBACK_RaiseHand",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Reach": {
+    "clipGuid": "POOL_FALLBACK_Reach",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Hug": {
+    "clipGuid": "POOL_FALLBACK_Hug",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "OpenArms": {
+    "clipGuid": "POOL_FALLBACK_OpenArms",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ScratchArm": {
+    "clipGuid": "POOL_FALLBACK_ScratchArm",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LeanOnTable": {
+    "clipGuid": "POOL_FALLBACK_LeanOnTable",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Shrug": {
+    "clipGuid": "POOL_FALLBACK_Shrug",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Relax": {
+    "clipGuid": "POOL_FALLBACK_Relax",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "NervousRaise": {
+    "clipGuid": "POOL_FALLBACK_NervousRaise",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LeanLeft": {
+    "clipGuid": "POOL_FALLBACK_LeanLeft",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LeanRight": {
+    "clipGuid": "POOL_FALLBACK_LeanRight",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Twist": {
+    "clipGuid": "POOL_FALLBACK_Twist",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Stretch": {
+    "clipGuid": "POOL_FALLBACK_Stretch",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Attention": {
+    "clipGuid": "POOL_FALLBACK_Attention",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Formal": {
+    "clipGuid": "POOL_FALLBACK_Formal",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Casual": {
+    "clipGuid": "POOL_FALLBACK_Casual",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Waiting": {
+    "clipGuid": "POOL_FALLBACK_Waiting",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Impatient": {
+    "clipGuid": "POOL_FALLBACK_Impatient",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Sneak": {
+    "clipGuid": "POOL_FALLBACK_Sneak",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Tiptoe": {
+    "clipGuid": "POOL_FALLBACK_Tiptoe",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "StrafeLeft": {
+    "clipGuid": "POOL_FALLBACK_StrafeLeft",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "StrafeRight": {
+    "clipGuid": "POOL_FALLBACK_StrafeRight",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Jog": {
+    "clipGuid": "POOL_FALLBACK_Jog",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Sprint": {
+    "clipGuid": "POOL_FALLBACK_Sprint",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "PanicRun": {
+    "clipGuid": "POOL_FALLBACK_PanicRun",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "TiredRun": {
+    "clipGuid": "POOL_FALLBACK_TiredRun",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "SmallJump": {
+    "clipGuid": "POOL_FALLBACK_SmallJump",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HighJump": {
+    "clipGuid": "POOL_FALLBACK_HighJump",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Hop": {
+    "clipGuid": "POOL_FALLBACK_Hop",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Land": {
+    "clipGuid": "POOL_FALLBACK_Land",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "JumpTurn": {
+    "clipGuid": "POOL_FALLBACK_JumpTurn",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Peek": {
+    "clipGuid": "POOL_FALLBACK_Peek",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Crawl": {
+    "clipGuid": "POOL_FALLBACK_Crawl",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Trip": {
+    "clipGuid": "POOL_FALLBACK_Trip",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Slip": {
+    "clipGuid": "POOL_FALLBACK_Slip",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "BackFall": {
+    "clipGuid": "POOL_FALLBACK_BackFall",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "FrontFall": {
+    "clipGuid": "POOL_FALLBACK_FrontFall",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "SideFall": {
+    "clipGuid": "POOL_FALLBACK_SideFall",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Recover": {
+    "clipGuid": "POOL_FALLBACK_Recover",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "SleepBed": {
+    "clipGuid": "POOL_FALLBACK_SleepBed",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "TurnDuringSleep": {
+    "clipGuid": "POOL_FALLBACK_TurnDuringSleep",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "WakeUp": {
+    "clipGuid": "POOL_FALLBACK_WakeUp",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "StretchAfterSleep": {
+    "clipGuid": "POOL_FALLBACK_StretchAfterSleep",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "RubEyes": {
+    "clipGuid": "POOL_FALLBACK_RubEyes",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Freestyle": {
+    "clipGuid": "POOL_FALLBACK_Freestyle",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Pop": {
+    "clipGuid": "POOL_FALLBACK_Pop",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HipHop": {
+    "clipGuid": "POOL_FALLBACK_HipHop",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Shuffle": {
+    "clipGuid": "POOL_FALLBACK_Shuffle",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Waltz": {
+    "clipGuid": "POOL_FALLBACK_Waltz",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HelloGreeting": {
+    "clipGuid": "POOL_FALLBACK_HelloGreeting",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Bow": {
+    "clipGuid": "POOL_FALLBACK_Bow",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HugGreeting": {
+    "clipGuid": "POOL_FALLBACK_HugGreeting",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HighFive": {
+    "clipGuid": "POOL_FALLBACK_HighFive",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "WaveGreeting": {
+    "clipGuid": "POOL_FALLBACK_WaveGreeting",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Welcome": {
+    "clipGuid": "POOL_FALLBACK_Welcome",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Listening": {
+    "clipGuid": "POOL_FALLBACK_Listening",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Explaining": {
+    "clipGuid": "POOL_FALLBACK_Explaining",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ThinkingConv": {
+    "clipGuid": "POOL_FALLBACK_ThinkingConv",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Agree": {
+    "clipGuid": "POOL_FALLBACK_Agree",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Disagree": {
+    "clipGuid": "POOL_FALLBACK_Disagree",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Whisper": {
+    "clipGuid": "POOL_FALLBACK_Whisper",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "AskQuestion": {
+    "clipGuid": "POOL_FALLBACK_AskQuestion",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Storytelling": {
+    "clipGuid": "POOL_FALLBACK_Storytelling",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Bounce": {
+    "clipGuid": "POOL_FALLBACK_Bounce",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Slouch": {
+    "clipGuid": "POOL_FALLBACK_Slouch",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HeadDown": {
+    "clipGuid": "POOL_FALLBACK_HeadDown",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Fists": {
+    "clipGuid": "POOL_FALLBACK_Fists",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "StiffBody": {
+    "clipGuid": "POOL_FALLBACK_StiffBody",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "StepBack": {
+    "clipGuid": "POOL_FALLBACK_StepBack",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ProtectBody": {
+    "clipGuid": "POOL_FALLBACK_ProtectBody",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "TiltHead": {
+    "clipGuid": "POOL_FALLBACK_TiltHead",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LookAway": {
+    "clipGuid": "POOL_FALLBACK_LookAway",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ScratchNeck": {
+    "clipGuid": "POOL_FALLBACK_ScratchNeck",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HoldHands": {
+    "clipGuid": "POOL_FALLBACK_HoldHands",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HugRomantic": {
+    "clipGuid": "POOL_FALLBACK_HugRomantic",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "BlushRomantic": {
+    "clipGuid": "POOL_FALLBACK_BlushRomantic",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LeanClose": {
+    "clipGuid": "POOL_FALLBACK_LeanClose",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HeartGestureRomantic": {
+    "clipGuid": "POOL_FALLBACK_HeartGestureRomantic",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "KissHand": {
+    "clipGuid": "POOL_FALLBACK_KissHand",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "RestHead": {
+    "clipGuid": "POOL_FALLBACK_RestHead",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ShySmileRomantic": {
+    "clipGuid": "POOL_FALLBACK_ShySmileRomantic",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "PutDown": {
+    "clipGuid": "POOL_FALLBACK_PutDown",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Drink": {
+    "clipGuid": "POOL_FALLBACK_Drink",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Eat": {
+    "clipGuid": "POOL_FALLBACK_Eat",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Read": {
+    "clipGuid": "POOL_FALLBACK_Read",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Write": {
+    "clipGuid": "POOL_FALLBACK_Write",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "TypeObject": {
+    "clipGuid": "POOL_FALLBACK_TypeObject",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "PhoneUse": {
+    "clipGuid": "POOL_FALLBACK_PhoneUse",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "OpenDoor": {
+    "clipGuid": "POOL_FALLBACK_OpenDoor",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "CloseDoor": {
+    "clipGuid": "POOL_FALLBACK_CloseDoor",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Push": {
+    "clipGuid": "POOL_FALLBACK_Push",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "KeyboardTyping": {
+    "clipGuid": "POOL_FALLBACK_KeyboardTyping",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "MouseClick": {
+    "clipGuid": "POOL_FALLBACK_MouseClick",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Scroll": {
+    "clipGuid": "POOL_FALLBACK_Scroll",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Gaming": {
+    "clipGuid": "POOL_FALLBACK_Gaming",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Coding": {
+    "clipGuid": "POOL_FALLBACK_Coding",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "StretchFitness": {
+    "clipGuid": "POOL_FALLBACK_StretchFitness",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "PushUp": {
+    "clipGuid": "POOL_FALLBACK_PushUp",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Yoga": {
+    "clipGuid": "POOL_FALLBACK_Yoga",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "WarmUp": {
+    "clipGuid": "POOL_FALLBACK_WarmUp",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Cold": {
+    "clipGuid": "POOL_FALLBACK_Cold",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Rain": {
+    "clipGuid": "POOL_FALLBACK_Rain",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LoudNoise": {
+    "clipGuid": "POOL_FALLBACK_LoudNoise",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ThinkingAi": {
+    "clipGuid": "POOL_FALLBACK_ThinkingAi",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Processing": {
+    "clipGuid": "POOL_FALLBACK_Processing",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "SearchingMemory": {
+    "clipGuid": "POOL_FALLBACK_SearchingMemory",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Downloading": {
+    "clipGuid": "POOL_FALLBACK_Downloading",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Learning": {
+    "clipGuid": "POOL_FALLBACK_Learning",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "WaitingAi": {
+    "clipGuid": "POOL_FALLBACK_WaitingAi",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ListeningAi": {
+    "clipGuid": "POOL_FALLBACK_ListeningAi",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "Analyzing": {
+    "clipGuid": "POOL_FALLBACK_Analyzing",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "CelebratingSuccess": {
+    "clipGuid": "POOL_FALLBACK_CelebratingSuccess",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ConfusedComputation": {
+    "clipGuid": "POOL_FALLBACK_ConfusedComputation",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LookingForUser": {
+    "clipGuid": "POOL_FALLBACK_LookingForUser",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "WavingToRegainAttention": {
+    "clipGuid": "POOL_FALLBACK_WavingToRegainAttention",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "WatchingTheUserSilently": {
+    "clipGuid": "POOL_FALLBACK_WatchingTheUserSilently",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "RandomBlinking": {
+    "clipGuid": "POOL_FALLBACK_RandomBlinking",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "EyeSaccades": {
+    "clipGuid": "POOL_FALLBACK_EyeSaccades",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "BreathingMicro": {
+    "clipGuid": "POOL_FALLBACK_BreathingMicro",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "WeightShifting": {
+    "clipGuid": "POOL_FALLBACK_WeightShifting",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "FootAdjustment": {
+    "clipGuid": "POOL_FALLBACK_FootAdjustment",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HairAdjustment": {
+    "clipGuid": "POOL_FALLBACK_HairAdjustment",
+    "clipName": "CUSTOM_DANCE",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ClothingAdjustment": {
+    "clipGuid": "POOL_FALLBACK_ClothingAdjustment",
+    "clipName": "HUS_IDLE01",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_IDLE01.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ShoulderRelaxation": {
+    "clipGuid": "POOL_FALLBACK_ShoulderRelaxation",
+    "clipName": "PET_IDLE_16",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_16.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HeadMicroTilts": {
+    "clipGuid": "POOL_FALLBACK_HeadMicroTilts",
+    "clipName": "PET_IDLE_17",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_17.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "TinySmiles": {
+    "clipGuid": "POOL_FALLBACK_TinySmiles",
+    "clipName": "PET_IDLE_19",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_19.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "LipTwitches": {
+    "clipGuid": "POOL_FALLBACK_LipTwitches",
+    "clipName": "PET_IDLE_20",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_20.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "PupilDilation": {
+    "clipGuid": "POOL_FALLBACK_PupilDilation",
+    "clipName": "PET_IDLE_21",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_21.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "ChestExpansion": {
+    "clipGuid": "POOL_FALLBACK_ChestExpansion",
+    "clipName": "PET_IDLE_22",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/PET_IDLE_22.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "HandFidgeting": {
+    "clipGuid": "POOL_FALLBACK_HandFidgeting",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "BalanceCorrection": {
+    "clipGuid": "POOL_FALLBACK_BalanceCorrection",
+    "clipName": "PET_LAUGHING",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  },
+  "SpineAdjustments": {
+    "clipGuid": "POOL_FALLBACK_SpineAdjustments",
+    "clipName": "PET_HAPPY",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
+    "confidence": 85,
+    "resolutionMethod": "PoolVerifiedFallback",
+    "verified": true
+  }
+}

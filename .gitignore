@@ -1,0 +1,77 @@
+# ── Virtual Environments & Python Cache ──
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+venv_avatar/
+venv_rvc/
+.pytest_cache/
+.vscode/
+.vs/
+
+# ── AI Model Weights & Checkpoints (Prevent GitHub >100MB errors) ──
+*.gguf
+*.pt
+*.pth
+*.bin
+*.onnx
+models/*.gguf
+models/*.bin
+models/*.pt
+rvc_cpu/**/*.pth
+rvc_cpu/**/*.pt
+
+# ── Runtime State, Audio Recordings & Shared IPC Buffers ──
+shared/
+recordings/
+transcripts/
+vivy_recordings/
+scratch/
+*.tmp
+*.lock
+*.log
+*.wav
+*.mp3
+*.flac
+*.m4a
+*.flag
+vivy_startup*.log
+runtime_animator_diag.txt
+mock_unity*.log
+
+# ── OS Generated Files ──
+Thirteenth
+Thumbs.db
+.DS_Store
+
+# ── Unity & MateEngine Local Build Caches ──
+Mate-Engine/Library/
+Mate-Engine/Temp/
+Mate-Engine/Logs/
+Mate-Engine/UserSettings/
+Mate-Engine/Obj/
+Mate-Engine/Build/
+Mate-Engine/Builds/
+Mate-Engine/MemoryCaptures/
+Mate-Engine/ProfilerCaptures/
+Mate-Engine/.plastic/
+Mate-Engine/*.csproj
+Mate-Engine/*.slnx
+Mate-Engine/*.unityproj
+Mate-Engine/*.suo
+Mate-Engine/*.tmp
+Mate-Engine/*.user
+Mate-Engine/*.userprefs
+Mate-Engine/*.pidb
+Mate-Engine/*.booproj
+Mate-Engine/*.svd
+Mate-Engine/*.pdb
+Mate-Engine/*.mdb
+Mate-Engine/*.opendb
+Mate-Engine/*.db
+
+# ── Third-Party Precompiled CUDA LLM Libraries (>100MB) ──
+Mate-Engine/Assets/StreamingAssets/undreamai-v1.2.5-llamacpp/**/*.dll
+Mate-Engine/Assets/StreamingAssets/undreamai-v1.2.5-llamacpp/**/*.so
+Mate-Engine/Assets/StreamingAssets/undreamai-v1.2.5-llamacpp/**/*.dylib
+*.dylib

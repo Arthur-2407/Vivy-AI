@@ -1,0 +1,2824 @@
+{
+  "_comment": "Vivy AI \u2014 Animation Registry Specification File (v1.0.0).",
+  "_comment2": "Defines available animation clips, categories, layer assignments, priorities, and default blend parameters.",
+  "version": "1.0.0",
+  "categories": {
+    "idle": [
+      {
+        "id": "Idle0",
+        "trigger": "Idle0",
+        "layer": "Base Layer",
+        "weight": 1,
+        "priority": 0,
+        "duration": 12,
+        "fallback_asset": "HUS_IDLE01"
+      },
+      {
+        "id": "Idle1",
+        "trigger": "Idle1",
+        "layer": "Base Layer",
+        "weight": 1,
+        "priority": 0,
+        "duration": 12,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "IdleHappy",
+        "trigger": "IdleHappy",
+        "layer": "Base Layer",
+        "weight": 1,
+        "priority": 1,
+        "duration": 5,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "IdleCheer",
+        "trigger": "IdleCheer",
+        "layer": "Base Layer",
+        "weight": 1,
+        "priority": 1,
+        "duration": 5,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "IdleSad",
+        "trigger": "IdleSad",
+        "layer": "Base Layer",
+        "weight": 1,
+        "priority": 1,
+        "duration": 6,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "IdleAngry",
+        "trigger": "IdleAngry",
+        "layer": "Base Layer",
+        "weight": 1,
+        "priority": 1,
+        "duration": 5,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "IdleSurprise",
+        "trigger": "IdleSurprise",
+        "layer": "Base Layer",
+        "weight": 1,
+        "priority": 1,
+        "duration": 4,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "dance": [
+      {
+        "id": "Dance0",
+        "bool_param": "isDancing",
+        "index_param": "DanceIndex",
+        "index_val": 0,
+        "layer": "Base Layer",
+        "priority": 2,
+        "trigger": "Dance0",
+        "duration": 10.01001001001,
+        "auto_generated": true,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Dance1",
+        "bool_param": "isDancing",
+        "index_param": "DanceIndex",
+        "index_val": 1,
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Dance2",
+        "bool_param": "isDancing",
+        "index_param": "DanceIndex",
+        "index_val": 2,
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Dance3",
+        "bool_param": "isDancing",
+        "index_param": "DanceIndex",
+        "index_val": 3,
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Dance4",
+        "bool_param": "isDancing",
+        "index_param": "DanceIndex",
+        "index_val": 4,
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "gesture": [
+      {
+        "id": "WaveHand",
+        "trigger": "GestureWave",
+        "layer": "Gesture Layer",
+        "weight": 1,
+        "priority": 3,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "NodHead",
+        "trigger": "GestureNod",
+        "layer": "Gesture Layer",
+        "weight": 1,
+        "priority": 3,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ShakeHead",
+        "trigger": "GestureShake",
+        "layer": "Gesture Layer",
+        "weight": 1,
+        "priority": 3,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "status": [
+      {
+        "id": "Thinking",
+        "bool_param": "isThinking",
+        "layer": "Base Layer",
+        "priority": 1,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Speaking",
+        "bool_param": "isSpeaking",
+        "layer": "Base Layer",
+        "priority": 1,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Sleeping",
+        "bool_param": "isSleeping",
+        "layer": "Base Layer",
+        "priority": 4,
+        "fallback_asset": "PET_SLEEPING"
+      },
+      {
+        "id": "Dragging",
+        "bool_param": "isDragging",
+        "layer": "Base Layer",
+        "priority": 5,
+        "fallback_asset": "PET_DRAGGING"
+      }
+    ],
+    "face": [
+      {
+        "id": "SmileBig",
+        "trigger": "SmileBig",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "Laugh",
+        "trigger": "Laugh",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "PET_LAUGHING"
+      },
+      {
+        "id": "Frown",
+        "trigger": "Frown",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Cry",
+        "trigger": "Cry",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "AngryFace",
+        "trigger": "AngryFace",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "WideEyes",
+        "trigger": "WideEyes",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "ScaredFace",
+        "trigger": "ScaredFace",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "DisgustFace",
+        "trigger": "DisgustFace",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "NeutralFace",
+        "trigger": "NeutralFace",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      }
+    ],
+    "procedural": [
+      {
+        "id": "HappyBreathing",
+        "trigger": "HappyBreathing",
+        "layer": "Procedural Layer",
+        "priority": 1,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "FastBlink",
+        "trigger": "FastBlink",
+        "layer": "Procedural Layer",
+        "priority": 1,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "SadBreathing",
+        "trigger": "SadBreathing",
+        "layer": "Procedural Layer",
+        "priority": 1,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "SlowBlink",
+        "trigger": "SlowBlink",
+        "layer": "Procedural Layer",
+        "priority": 1,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "HeavyBreathing",
+        "trigger": "HeavyBreathing",
+        "layer": "Procedural Layer",
+        "priority": 1,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "GaspBreathing",
+        "trigger": "GaspBreathing",
+        "layer": "Procedural Layer",
+        "priority": 1,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "NervousBreathing",
+        "trigger": "NervousBreathing",
+        "layer": "Procedural Layer",
+        "priority": 1,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "NormalBreathing",
+        "trigger": "NormalBreathing",
+        "layer": "Procedural Layer",
+        "priority": 1,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "NormalBlink",
+        "trigger": "NormalBlink",
+        "layer": "Procedural Layer",
+        "priority": 1,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "WeightShift",
+        "trigger": "WeightShift",
+        "layer": "Procedural Layer",
+        "priority": 1,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "idle_animations": [
+      {
+        "id": "Neutral",
+        "trigger": "Neutral",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "IdleStanding120",
+        "trigger": "IdleStanding120",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "RelaxedStanding",
+        "trigger": "RelaxedStanding",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "FormalStanding",
+        "trigger": "FormalStanding",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "CasualStanding",
+        "trigger": "CasualStanding",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ConfidentStanding",
+        "trigger": "ConfidentStanding",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ShyStanding",
+        "trigger": "ShyStanding",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HandsBehindBack",
+        "trigger": "HandsBehindBack",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HandsCrossed",
+        "trigger": "HandsCrossed",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HandsInPocket",
+        "trigger": "HandsInPocket",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "OneHandPocket",
+        "trigger": "OneHandPocket",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ArmsRelaxed",
+        "trigger": "ArmsRelaxed",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ArmsFolded",
+        "trigger": "ArmsFolded",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "LookingAround",
+        "trigger": "LookingAround",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "StretchWhileIdle",
+        "trigger": "StretchWhileIdle",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "FootTap",
+        "trigger": "FootTap",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "FingerTap",
+        "trigger": "FingerTap",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HairFix",
+        "trigger": "HairFix",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ShirtAdjustment",
+        "trigger": "ShirtAdjustment",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "GlassesAdjustment",
+        "trigger": "GlassesAdjustment",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "breathing_animations": [
+      {
+        "id": "DeepBreathing",
+        "trigger": "DeepBreathing",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "SlowBreathing",
+        "trigger": "SlowBreathing",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ExcitedBreathing",
+        "trigger": "ExcitedBreathing",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "SleepingBreathing",
+        "trigger": "SleepingBreathing",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ExhaustedBreathing",
+        "trigger": "ExhaustedBreathing",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "blink_system": [
+      {
+        "id": "DoubleBlink",
+        "trigger": "DoubleBlink",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "SleepyBlink",
+        "trigger": "SleepyBlink",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "CuriousBlink",
+        "trigger": "CuriousBlink",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "ConfusedBlink",
+        "trigger": "ConfusedBlink",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "EmotionalBlink",
+        "trigger": "EmotionalBlink",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "WinkLeft",
+        "trigger": "WinkLeft",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "WinkRight",
+        "trigger": "WinkRight",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "eye_movement": [
+      {
+        "id": "LookLeft",
+        "trigger": "LookLeft",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "LookRight",
+        "trigger": "LookRight",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "LookUp",
+        "trigger": "LookUp",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "LookDown",
+        "trigger": "LookDown",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "EyeContact",
+        "trigger": "EyeContact",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "AvoidEyeContact",
+        "trigger": "AvoidEyeContact",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "ScanRoom",
+        "trigger": "ScanRoom",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "FollowMouse",
+        "trigger": "FollowMouse",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "FollowFace",
+        "trigger": "FollowFace",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "CuriousEyeTracking",
+        "trigger": "CuriousEyeTracking",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "Focus",
+        "trigger": "Focus",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Distracted",
+        "trigger": "Distracted",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "RollEyes",
+        "trigger": "RollEyes",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "Squint",
+        "trigger": "Squint",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "head_movement": [
+      {
+        "id": "NodYes",
+        "trigger": "NodYes",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ShakeNo",
+        "trigger": "ShakeNo",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "TiltLeft",
+        "trigger": "TiltLeft",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "TiltRight",
+        "trigger": "TiltRight",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "LeanForward",
+        "trigger": "LeanForward",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "LeanBack",
+        "trigger": "LeanBack",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HeadScratch",
+        "trigger": "HeadScratch",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ChinHold",
+        "trigger": "ChinHold",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HeadBow",
+        "trigger": "HeadBow",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "CuriousTilt",
+        "trigger": "CuriousTilt",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "facial_expressions": [
+      {
+        "id": "SmallSmile",
+        "trigger": "SmallSmile",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "BigSmile",
+        "trigger": "BigSmile",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "Giggle",
+        "trigger": "Giggle",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Grin",
+        "trigger": "Grin",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "TearUp",
+        "trigger": "TearUp",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Annoyed",
+        "trigger": "Annoyed",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Frustrated",
+        "trigger": "Frustrated",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Fear",
+        "trigger": "Fear",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Shock",
+        "trigger": "Shock",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Nervous",
+        "trigger": "Nervous",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Love",
+        "trigger": "Love",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Blush",
+        "trigger": "Blush",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "LovingSmile",
+        "trigger": "LovingSmile",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "Affection",
+        "trigger": "Affection",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Confused",
+        "trigger": "Confused",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Proud",
+        "trigger": "Proud",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Excited",
+        "trigger": "Excited",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Sleepy",
+        "trigger": "Sleepy",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Bored",
+        "trigger": "Bored",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Tired",
+        "trigger": "Tired",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Disappointed",
+        "trigger": "Disappointed",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Relieved",
+        "trigger": "Relieved",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "mouth_animations": [
+      {
+        "id": "Talking",
+        "trigger": "Talking",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "PET_TALKING"
+      },
+      {
+        "id": "Laughing",
+        "trigger": "Laughing",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "PET_LAUGHING"
+      },
+      {
+        "id": "Smiling",
+        "trigger": "Smiling",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Yawning",
+        "trigger": "Yawning",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Whistle",
+        "trigger": "Whistle",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Singing",
+        "trigger": "Singing",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Sigh",
+        "trigger": "Sigh",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Surprise",
+        "trigger": "Surprise",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "BiteLip",
+        "trigger": "BiteLip",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "LipPurse",
+        "trigger": "LipPurse",
+        "layer": "Face Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      }
+    ],
+    "hand_gestures": [
+      {
+        "id": "Wave",
+        "trigger": "Wave",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Peace",
+        "trigger": "Peace",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ThumbsUp",
+        "trigger": "ThumbsUp",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ThumbsDown",
+        "trigger": "ThumbsDown",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Point",
+        "trigger": "Point",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "PET_SHY_POINT"
+      },
+      {
+        "id": "Stop",
+        "trigger": "Stop",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ComeHere",
+        "trigger": "ComeHere",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Goodbye",
+        "trigger": "Goodbye",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Hello",
+        "trigger": "Hello",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Clap",
+        "trigger": "Clap",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "FingerSnap",
+        "trigger": "FingerSnap",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "CrossFingers",
+        "trigger": "CrossFingers",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HeartGesture",
+        "trigger": "HeartGesture",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "OkSign",
+        "trigger": "OkSign",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "RockSign",
+        "trigger": "RockSign",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Handshake",
+        "trigger": "Handshake",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "FistBump",
+        "trigger": "FistBump",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Salute",
+        "trigger": "Salute",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "finger_animations": [
+      {
+        "id": "Relaxed",
+        "trigger": "Relaxed",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Typing",
+        "trigger": "Typing",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Pointing",
+        "trigger": "Pointing",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Grabbing",
+        "trigger": "Grabbing",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HoldingCup",
+        "trigger": "HoldingCup",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HoldingPhone",
+        "trigger": "HoldingPhone",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Pinch",
+        "trigger": "Pinch",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Tap",
+        "trigger": "Tap",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Snap",
+        "trigger": "Snap",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "arm_animations": [
+      {
+        "id": "FoldArms",
+        "trigger": "FoldArms",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "StretchArms",
+        "trigger": "StretchArms",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "RaiseHand",
+        "trigger": "RaiseHand",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Reach",
+        "trigger": "Reach",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Hug",
+        "trigger": "Hug",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "OpenArms",
+        "trigger": "OpenArms",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ScratchArm",
+        "trigger": "ScratchArm",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "LeanOnTable",
+        "trigger": "LeanOnTable",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "shoulder_animations": [
+      {
+        "id": "Shrug",
+        "trigger": "Shrug",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Relax",
+        "trigger": "Relax",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "NervousRaise",
+        "trigger": "NervousRaise",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HappyBounce",
+        "trigger": "HappyBounce",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "upper_body": [
+      {
+        "id": "LeanLeft",
+        "trigger": "LeanLeft",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "LeanRight",
+        "trigger": "LeanRight",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Twist",
+        "trigger": "Twist",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Stretch",
+        "trigger": "Stretch",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "sitting": [
+      {
+        "id": "SitChair",
+        "trigger": "SitChair",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "sit 1"
+      },
+      {
+        "id": "SitFloor",
+        "trigger": "SitFloor",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "sit 1"
+      },
+      {
+        "id": "SitCrossLeg",
+        "trigger": "SitCrossLeg",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "sit 1"
+      },
+      {
+        "id": "SitRelaxed",
+        "trigger": "SitRelaxed",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "sit 1"
+      },
+      {
+        "id": "SitFormal",
+        "trigger": "SitFormal",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "sit 1"
+      },
+      {
+        "id": "SitEdge",
+        "trigger": "SitEdge",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "sit 1"
+      },
+      {
+        "id": "SitSofa",
+        "trigger": "SitSofa",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "sit 1"
+      },
+      {
+        "id": "SitGaming",
+        "trigger": "SitGaming",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "sit 1"
+      },
+      {
+        "id": "SitThinking",
+        "trigger": "SitThinking",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "sit 1"
+      },
+      {
+        "id": "SitReading",
+        "trigger": "SitReading",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "sit 1"
+      }
+    ],
+    "standing": [
+      {
+        "id": "Attention",
+        "trigger": "Attention",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Formal",
+        "trigger": "Formal",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Casual",
+        "trigger": "Casual",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Waiting",
+        "trigger": "Waiting",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Impatient",
+        "trigger": "Impatient",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "walking": [
+      {
+        "id": "NormalWalk",
+        "trigger": "NormalWalk",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "walk_cycle_sexy_02"
+      },
+      {
+        "id": "SlowWalk",
+        "trigger": "SlowWalk",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "walk_cycle_sexy_02"
+      },
+      {
+        "id": "FastWalk",
+        "trigger": "FastWalk",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "walk_cycle_sexy_02"
+      },
+      {
+        "id": "HappyWalk",
+        "trigger": "HappyWalk",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "walk_cycle_sexy_02"
+      },
+      {
+        "id": "SadWalk",
+        "trigger": "SadWalk",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "walk_cycle_sexy_02"
+      },
+      {
+        "id": "AngryWalk",
+        "trigger": "AngryWalk",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "walk_cycle_sexy_02"
+      },
+      {
+        "id": "ConfidentWalk",
+        "trigger": "ConfidentWalk",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "walk_cycle_sexy_02"
+      },
+      {
+        "id": "ShyWalk",
+        "trigger": "ShyWalk",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "walk_cycle_sexy_02"
+      },
+      {
+        "id": "InjuredWalk",
+        "trigger": "InjuredWalk",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "walk_cycle_sexy_02"
+      },
+      {
+        "id": "Sneak",
+        "trigger": "Sneak",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Tiptoe",
+        "trigger": "Tiptoe",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "WalkBackwards",
+        "trigger": "WalkBackwards",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "walk_cycle_sexy_02"
+      },
+      {
+        "id": "StrafeLeft",
+        "trigger": "StrafeLeft",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "StrafeRight",
+        "trigger": "StrafeRight",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "running": [
+      {
+        "id": "Jog",
+        "trigger": "Jog",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Sprint",
+        "trigger": "Sprint",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "PanicRun",
+        "trigger": "PanicRun",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HappyRun",
+        "trigger": "HappyRun",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "TiredRun",
+        "trigger": "TiredRun",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "jumping": [
+      {
+        "id": "SmallJump",
+        "trigger": "SmallJump",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HighJump",
+        "trigger": "HighJump",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HappyJump",
+        "trigger": "HappyJump",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Hop",
+        "trigger": "Hop",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Land",
+        "trigger": "Land",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "JumpTurn",
+        "trigger": "JumpTurn",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "crouching": [
+      {
+        "id": "CrouchIdle",
+        "trigger": "CrouchIdle",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "WalkCrouch",
+        "trigger": "WalkCrouch",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "walk_cycle_sexy_02"
+      },
+      {
+        "id": "Peek",
+        "trigger": "Peek",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Crawl",
+        "trigger": "Crawl",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "falling": [
+      {
+        "id": "Trip",
+        "trigger": "Trip",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Slip",
+        "trigger": "Slip",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "BackFall",
+        "trigger": "BackFall",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "FrontFall",
+        "trigger": "FrontFall",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "SideFall",
+        "trigger": "SideFall",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Recover",
+        "trigger": "Recover",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "sleeping": [
+      {
+        "id": "SleepStanding",
+        "trigger": "SleepStanding",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "SleepSitting",
+        "trigger": "SleepSitting",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "SleepBed",
+        "trigger": "SleepBed",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "TurnDuringSleep",
+        "trigger": "TurnDuringSleep",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "WakeUp",
+        "trigger": "WakeUp",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "StretchAfterSleep",
+        "trigger": "StretchAfterSleep",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "RubEyes",
+        "trigger": "RubEyes",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      }
+    ],
+    "dancing": [
+      {
+        "id": "Freestyle",
+        "trigger": "Freestyle",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "CuteDance",
+        "trigger": "CuteDance",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Pop",
+        "trigger": "Pop",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HipHop",
+        "trigger": "HipHop",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "KPop",
+        "trigger": "KPop",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "PET_WALK_LEFT"
+      },
+      {
+        "id": "Shuffle",
+        "trigger": "Shuffle",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Waltz",
+        "trigger": "Waltz",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "IdleDance",
+        "trigger": "IdleDance",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "VictoryDance",
+        "trigger": "VictoryDance",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "greeting": [
+      {
+        "id": "HelloGreeting",
+        "trigger": "HelloGreeting",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Bow",
+        "trigger": "Bow",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HugGreeting",
+        "trigger": "HugGreeting",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HighFive",
+        "trigger": "HighFive",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "WaveGreeting",
+        "trigger": "WaveGreeting",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Welcome",
+        "trigger": "Welcome",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "conversation": [
+      {
+        "id": "Listening",
+        "trigger": "Listening",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "TalkingConv",
+        "trigger": "TalkingConv",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Explaining",
+        "trigger": "Explaining",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ThinkingConv",
+        "trigger": "ThinkingConv",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Agree",
+        "trigger": "Agree",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Disagree",
+        "trigger": "Disagree",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "LaughWhileTalking",
+        "trigger": "LaughWhileTalking",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "Whisper",
+        "trigger": "Whisper",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "AskQuestion",
+        "trigger": "AskQuestion",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Storytelling",
+        "trigger": "Storytelling",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "emotional_body_language": [
+      {
+        "id": "Bounce",
+        "trigger": "Bounce",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Slouch",
+        "trigger": "Slouch",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HeadDown",
+        "trigger": "HeadDown",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Fists",
+        "trigger": "Fists",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "StiffBody",
+        "trigger": "StiffBody",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "StepBack",
+        "trigger": "StepBack",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ProtectBody",
+        "trigger": "ProtectBody",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "TiltHead",
+        "trigger": "TiltHead",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "LookAway",
+        "trigger": "LookAway",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "ScratchNeck",
+        "trigger": "ScratchNeck",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "romantic": [
+      {
+        "id": "HoldHands",
+        "trigger": "HoldHands",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HugRomantic",
+        "trigger": "HugRomantic",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "BlushRomantic",
+        "trigger": "BlushRomantic",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "LeanClose",
+        "trigger": "LeanClose",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HeartGestureRomantic",
+        "trigger": "HeartGestureRomantic",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "KissHand",
+        "trigger": "KissHand",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "RestHead",
+        "trigger": "RestHead",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ShySmileRomantic",
+        "trigger": "ShySmileRomantic",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      }
+    ],
+    "object_interaction": [
+      {
+        "id": "PickUp",
+        "trigger": "PickUp",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "PutDown",
+        "trigger": "PutDown",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Drink",
+        "trigger": "Drink",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Eat",
+        "trigger": "Eat",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Read",
+        "trigger": "Read",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Write",
+        "trigger": "Write",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "TypeObject",
+        "trigger": "TypeObject",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "PhoneUse",
+        "trigger": "PhoneUse",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "OpenDoor",
+        "trigger": "OpenDoor",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "CloseDoor",
+        "trigger": "CloseDoor",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Push",
+        "trigger": "Push",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Pull",
+        "trigger": "Pull",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "computer_interaction": [
+      {
+        "id": "KeyboardTyping",
+        "trigger": "KeyboardTyping",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "MouseClick",
+        "trigger": "MouseClick",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Scroll",
+        "trigger": "Scroll",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Gaming",
+        "trigger": "Gaming",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Coding",
+        "trigger": "Coding",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "WatchingScreen",
+        "trigger": "WatchingScreen",
+        "layer": "Gesture Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "fitness": [
+      {
+        "id": "StretchFitness",
+        "trigger": "StretchFitness",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "PushUp",
+        "trigger": "PushUp",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "SitUp",
+        "trigger": "SitUp",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "sit 1"
+      },
+      {
+        "id": "Yoga",
+        "trigger": "Yoga",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "WalkFitness",
+        "trigger": "WalkFitness",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "walk_cycle_sexy_02"
+      },
+      {
+        "id": "WarmUp",
+        "trigger": "WarmUp",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "environmental_reactions": [
+      {
+        "id": "Cold",
+        "trigger": "Cold",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Hot",
+        "trigger": "Hot",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Rain",
+        "trigger": "Rain",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Wind",
+        "trigger": "Wind",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "WINDOW_LAY_10"
+      },
+      {
+        "id": "BrightLight",
+        "trigger": "BrightLight",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "walk_cycle_sexy_01_light"
+      },
+      {
+        "id": "LoudNoise",
+        "trigger": "LoudNoise",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "ai_specific_behaviors_vivy": [
+      {
+        "id": "ThinkingAi",
+        "trigger": "ThinkingAi",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Processing",
+        "trigger": "Processing",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "SearchingMemory",
+        "trigger": "SearchingMemory",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Downloading",
+        "trigger": "Downloading",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Learning",
+        "trigger": "Learning",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "WaitingAi",
+        "trigger": "WaitingAi",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ListeningAi",
+        "trigger": "ListeningAi",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "Analyzing",
+        "trigger": "Analyzing",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "CelebratingSuccess",
+        "trigger": "CelebratingSuccess",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ConfusedComputation",
+        "trigger": "ConfusedComputation",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "IdleCuriosity",
+        "trigger": "IdleCuriosity",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "LonelyIdleBehavior",
+        "trigger": "LonelyIdleBehavior",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "LookingForUser",
+        "trigger": "LookingForUser",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "WavingToRegainAttention",
+        "trigger": "WavingToRegainAttention",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "WatchingTheUserSilently",
+        "trigger": "WatchingTheUserSilently",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "FollowingTheUserSCursorWithHeadAndEyes",
+        "trigger": "FollowingTheUserSCursorWithHeadAndEyes",
+        "layer": "Base Layer",
+        "priority": 2,
+        "fallback_asset": "PET_POSE_1"
+      }
+    ],
+    "micro_animations_procedural": [
+      {
+        "id": "RandomBlinking",
+        "trigger": "RandomBlinking",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "EyeSaccades",
+        "trigger": "EyeSaccades",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "BreathingMicro",
+        "trigger": "BreathingMicro",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "FingerMovement",
+        "trigger": "FingerMovement",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "WeightShifting",
+        "trigger": "WeightShifting",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "FootAdjustment",
+        "trigger": "FootAdjustment",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HairAdjustment",
+        "trigger": "HairAdjustment",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ClothingAdjustment",
+        "trigger": "ClothingAdjustment",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ShoulderRelaxation",
+        "trigger": "ShoulderRelaxation",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HeadMicroTilts",
+        "trigger": "HeadMicroTilts",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "TinySmiles",
+        "trigger": "TinySmiles",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "LipTwitches",
+        "trigger": "LipTwitches",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "HoverFace"
+      },
+      {
+        "id": "EarMovement",
+        "trigger": "EarMovement",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "PupilDilation",
+        "trigger": "PupilDilation",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "ChestExpansion",
+        "trigger": "ChestExpansion",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "HandFidgeting",
+        "trigger": "HandFidgeting",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "BalanceCorrection",
+        "trigger": "BalanceCorrection",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      },
+      {
+        "id": "SpineAdjustments",
+        "trigger": "SpineAdjustments",
+        "layer": "Procedural Layer",
+        "priority": 2,
+        "fallback_asset": "FACE_DRAG"
+      }
+    ],
+    "Generated": [
+      {
+        "id": "AutoAnim_a384b80e",
+        "trigger": "AutoAnim_a384b80e",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 3.003003,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_4064fbe8",
+        "trigger": "AutoAnim_4064fbe8",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 3.003003,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_0255cf9a",
+        "trigger": "AutoAnim_0255cf9a",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 10.01001,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_6988a041",
+        "trigger": "AutoAnim_6988a041",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_cc6c25f7",
+        "trigger": "AutoAnim_cc6c25f7",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_dc75ee09",
+        "trigger": "AutoAnim_dc75ee09",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.30931,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_fd2fe120",
+        "trigger": "AutoAnim_fd2fe120",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 5.038372,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_3c16b00c",
+        "trigger": "AutoAnim_3c16b00c",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_9112d6d3",
+        "trigger": "AutoAnim_9112d6d3",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 5.1,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_a10a9dd7",
+        "trigger": "AutoAnim_a10a9dd7",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 8.8,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_cc506df1",
+        "trigger": "AutoAnim_cc506df1",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_605eb1a7",
+        "trigger": "AutoAnim_605eb1a7",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_25123d8c",
+        "trigger": "AutoAnim_25123d8c",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_cbb74fd6",
+        "trigger": "AutoAnim_cbb74fd6",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_6cf689d9",
+        "trigger": "AutoAnim_6cf689d9",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_4b3280f3",
+        "trigger": "AutoAnim_4b3280f3",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_81b98988",
+        "trigger": "AutoAnim_81b98988",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_1c1dc00f",
+        "trigger": "AutoAnim_1c1dc00f",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_3d5ce2d9",
+        "trigger": "AutoAnim_3d5ce2d9",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_02ef4490",
+        "trigger": "AutoAnim_02ef4490",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_8e0fc8e1",
+        "trigger": "AutoAnim_8e0fc8e1",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_42caf39c",
+        "trigger": "AutoAnim_42caf39c",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_ef356ca4",
+        "trigger": "AutoAnim_ef356ca4",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_ff6ec21d",
+        "trigger": "AutoAnim_ff6ec21d",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_dc5f66fa",
+        "trigger": "AutoAnim_dc5f66fa",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_aa2f426b",
+        "trigger": "AutoAnim_aa2f426b",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_e32626d8",
+        "trigger": "AutoAnim_e32626d8",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_1b7959df",
+        "trigger": "AutoAnim_1b7959df",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_6df6021e",
+        "trigger": "AutoAnim_6df6021e",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_68f42977",
+        "trigger": "AutoAnim_68f42977",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_3e0747b5",
+        "trigger": "AutoAnim_3e0747b5",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_9e99cc1f",
+        "trigger": "AutoAnim_9e99cc1f",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_d7c5ca05",
+        "trigger": "AutoAnim_d7c5ca05",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 28.79543,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_565c93ec",
+        "trigger": "AutoAnim_565c93ec",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_523b71fc",
+        "trigger": "AutoAnim_523b71fc",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_a00c21b0",
+        "trigger": "AutoAnim_a00c21b0",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_d754aed3",
+        "trigger": "AutoAnim_d754aed3",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_d9713ad6",
+        "trigger": "AutoAnim_d9713ad6",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_29e2d065",
+        "trigger": "AutoAnim_29e2d065",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_fb0ffe5b",
+        "trigger": "AutoAnim_fb0ffe5b",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_b5c84951",
+        "trigger": "AutoAnim_b5c84951",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_def329e8",
+        "trigger": "AutoAnim_def329e8",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      },
+      {
+        "id": "AutoAnim_9582f116",
+        "trigger": "AutoAnim_9582f116",
+        "layer": "Base Layer",
+        "priority": 2,
+        "duration": 9.333333,
+        "auto_generated": true
+      }
+    ]
+  },
+  "emotion_layers": {
+    "joy": {
+      "Base Layer": [
+        "IdleHappy",
+        "IdleCheer"
+      ],
+      "Face Layer": [
+        "SmileBig",
+        "Laugh"
+      ],
+      "Gesture Layer": [
+        "WaveHand"
+      ],
+      "Procedural Layer": [
+        "HappyBreathing",
+        "FastBlink"
+      ]
+    },
+    "neutral": {
+      "Base Layer": [
+        "Idle0",
+        "Idle1"
+      ],
+      "Face Layer": [
+        "NeutralFace"
+      ],
+      "Gesture Layer": [
+      ],
+      "Procedural Layer": [
+        "NormalBreathing",
+        "NormalBlink",
+        "WeightShift"
+      ]
+    }
+  },
+  "fallback_trigger": "Idle0"
+}

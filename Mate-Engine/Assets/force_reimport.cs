@@ -1,0 +1,1 @@
+using UnityEditor; public class ForceReimport { [InitializeOnLoadMethod] static void DoReimport() { AssetDatabase.Refresh(); } }
