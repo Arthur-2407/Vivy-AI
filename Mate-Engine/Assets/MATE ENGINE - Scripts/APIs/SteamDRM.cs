@@ -5,7 +5,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
-public class SteamDRM : MonoBehaviour
+public static class SteamDRM
 {
     static bool initialized;
     static bool entitled;
