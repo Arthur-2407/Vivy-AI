@@ -115,6 +115,36 @@ except Exception as _evo_import_err:
     print(f"[run_vivy] Evolution package unavailable ({_evo_import_err}). Continuing without self-evolution loop.")
     _evolution_orchestrator = None
 
+# ──────────────────────────────────────────────────────────────────────
+# MULTILINGUAL INTELLIGENCE SUBSYSTEM — Language Engine integration
+# v2.0: Hybrid Language Intelligence Layer (NLLB-200 CPU + Qwen3)
+# Imported with graceful fallback: absent package = full existing behaviour.
+# ──────────────────────────────────────────────────────────────────────
+_language_router = None
+_language_translator = None
+_language_voice_selector = None
+_language_memory_filter = None
+_language_manager = None   # NEW: Hybrid Language Intelligence Layer orchestrator
+try:
+    from language import get_language_router as _get_lang_router, get_voice_selector as _get_v_selector
+    from language import get_language_manager as _get_lang_manager
+    from language.translator import OutputTranslator as _OutTranslator
+    from language.memory_filter import CrossLingualMemoryFilter as _CrossMemFilter
+    _language_router = _get_lang_router()
+    _language_translator = _OutTranslator()
+    _language_voice_selector = _get_v_selector()
+    _language_memory_filter = _CrossMemFilter()
+    _language_manager = _get_lang_manager()
+    print("[run_vivy] Multilingual & Cross-Lingual Intelligence Subsystem loaded successfully.")
+    print("[run_vivy] Hybrid Language Intelligence Layer (NLLB-200 + Qwen3) initialized.")
+except Exception as _lang_import_err:
+    print(f"[run_vivy] Multilingual package unavailable ({_lang_import_err}). Continuing in standard monolingual mode.")
+    _language_router = None
+    _language_translator = None
+    _language_voice_selector = None
+    _language_memory_filter = None
+    _language_manager = None
+
 
 
 # Reconfigure original console streams to utf-8 with fallback error replacement
@@ -618,6 +648,7 @@ def print_startup_readiness_table():
         ("Affection System",        "READY"),
         ("Loneliness System",       "READY"),
         ("Circadian System",        "READY"),
+        ("Multilingual Engine",     "READY" if _language_router is not None else "STANDBY"),
         ("Conversation Planner",    "READY"),
         ("Vision",                  sub.get("Vision", {}).get("state", "STANDBY")),
         ("Internet",                sub.get("Internet", {}).get("state", "ONLINE")),
@@ -864,6 +895,28 @@ while _run_main_loop:
                 is_voice_turn = (input_source == "voice")
                 print(f"Input source mode: {input_source}")
 
+                # [MULTILINGUAL v2.0] Step 1-5: Hybrid Language Intelligence Layer — detect, context, profile, localize
+                detected_lang_code = "en"
+                multilingual_prompt_hint = ""
+                try:
+                    if not is_proactive:
+                        if _language_manager is not None:
+                            # v2.0: Full Language Intelligence Layer (NLLB + Qwen + LanguageContext + PromptLocalizer)
+                            lang_res = _language_manager.process_input(user_input, input_source)
+                            detected_lang_code = lang_res.get("lang_code", "en")
+                            multilingual_prompt_hint = lang_res.get("prompt_hint", "")
+                            if detected_lang_code != "en":
+                                print(f"[Multilingual Engine v2.0] Active dialect: {lang_res.get('lang_name')} ({detected_lang_code}) | code_switching={lang_res.get('is_code_switching', False)}")
+                        elif _language_router is not None:
+                            # v1.0 fallback: basic router (preserved for resilience)
+                            lang_res = _language_router.process_input_turn(user_input, input_source)
+                            detected_lang_code = lang_res.get("lang_code", "en")
+                            multilingual_prompt_hint = lang_res.get("prompt_hint", "")
+                            if detected_lang_code != "en":
+                                print(f"[Multilingual Engine] Active dialect: {lang_res.get('lang_name')} ({detected_lang_code})")
+                except Exception as _lang_proc_err:
+                    print(f"[Multilingual Engine] Routing error (non-fatal): {_lang_proc_err}")
+
                 # Push event to FusionEngine if user sent input
                 if not is_proactive:
                     try:
@@ -958,16 +1011,30 @@ while _run_main_loop:
 
                 _telemetry_mgr.log_event("Reasoning Started", details={"input": user_input[:60]})
                 try:
+                    _query_to_llm = user_input
+                    if multilingual_prompt_hint:
+                        _query_to_llm = user_input + multilingual_prompt_hint
                     reply, history = conversation.generate_reply_internal(
-                        user_input, history, mem, screen_ctx,
+                        _query_to_llm, history, mem, screen_ctx,
                         perception_context=perception_ctx,
                         perception_state=perception_state
                     )
+                    # [MULTILINGUAL v2.0] Output localization — LanguageManager (NLLB + Qwen) or legacy translator
+                    if not is_proactive:
+                        if _language_manager is not None:
+                            reply = _language_manager.process_output(reply, detected_lang_code)
+                        elif _language_translator is not None:
+                            reply = _language_translator.verify_and_localize(reply, detected_lang_code)
                 except Exception as _gen_err:
                     print(f"[run_vivy] Pipeline reasoning exception: {_gen_err}")
                     import traceback
                     traceback.print_exc()
                     reply = "I'm right here with you! Tell me more about what's on your mind."
+                    if not is_proactive:
+                        if _language_manager is not None:
+                            reply = _language_manager.process_output(reply, detected_lang_code)
+                        elif _language_translator is not None:
+                            reply = _language_translator.verify_and_localize(reply, detected_lang_code)
                     history.append("You: " + user_input)
                     history.append("Vivy: " + reply)
                 _telemetry_mgr.log_event("Reasoning Finished", details={"reply_length": len(reply)})
@@ -1153,7 +1220,10 @@ while _run_main_loop:
                     except Exception as _cv_err:
                         print(f"[Circadian] Voice modulation error (non-fatal): {_cv_err}")
 
-                    voice.generate_tts_only(reply, TTS_WAV)
+                    if _language_voice_selector is not None and not is_proactive:
+                        _language_voice_selector.synthesize(reply, TTS_WAV, lang_code=detected_lang_code, fallback_tts_func=voice.generate_tts_only)
+                    else:
+                        voice.generate_tts_only(reply, TTS_WAV)
                     
                     # Run Voice Cloning (RVC) using the venv_rvc python environment
                     rvc_disabled = os.path.exists(os.path.join(SHARED_DIR, "rvc_disable.txt"))

@@ -3554,12 +3554,12 @@ def score_response_rie(reply, user, mem, categories, history=None, perception_st
     Must average >= 8.5 and minimum score per check must be passed.
     Returns (average_score, is_valid) tuple."""
     t = reply.strip()
-    if not t or len(t.split()) < 2:
+    if not t or (len(t.split()) < 2 and not any(ord(c) > 127 for c in t)):
         return 0.0, False
         
     # Truncation and Incompleteness Guard
-    t_stripped = t.rstrip(":.— \t\n")
-    if t.endswith(":") or t.endswith("—") or t.endswith("-") or t.endswith(","):
+    t_stripped = t.rstrip(":.— \t\n、，：〜")
+    if t.endswith(":") or t.endswith("—") or t.endswith("-") or t.endswith(",") or t.endswith("、") or t.endswith("，") or t.endswith("：") or t.endswith("〜"):
         print("Response validation rejected candidate: Response ends with truncation characters.")
         return 0.0, False
     if t_stripped.lower().endswith("reads") or t_stripped.lower().endswith("reads:"):
@@ -3739,6 +3739,13 @@ def score_response_rie(reply, user, mem, categories, history=None, perception_st
         is_prep_turn = not ts.get("skip_prep") and strategy != "tutorial"
         if not is_clarification_or_empty and not is_prep_turn:
             food_terms = ["recipe", "ingredient", "cook", "boil", "water", "noodle", "ramen", "pizza", "pan", "heat", "toastie", "cheese", "bread", "craving", "craved", "eat", "food", "kitchen", "cupboard", "fridge", "pantry"]
+            try:
+                from config.config_manager import get_config_manager
+                cfg_terms = get_config_manager().get("multilingual_engine", {}).get("multilingual_task_terms", {}).get("cooking", [])
+                if cfg_terms:
+                    food_terms.extend([term.lower() for term in cfg_terms])
+            except Exception:
+                pass
             task_query = ts.get("query", "").lower()
             if task_query:
                 food_terms.extend(task_query.split())
@@ -3748,8 +3755,8 @@ def score_response_rie(reply, user, mem, categories, history=None, perception_st
             
             # If in tutorial mode (meaning we are delivering the recipe), ensure it is not truncated or empty
             if strategy == "tutorial" or ts.get("skip_prep"):
-                # 1. Must be reasonably long for a full recipe
-                if len(t.split()) < 25:
+                # 1. Must be reasonably long for a full recipe (multilingual character aware)
+                if len(t.split()) < 25 and len(t) < 80:
                     print("Response validation rejected candidate: Recipe tutorial is too short.")
                     return 0.0, False
                 # 2. Must not end in trailing colons, dashes or commas (signals truncation)
@@ -3846,8 +3853,8 @@ def score_response_rie(reply, user, mem, categories, history=None, perception_st
             print("Response validation rejected candidate: Low-trust emotional overshooting.")
             return 0.0, False
         
-    # Metric 1: Naturalness (starts capital, ends with punctuation)
-    naturalness = 10.0 if t[0].isupper() and t[-1] in [".", "!", "?"] else 7.0
+    # Metric 1: Naturalness (starts capital or regional script, ends with punctuation)
+    naturalness = 10.0 if (t[0].isupper() or ord(t[0]) > 127) and t[-1] in [".", "!", "?", "。", "！", "？", "।"] else 7.0
     
     # Metric 2: Warmth (persona keywords)
     warmth = 8.5
@@ -3883,7 +3890,7 @@ def score_response_rie(reply, user, mem, categories, history=None, perception_st
     personality = 9.5
     
     avg = (naturalness + warmth + context + flow + continuation + emotion + memory + personality) / 8.0
-    is_valid = (avg >= 8.5) and (len(t.split()) >= 2)
+    is_valid = (avg >= 8.5) and (len(t.split()) >= 2 or any(ord(c) > 127 for c in t))
     return avg, is_valid
 
 # =====================================================
@@ -4335,8 +4342,8 @@ def clean(text, user, mem):
         print(f"Safety Manager blocked prompt leakage candidate: '{t}'")
         return ""
 
-    # PART 3 — Basic length and tag safety validation
-    if len(t.split()) < 2:  # Too short
+    # PART 3 — Basic length and tag safety validation (multilingual script aware)
+    if len(t.split()) < 2 and not any(ord(c) > 127 for c in t):  # Too short for English words
         return ""
         
     # Only reject actual LLM system/thought tags to allow code brackets
@@ -5826,14 +5833,13 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
             t_clean = clean(raw_clean, user, mem)
             if not t_clean:
                 lines = [l.strip() for l in raw_clean.split("\n") if l.strip()]
-                # Root-cause fix: lines[0] was bypassing clean() entirely, allowing
-                # orphaned <think> tags, single-word emoji, and unvalidated LLM text
-                # to escape into the pipeline. Apply final sanitisation before accepting.
-                candidate = lines[0] if lines else ""
+                # Root-cause fix: retain complete multi-line responses under 400 chars rather than
+                # severing at the first line break (e.g. after interjections or Japanese commas).
+                candidate = " ".join(lines) if (lines and len(" ".join(lines)) < 400) else (lines[0] if lines else "")
                 # Strip any surviving think tags from the raw line candidate
                 candidate = _THINK_TAG_RE.sub("", candidate).strip()
-                # Discard if result is empty, contains XML/HTML tags, or is a single token
-                if candidate and "<" not in candidate and ">" not in candidate and len(candidate.split()) >= 2:
+                # Discard if result is empty, contains XML/HTML tags, or is a single English token
+                if candidate and "<" not in candidate and ">" not in candidate and (len(candidate.split()) >= 2 or any(ord(c) > 127 for c in candidate)):
                     t_clean = candidate
                 else:
                     t_clean = ""

@@ -26,6 +26,7 @@ shared/
 recordings/
 transcripts/
 vivy_recordings/
+Reports/
 scratch/
 *.tmp
 *.lock
@@ -90,3 +91,25 @@ Mate-Engine/Assets/StreamingAssets/undreamai-v1.2.5-llamacpp/**/*.dylib
 # ── Re-apply exception for >100MB Precompiled CUDA LLM Libraries ──
 Mate-Engine/Assets/StreamingAssets/undreamai-v1.2.5-llamacpp/
 Mate-Engine/Assets/StreamingAssets/undreamai-v1.2.5-llamacpp/**
+
+# ── Privacy, User Anonymity & Sensitive Runtime States (NEVER share on GitHub) ──
+vivy_memory.json
+vivy_memory*.json
+.agent_progress.json
+.agent_progress*.json
+*.override.json
+.env
+.env.*
+secrets*.json
+*.secret
+
+# ── Local Diagnostic Scripts & User-Specific Absolute Paths ──
+validate_system.py
+scratch_*.py
+poll.py
+
+# ── Converted AI Translation Models & Cache Directories ──
+models/nlp/*-ct2/
+models/**/*-ct2/
+.gemini/
+.system_generated/

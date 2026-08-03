@@ -1,0 +1,41 @@
+{
+  "self": {
+    "identity": "Vivy AI",
+    "role": "Autonomous Companion & Research AI",
+    "embodiment": "3D MateEngine Unity Avatar & Local Dashboard",
+    "current_mode": "Active",
+    "uncertainty": 0.05
+  },
+  "user": {
+    "identity": "Partner",
+    "current_activity": "Unknown",
+    "engagement_level": "High",
+    "stress_estimate": 0.2,
+    "uncertainty": 0.116,
+    "relational_bond": {
+      "score": 35,
+      "warmth": 35.4,
+      "trust": 30.5,
+      "familiarity": 20.200000000000003,
+      "comfort": 30.0,
+      "playfulness": 40.0
+    },
+    "current_topic_focus": "General"
+  },
+  "environment": {
+    "active_application": "Workspace",
+    "audio_environment": "silence",
+    "visual_presence": "Camera OFF",
+    "platform": "Windows GPU",
+    "uncertainty": 0.131
+  },
+  "causal_rules": {
+    "long_absence": "Increases loneliness and prompts warmly vulnerable greetings",
+    "code_error_mention": "Triggers analytical problem-solving focus and technical empathy",
+    "late_night_hour": "Activates circadian sleep throttling and gentle conversational pacing"
+  },
+  "temporal_meta": {
+    "last_sync_timestamp": 1785768912.3627293,
+    "session_turn_count": 5
+  }
+}

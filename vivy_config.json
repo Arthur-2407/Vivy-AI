@@ -125,5 +125,109 @@
     "max_retrieved_memories":      3,
     "consolidation_interval_turns": 5,
     "memory_file":                 "vivy_memory.json"
+  },
+
+  "multilingual_engine": {
+    "enabled": true,
+    "default_language": "en",
+    "auto_detect_from_whisper": true,
+    "auto_detect_from_text": true,
+    "cross_lingual_memory": true,
+    "preserve_rvc_voice_identity": true,
+    "supported_native_llm_languages": ["en", "hi", "ja", "zh", "es", "fr", "de", "ru", "or", "bn", "ko"],
+    "regional_dialect_mapping": {
+      "or": {"name": "Odia", "script_range_start": 2816, "script_range_end": 2943, "script_ranges": [[2816, 2943]], "use_localized_tts": true, "honorific": "ତୁମେ"},
+      "bn": {"name": "Bengali", "script_range_start": 2432, "script_range_end": 2559, "script_ranges": [[2432, 2559]], "use_localized_tts": true, "honorific": "ତୁମେ"},
+      "hi": {"name": "Hindi", "script_range_start": 2304, "script_range_end": 2431, "script_ranges": [[2304, 2431]], "use_localized_tts": false, "honorific": "आप"},
+      "ja": {"name": "Japanese", "script_range_start": 12352, "script_range_end": 12799, "script_ranges": [[12288, 12799], [19968, 40959]], "use_localized_tts": false, "honorific": "さん"},
+      "zh": {"name": "Chinese", "script_range_start": 19968, "script_range_end": 40959, "script_ranges": [[19968, 40959], [13312, 19903]], "use_localized_tts": false, "honorific": "您"},
+      "ru": {"name": "Russian", "script_range_start": 1024, "script_range_end": 1279, "script_ranges": [[1024, 1279]], "use_localized_tts": false, "honorific": ""},
+      "ko": {"name": "Korean", "script_range_start": 44032, "script_range_end": 55215, "script_ranges": [[44032, 55215], [12592, 12687]], "use_localized_tts": false, "honorific": "님"},
+      "fr": {"name": "French", "script_range_start": -1, "script_range_end": -1, "script_ranges": [], "use_localized_tts": false, "honorific": ""},
+      "es": {"name": "Spanish", "script_range_start": -1, "script_range_end": -1, "script_ranges": [], "use_localized_tts": false, "honorific": ""},
+      "de": {"name": "German", "script_range_start": -1, "script_range_end": -1, "script_ranges": [], "use_localized_tts": false, "honorific": ""}
+    },
+    "linguistic_fingerprints": {
+      "fr": ["qu'est-ce", "qu'est", "que", "qui", "aimes", "manger", "peux", "dire", "comment", "faire", "une", "les", "ingrédients", "nécessaires", "pourquoi", "quand", "oui", "merci", "bonjour", "salut", "vous", "nous", "avec", "dans", "pour", "recette", "cuisiner"],
+      "es": ["qué", "cómo", "donde", "cuándo", "mucho", "hola", "buenos", "días", "gracias", "por qué", "estás", "haciendo", "quiero", "puedes", "decirme", "ingredientes", "receta"],
+      "de": ["wie", "was", "wo", "wann", "warum", "wer", "ich", "du", "wir", "ihr", "und", "aber", "mit", "für", "danke", "bitte", "hallo", "ist", "sind", "nicht", "rezept", "zutaten"],
+      "ja": ["watashi", "anata", "boku", "kimi", "to", "deeto", "ikanai", "iku", "suki", "daijoubu", "nani", "doushite", "ohayo", "konnichiwa", "arigatou", "tabetai", "nomitai"]
+    },
+    "multilingual_task_terms": {
+      "cooking": [
+        "recette", "ingrédient", "ingrédients", "cuisiner", "cuisson", "four", "farine", "levure", "sauce", "fromage", "pâte", "manger", "nourriture", "repas", "plat", "pizza",
+        "receta", "ingredientes", "cocinar", "horno", "harina", "queso", "comida",
+        "rezept", "zutaten", "kochen", "essen", "mehl", "käse", "gericht"
+      ]
+    },
+    "nllb_model": {
+      "model_id": "facebook/nllb-200-distilled-600M",
+      "local_converted_path": "models/nlp/nllb-200-distilled-600M-ct2",
+      "device": "hybrid",
+      "cpu_compute_type": "int8",
+      "cuda_compute_type": "int8_float16",
+      "compute_type": "int8",
+      "inter_threads": 4,
+      "intra_threads": 4,
+      "beam_size": 2,
+      "max_input_tokens": 256,
+      "adaptive_load_switching": {
+        "enabled": true,
+        "min_free_vram_mb": 1200,
+        "max_gpu_utilization_percent": 85,
+        "max_cpu_load_percent": 75,
+        "check_interval_seconds": 3.0
+      },
+      "nllb_lang_map": {
+        "en": "eng_Latn",
+        "hi": "hin_Deva",
+        "or": "ory_Orya",
+        "bn": "ben_Beng",
+        "ja": "jpn_Jpan",
+        "zh": "zho_Hans",
+        "fr": "fra_Latn",
+        "es": "spa_Latn",
+        "de": "deu_Latn",
+        "ru": "rus_Cyrl",
+        "ko": "kor_Hang"
+      }
+    },
+    "hybrid_translation": {
+      "enabled": true,
+      "confidence_threshold": 0.82,
+      "qwen_review_on_low_confidence": true,
+      "personality_preservation_pass": true,
+      "complexity_rules": {
+        "simple": "nllb",
+        "normal": "nllb",
+        "emotional": "nllb_then_qwen_validate",
+        "technical": "qwen",
+        "creative": "qwen",
+        "code": "qwen"
+      },
+      "complexity_word_thresholds": {
+        "simple": 5,
+        "normal": 30,
+        "emotional_keywords": ["lonely", "sad", "miss", "love", "heart", "hurt", "cry", "feel", "अकेला", "दुखी", "淋しい", "孤独"]
+      }
+    },
+    "translation_cache": {
+      "enabled": true,
+      "max_entries": 500,
+      "ttl_seconds": 3600
+    },
+    "language_profiles": {
+      "en": {"tone": "warm_friendly", "formality": "casual", "writing_style": "conversational", "use_contractions": true},
+      "hi": {"tone": "warm_respectful", "formality": "polite", "writing_style": "expressive", "use_contractions": false},
+      "or": {"tone": "warm_respectful", "formality": "polite", "writing_style": "expressive", "use_contractions": false},
+      "bn": {"tone": "warm_friendly", "formality": "polite", "writing_style": "poetic", "use_contractions": false},
+      "ja": {"tone": "polite_warm", "formality": "keigo_casual", "writing_style": "concise", "use_contractions": false},
+      "zh": {"tone": "warm_friendly", "formality": "casual", "writing_style": "concise", "use_contractions": false},
+      "fr": {"tone": "warm_expressive", "formality": "casual", "writing_style": "conversational", "use_contractions": true},
+      "es": {"tone": "expressive_warm", "formality": "casual", "writing_style": "conversational", "use_contractions": true},
+      "de": {"tone": "direct_warm", "formality": "casual", "writing_style": "precise", "use_contractions": false},
+      "ru": {"tone": "warm_expressive", "formality": "casual", "writing_style": "rich", "use_contractions": false},
+      "ko": {"tone": "polite_warm", "formality": "informal_polite", "writing_style": "concise", "use_contractions": false}
+    }
   }
 }

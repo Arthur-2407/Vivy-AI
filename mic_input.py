@@ -267,6 +267,16 @@ def run_whisper(wav_file, output_txt_path=None):
     print(Fore.CYAN + f"Transcript saved: {txt_path}" + Style.RESET_ALL)
     _cprint(f"  \033[97m🗣  Heard: {text}\033[0m")
 
+    # Write detected language metadata for Multilingual Engine
+    try:
+        from language.detector import LanguageDetector
+        _det = LanguageDetector().classify_text_by_script(text)
+        _lang_path = os.path.join(BASE_DIR, "shared", "detected_language.txt")
+        with open(_lang_path, "w", encoding="utf-8") as lf:
+            lf.write(_det.get("code", "en"))
+    except Exception as _l_err:
+        print(Fore.YELLOW + f"[mic_input] Language identification warning: {_l_err}" + Style.RESET_ALL)
+
     # Write to speech_diagnostics.json
     try:
         import json

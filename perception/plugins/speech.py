@@ -155,10 +155,20 @@ class FasterWhisperSpeechPlugin(BaseSpeechPlugin):
                 })
                 
             full_text = " ".join(text_chunks).strip()
+            detected_lang = getattr(info, 'language', 'en')
+            try:
+                import os
+                shared_lang = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "shared", "detected_language.txt")
+                os.makedirs(os.path.dirname(shared_lang), exist_ok=True)
+                with open(shared_lang, "w", encoding="utf-8") as lf:
+                    lf.write(str(detected_lang))
+            except Exception as _err:
+                logger.warning(f"[FasterWhisper] Error writing detected language metadata: {_err}")
             
             return {
                 "text": full_text,
                 "confidence": getattr(info, 'language_probability', 0.95),
+                "language": detected_lang,
                 "timestamps": timestamps,
                 "speaker_id": "speaker_0"
             }
