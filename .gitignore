@@ -37,9 +37,12 @@ scratch/
 *.m4a
 *.flag
 
-# Ignore all text files but keep requirements.txt
+# Ignore all text files but keep requirements.txt and important configs
 *.txt
 !requirements.txt
+!Retrieval-based-Voice-Conversion-WebUI-main/*.txt
+!Mate-Engine/ProjectSettings/ProjectVersion.txt
+!Mate-Engine/**/steam_appid.txt
 
 # Specific logs and reports requested
 Animation_Inventory_Report.txt
@@ -131,7 +134,7 @@ models/**/*-ct2/
 .system_generated/
 
 # ── Demo & Unnecessary Test Files ──
-demo/
+/demo/
 test_*.wav
 *dummy_evolve_test*.bak*
 dummy_test.txt
