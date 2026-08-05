@@ -11,12 +11,12 @@
     "current_activity": "Unknown",
     "engagement_level": "High",
     "stress_estimate": 0.2,
-    "uncertainty": 0.116,
+    "uncertainty": 0.109,
     "relational_bond": {
       "score": 35,
-      "warmth": 35.4,
-      "trust": 30.5,
-      "familiarity": 20.200000000000003,
+      "warmth": 35.0,
+      "trust": 30.0,
+      "familiarity": 20.0,
       "comfort": 30.0,
       "playfulness": 40.0
     },
@@ -27,7 +27,7 @@
     "audio_environment": "silence",
     "visual_presence": "Camera OFF",
     "platform": "Windows GPU",
-    "uncertainty": 0.131
+    "uncertainty": 0.13
   },
   "causal_rules": {
     "long_absence": "Increases loneliness and prompts warmly vulnerable greetings",
@@ -35,7 +35,7 @@
     "late_night_hour": "Activates circadian sleep throttling and gentle conversational pacing"
   },
   "temporal_meta": {
-    "last_sync_timestamp": 1785768912.3627293,
-    "session_turn_count": 5
+    "last_sync_timestamp": 1785947246.0435805,
+    "session_turn_count": 25
   }
 }

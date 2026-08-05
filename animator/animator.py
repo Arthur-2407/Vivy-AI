@@ -127,7 +127,7 @@ class VivyAnimationPlanner:
             self._config = _load_config()
         logger.info("Config reloaded.")
 
-    def on_emotion(self, emotion_label: str, circadian_energy: float = 0.7) -> AnimationRequest:
+    def on_emotion(self, emotion_label: str, circadian_energy: float = 0.7, vocal_style: str = None) -> AnimationRequest:
         """
         Called after detect_emotion() produces a new label.
         Chooses appropriate modular animation triggers per layer, constructs 
@@ -140,6 +140,13 @@ class VivyAnimationPlanner:
         if circadian_energy < 0.20 and emotion != "sleeping":
             logger.info(f"Suppressing animation for emotion '{emotion}': Circadian energy is {circadian_energy:.2f} (< 0.20 sleep threshold).")
             return None
+
+        if vocal_style is None:
+            try:
+                from voice.voice_manager import get_voice_manager
+                vocal_style = get_voice_manager().get_active_voice().get("active_style", "Professional")
+            except Exception:
+                vocal_style = "Professional"
 
         dispatched_requests = []
 
@@ -183,16 +190,17 @@ class VivyAnimationPlanner:
                 self._last_triggers[layer_name] = trigger
                 self._last_sent_at[layer_name] = now
 
+                transition_time = 0.5 if vocal_style in ("Soft", "Calm") else 0.3
                 anim_req = AnimationRequest(
                     request_id=str(uuid.uuid4()),
                     category="emotion",
                     clip_or_procedural_id=trigger,
                     target_layers=[layer_name],
                     blend_weight=1.0,
-                    transition_duration=0.3,
+                    transition_duration=transition_time,
                     priority=1,
                     source_module="VivyAnimationPlanner",
-                    parameters={"emotion": emotion, "circadian_energy": circadian_energy}
+                    parameters={"emotion": emotion, "circadian_energy": circadian_energy, "vocal_style": vocal_style}
                 )
                 
                 self._dispatch(trigger, anim_req)

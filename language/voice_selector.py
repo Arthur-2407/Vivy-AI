@@ -56,6 +56,22 @@ class MultilingualVoiceSelector:
         meta = self.dialect_mapping.get(lang_code, {})
         use_localized = meta.get("use_localized_tts", False)
 
+        # 0. Check Custom Voice & Neural Router Integration (Upgrade)
+        try:
+            from voice.voice_router import get_voice_router
+            v_router = get_voice_router()
+            if v_router.is_language_supported(lang_code) and not use_localized:
+                if fallback_tts_func is not None:
+                    try:
+                        fallback_tts_func(text, output_wav_path)
+                        if os.path.exists(output_wav_path) and os.path.getsize(output_wav_path) > 100:
+                            logger.info(f"[VoiceSelector] Synthesized {lang_code} via Custom Neural Voice Router.")
+                            return True
+                    except Exception as _r_err:
+                        logger.warning(f"[VoiceSelector] Neural Voice Router fallback error: {_r_err}")
+        except Exception:
+            pass
+
         # 1. Standard English or non-localized dialect -> Invoke existing voice.generate_tts_only()
         if lang_code == "en" or not use_localized:
             if fallback_tts_func is not None:
@@ -72,17 +88,27 @@ class MultilingualVoiceSelector:
             try:
                 import pyttsx3
                 engine = pyttsx3.init()
-                # Try to select best matching system voice
+                # Try to select best matching female system voice
                 voices = engine.getProperty('voices')
+                selected_v = None
                 for v in voices:
                     v_lower = (getattr(v, 'name', '') + getattr(v, 'id', '')).lower()
-                    if any(w in v_lower for w in [lang_code, meta.get("name", "").lower(), "india", "indic", "devanagari"]):
-                        try:
-                            engine.setProperty('voice', v.id)
+                    if not any(m in v_lower for m in ['david', 'mark', 'male']):
+                        if any(w in v_lower for w in [lang_code, meta.get("name", "").lower(), "india", "indic", "devanagari", "zira", "haruka", "female"]):
+                            selected_v = v
                             break
-                        except Exception:
-                            pass
-                
+                if not selected_v and voices:
+                    for v in voices:
+                        v_lower = (getattr(v, 'name', '') + getattr(v, 'id', '')).lower()
+                        if not any(m in v_lower for m in ['david', 'mark', 'male']):
+                            selected_v = v
+                            break
+                if selected_v:
+                    try:
+                        engine.setProperty('voice', selected_v.id)
+                    except Exception:
+                        pass
+
                 # Set conversational speech rate
                 try:
                     engine.setProperty('rate', 175)
@@ -107,3 +133,15 @@ class MultilingualVoiceSelector:
                 logger.error(f"[VoiceSelector] Fallback TTS failed: {fb_err}")
 
         return os.path.exists(output_wav_path)
+
+import threading
+_global_voice_selector = None
+_vs_lock = threading.Lock()
+
+def get_voice_selector() -> MultilingualVoiceSelector:
+    global _global_voice_selector
+    if _global_voice_selector is None:
+        with _vs_lock:
+            if _global_voice_selector is None:
+                _global_voice_selector = MultilingualVoiceSelector()
+    return _global_voice_selector

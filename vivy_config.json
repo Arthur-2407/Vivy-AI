@@ -65,6 +65,7 @@
   },
 
   "pipeline": {
+    "auto_listen":              false,
     "poll_interval_seconds":    0.25,
     "mic_sample_rate":          16000,
     "mic_frame_ms":             30,
@@ -151,7 +152,8 @@
       "fr": ["qu'est-ce", "qu'est", "que", "qui", "aimes", "manger", "peux", "dire", "comment", "faire", "une", "les", "ingrédients", "nécessaires", "pourquoi", "quand", "oui", "merci", "bonjour", "salut", "vous", "nous", "avec", "dans", "pour", "recette", "cuisiner"],
       "es": ["qué", "cómo", "donde", "cuándo", "mucho", "hola", "buenos", "días", "gracias", "por qué", "estás", "haciendo", "quiero", "puedes", "decirme", "ingredientes", "receta"],
       "de": ["wie", "was", "wo", "wann", "warum", "wer", "ich", "du", "wir", "ihr", "und", "aber", "mit", "für", "danke", "bitte", "hallo", "ist", "sind", "nicht", "rezept", "zutaten"],
-      "ja": ["watashi", "anata", "boku", "kimi", "to", "deeto", "ikanai", "iku", "suki", "daijoubu", "nani", "doushite", "ohayo", "konnichiwa", "arigatou", "tabetai", "nomitai"]
+      "ja": ["watashi", "anata", "boku", "kimi", "to", "deeto", "ikanai", "iku", "suki", "daijoubu", "nani", "doushite", "ohayo", "konnichiwa", "arigatou", "tabetai", "nomitai"],
+      "ko": ["gomawo", "gamsahamnida", "kamsahamnida", "annyeong", "saranghae", "oppa", "noona", "mianhae", "jinjja", "daebak", "jebal", "chinggu", "yeobo", "bibimbap", "kimchi", "soju", "unni", "hyung"]
     },
     "multilingual_task_terms": {
       "cooking": [

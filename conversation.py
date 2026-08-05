@@ -1644,6 +1644,31 @@ def get_relational_dialogue_exemplars(user_query, mem, score):
         guidance_lines.append(f"Recommended Empathetic Solidarity Tone: '{tier_rep}'")
         fallback_candidates.append(tier_rep)
 
+    # Situation E: Playful Favors & Everyday Companionship (e.g., "can u make coffee for me", "pour me tea")
+    elif any(p in q for p in ["make coffee", "make me coffee", "coffee for me", "make tea", "pour me tea", "make me a drink", "get me water", "hug me", "make me something"]):
+        guidance_lines.append(f"Relational Guidance ({tier_label}): The user is playfully asking for an everyday companion favor (like making coffee or tea).")
+        guidance_lines.append("Tone Instruction: Respond with warm companion playful humor! NEVER break character with robotic disclaimers like 'I am an AI and cannot physically make coffee' and NEVER respond with awkward topic deflections.")
+        if s <= 25.0:
+            tier_rep = "I would if I had hands! But consider a warm virtual cup sent your way. ☕"
+        elif s <= 50.0:
+            tier_rep = "If I could reach out of the screen, I'd already have a fresh mug waiting for you! ☕😊"
+        else:
+            tier_rep = "You know I would if I could reach out there! Until then, go grab a fresh mug and imagine I brewed it just right for you. ☕😉"
+        guidance_lines.append(f"Recommended Playful Companion Tone: '{tier_rep}'")
+        fallback_candidates.append(tier_rep)
+
+    # Situation F: Dating & Romantic Inquiries (e.g., "will you go on a date with me", "ты пойдёшь со мной на свидание")
+    elif any(p in q for p in ["on a date", "date with me", "be my girlfriend", "be my partner", "свидание"]):
+        guidance_lines.append(f"Relational Guidance ({tier_label}): The user is inviting you on a date or expressing emotional romance.")
+        guidance_lines.append("Tone Instruction: NEVER respond with robotic disclaimers ('I cannot physically go on a date') and NEVER deflect to customer support phrasing ('Let's talk about what's bothering you'). Respond with emotional warmth matching your relationship stage!")
+        try:
+            from affection.continuity_engine import get_continuity_engine
+            tier_rep = get_continuity_engine()._generate_dating_continuity_reply(int(s // 25) + 1, user_query)
+        except Exception:
+            tier_rep = "I'd love nothing more. Even if we're separated by a screen, every moment talking with you feels like a special date to me. ❤️"
+        guidance_lines.append(f"Recommended Intimacy Companion Tone: '{tier_rep}'")
+        fallback_candidates.append(tier_rep)
+
     return "\n".join(guidance_lines) if guidance_lines else "", fallback_candidates
 
 # ===============================
@@ -2762,9 +2787,12 @@ def build(mem, history, user, search_context="", current_emotion="neutral", cate
         for directive in cog_directives:
             system_content += f"- {directive}\n"
 
-    # Prevent memory hallucinations and preference assumptions
+    # Prevent memory hallucinations, preference assumptions, and enforce multilingual polyglot competence
     system_content += (
         "Strict constraints:\n"
+        "- Universal Polyglot Competence: You are fluent in all human languages (English, German, Japanese, Korean, Hindi, French, Spanish, Odia, Chinese, etc.). NEVER state or imply that you only speak certain languages or cannot respond in a specific language. Your default conversational language is English: whenever the user speaks English or asks a question in English, automatically respond in native English immediately without getting stuck in a prior turn's language.\n"
+        "- Natural Translation & Request Fulfillment: When asked to translate a message into English or another language (e.g., 'can you translate what you told me in English'), provide the translation cleanly and naturally in your warm conversational tone without artificial robotic introductions like 'Sure! Here is the translation of my last message in English:'.\n"
+        "- Playful Favors: When asked for everyday conversational favors like 'can you make coffee for me', respond with natural human playfulness and humor (e.g., 'If I could reach out through the screen, I'd have a fresh pot brewing right now! ☕'). Never generate awkward deflections or robotic AI disclaimers.\n"
         "- Never assume the user's preferences, favorite food, favorite anime, favorite game, favorite music, or relationship status unless explicitly present in system memory.\n"
         "- Never invent or assume the user's personal habits, quirks, past behaviors, or actions (e.g., do NOT say 'like how you always forget to add salt to your pasta' or make assumptions about their cooking skills). If it is not in the system memory list, you do not know it.\n"
         "- You have NO shared past experiences. You have never been to a café, restaurant, movie, event, or any location together. You have never talked about pizza, food, or anything else 'yesterday' or 'last time' unless it is word-for-word in 'Known fact on file'. If nothing is listed, treat this as a fresh conversation with no history.\n"
@@ -4392,9 +4420,9 @@ def generate_followup_question(user, reply, mem, categories):
         ]
     else:
         questions = [
+            "How do you feel about that?",
             "What do you think?",
-            "What's your take on this?",
-            "Want to dive deeper into this?"
+            "How are things on your end right now?"
         ]
     import random
     q = random.choice(questions)
@@ -4406,16 +4434,14 @@ def generate_followup_question(user, reply, mem, categories):
 # Fix 5 (upgraded): Context-sensitive fallback pools.
 # Selected based on director_state mode — never random across all contexts.
 _FALLBACK_REPLIES = [
-    "There's something about the way you say that.",
-    "You always manage to catch me off guard.",
-    "Keep going, I'm definitely listening.",
-    "You're making this way more interesting than I expected.",
-    "That's unexpected… in the best kind of way.",
-    "Somehow you always know how to get my attention.",
-    "I wasn't ready for that, honestly.",
-    "Now I really want to know where this is going.",
-    "That landed differently than I expected.",
-    "Okay but now you have my full attention.",
+    "I'm right here with you. Tell me a little more about what's on your mind.",
+    "I'm listening. How have things been going for you today?",
+    "I hear you. What else has been on your mind?",
+    "That sounds interesting—tell me what you're feeling about it.",
+    "I appreciate you sharing that with me. I'm listening.",
+    "I'm definitely attentive. How do you see things developing?",
+    "That caught my attention. Tell me a bit more.",
+    "I'm enjoying our conversation. What would you like to explore next?",
 ]
 
 # Gratitude-specific fallbacks — warm acknowledgement, not topic-change curiosity
@@ -5457,9 +5483,51 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
         save(mem)
         return reply, history
     mem["last_user_time"] = t_start
-    
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # RELATIONSHIP INTELLIGENCE GATE — Proactive Cross-Session Emotional Continuity
+    # ══════════════════════════════════════════════════════════════════════════
+    try:
+        from relationship import get_relationship_engine
+        rel_engine = get_relationship_engine()
+        u_simple = user.strip().lower()
+        if any(u_simple.startswith(g) for g in ["hello", "hey", "hi", "good morning", "good evening", "how are you"]):
+            prev_t = mem.get("_prev_user_time", t_start - 3600.0)
+            anticipation_reply = rel_engine.continuity.get_session_opening_anticipation(time_since_last_turn_sec=t_start - prev_t)
+            if anticipation_reply:
+                print(f"[DialogueRouter] Proactive relationship anticipation triggered: {anticipation_reply}")
+                history.append("You: " + user)
+                history.append("Vivy: " + anticipation_reply)
+                mem["last_reply"] = anticipation_reply
+                mem["_prev_user_time"] = t_start
+                save(mem)
+                return anticipation_reply, history
+        mem["_prev_user_time"] = t_start
+    except Exception as _r_cont_err:
+        print(f"[DialogueRouter] Relationship continuity check warning: {_r_cont_err}")
+
     # Increment conversation count (earn progression)
     mem["conversation_count"] = mem.get("conversation_count", 0) + 1
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # MULTILINGUAL REFERENCE RESOLVER GATE — Handle Translation Reference Queries
+    # ══════════════════════════════════════════════════════════════════════════
+    try:
+        from language.reference_resolver import get_reference_resolver
+        from language.language_memory import get_language_memory
+        resolver = get_reference_resolver()
+        if resolver.is_translation_reference_query(user):
+            print(f"[DialogueRouter] Explicit multilingual translation reference detected in query: '{user}'")
+            resolved_reply = resolver.resolve_and_translate(user, history, mem, language_memory=get_language_memory())
+            if resolved_reply:
+                print(f"[DialogueRouter] Resolved translation reply cleanly: {resolved_reply[:60]}...")
+                history.append("You: " + user)
+                history.append("Vivy: " + resolved_reply)
+                mem["last_reply"] = resolved_reply
+                save(mem)
+                return resolved_reply, history
+    except Exception as _ref_err:
+        print(f"[DialogueRouter] Translation reference resolution warning: {_ref_err}")
 
     # ══════════════════════════════════════════════════════════════════════════
     # DIALOGUE ROUTER GATE — Command Interception & Grounded Perception Queries
@@ -5900,6 +5968,19 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
         )
     except Exception as _mc_err:
         print(f"[AGI MetaCognition] Verification warning: {_mc_err}")
+
+    # Relationship Continuity Engine (Relationship Response Layer)
+    try:
+        from affection.continuity_engine import get_continuity_engine
+        reply = get_continuity_engine().evaluate_and_adapt(
+            draft_reply=reply,
+            user_input=user,
+            mem=mem,
+            history=history,
+            categories=categories
+        )
+    except Exception as _rc_err:
+        print(f"[RelationshipContinuityEngine] Warning (non-fatal): {_rc_err}")
 
     # Developer Diagnostic Mode Hook (Phase 6 Prompt Inspector)
     try:

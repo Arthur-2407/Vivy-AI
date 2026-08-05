@@ -81,8 +81,13 @@ class TestPipelineChatConnection(unittest.TestCase):
         self.assertTrue(is_blank_or_noise("   "))
         self.assertTrue(is_blank_or_noise("[blank_audio]"))
         self.assertTrue(is_blank_or_noise("[music]"))
+        # Verify acoustic hallucination and repetition guard (e.g., Kannada script repetition loop 'ಸಿರಿಲಿಲಿಲಿಲಿಲಿ')
+        self.assertTrue(is_blank_or_noise("ಸಿರಿಲಿಲಿಲಿಲಿಲಿ"))
+        self.assertTrue(is_blank_or_noise("............"))
+        self.assertTrue(is_blank_or_noise("yeah yeah yeah yeah yeah"))
         self.assertFalse(is_blank_or_noise("Hello Vivy how are you"))
         self.assertFalse(is_blank_or_noise("Can you help me with Python?"))
+        self.assertFalse(is_blank_or_noise("नमस्ते विवी आप कैसी हैं"))
 
     def test_stop_indicator_flushes(self):
         # Ensure stop_indicator runs without exception

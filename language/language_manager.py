@@ -129,6 +129,14 @@ class LanguageManager:
         except Exception as e:
             logger.error(f"[LanguageManager] HybridTranslationEngine init failed: {e}")
 
+        try:
+            from language.reference_resolver import get_reference_resolver
+            self._reference_resolver = get_reference_resolver()
+            logger.info("[LanguageManager] MultilingualReferenceResolver ready.")
+        except Exception as e:
+            self._reference_resolver = None
+            logger.error(f"[LanguageManager] MultilingualReferenceResolver init failed: {e}")
+
         logger.info("[LanguageManager] All modules initialized. Language Intelligence Layer ACTIVE.")
 
     # ------------------------------------------------------------------
@@ -204,7 +212,15 @@ class LanguageManager:
                     )
                 result["prompt_hint"] = prompt_hint
 
-            # Step 4: Record in language memory
+            # Step 4: Check for explicit translation reference queries ("can u translate this")
+            is_translation_request = False
+            if self._reference_resolver is not None:
+                is_translation_request = self._reference_resolver.is_translation_reference_query(user_text)
+            result["is_translation_request"] = is_translation_request
+            if is_translation_request and lang_code == "en" and not result["prompt_hint"]:
+                result["prompt_hint"] = " [EXPLICIT TRANSLATION REFERENCE QUERY DETECTED]"
+
+            # Step 5: Record in language memory
             if self._memory is not None:
                 self._memory.record_turn(user_text, lang_code, lang_name, emotion=emotion)
 
@@ -279,6 +295,10 @@ class LanguageManager:
     def get_voice_selector(self):
         """Returns the MultilingualVoiceSelector — preserves existing API."""
         return self._voice_selector
+
+    def get_reference_resolver(self):
+        """Returns the MultilingualReferenceResolver — preserves existing API."""
+        return getattr(self, "_reference_resolver", None)
 
     # ------------------------------------------------------------------
     # Status / Diagnostics

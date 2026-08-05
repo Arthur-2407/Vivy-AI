@@ -330,3 +330,31 @@ def test_adaptive_nllb_load_switching():
     translated, conf = engine.translate("Thank you very much.", "en", "hi", force_engine="nllb")
     assert translated != "" and translated != "Thank you very much.", f"Translation failed: {translated}"
     assert conf > 0.0
+
+
+def test_korean_romaji_and_conversational_favors_upgrade():
+    """Verify Korean Romaji ('Gomawo') detection, polyglot competence rules, and natural conversational favors."""
+    from language import get_language_detector
+    from language.prompt_localizer import get_prompt_localizer
+    from conversation import get_relational_dialogue_exemplars
+    import time
+
+    # 1. Verify Korean Romaji detection without hardcoding
+    detector = get_language_detector()
+    assert detector.default_lang == "en", "Default language must remain set to English"
+    ko_res = detector.detect("Gomawo")
+    assert ko_res["code"] == "ko", f"Expected 'ko', got {ko_res}"
+    assert ko_res["name"] == "Korean"
+
+    # 2. Verify Polyglot Competence directive prevents language hallucination
+    loc = get_prompt_localizer()
+    directive = loc.build_directive("ko", "Korean", {"tone": "warm_friendly", "formality": "casual", "writing_style": "concise"})
+    assert "Polyglot Competence Rule" in directive
+    assert "universal polyglot AI companion" in directive
+
+    # 3. Verify everyday playful favors (e.g. 'can u make coffee for me') return warm human exemplars
+    guidance, candidates = get_relational_dialogue_exemplars("can u make coffee for me", {"last_user_time": time.time()}, score=65.0)
+    assert "playfully asking for an everyday companion favor" in guidance
+    assert len(candidates) > 0
+    assert not any("Somehow you always know how to get my attention" in c for c in candidates)
+    assert any("reach out" in c or "virtual cup" in c for c in candidates)

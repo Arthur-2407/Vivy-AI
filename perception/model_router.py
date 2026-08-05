@@ -48,11 +48,21 @@ class ModelRouter:
         """
         from perception.config_loader import get
         
+        # Auto-register standard builtin plugin modules if category dictionary is unpopulated
+        try:
+            if not cls._plugins.get(category):
+                if category == "speech": import perception.plugins.speech
+                elif category == "vision": import perception.plugins.vision
+                elif category == "ocr": import perception.plugins.ocr
+                elif category == "audio_analysis": import perception.plugins.audio
+        except Exception as _reg_err:
+            logger.debug(f"[ModelRouter] Auto-import note for {category}: {_reg_err}")
+
         # Read preferred plugin from config
-        # Default choices based on existing codebase
+        # Default choices based on existing codebase (prioritizing in-memory CTranslate2 faster-whisper over subprocess)
         defaults = {
             "vision": "null",
-            "speech": "whisper_cpp",
+            "speech": "faster_whisper",
             "ocr": "pytesseract",
             "audio_analysis": "heuristic"
         }

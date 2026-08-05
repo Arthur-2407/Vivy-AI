@@ -56,6 +56,7 @@ WEB_INTERACTION_TXT = os.path.join(SHARED_DIR, "web_interaction.txt")
 # Sentinel: Circadian Intelligence System state (written by run_vivy.py after each reply)
 CIRCADIAN_STATE_JSON = os.path.join(SHARED_DIR, "circadian_state.json")
 EMOTION_STATE_JSON = os.path.join(SHARED_DIR, "emotion_state.json")
+VOICE_EVENT_JSON = os.path.join(SHARED_DIR, "last_voice_event.json")
 
 import mmap
 import struct
@@ -343,9 +344,37 @@ def push_status(status):
     _schedule_broadcast({"type": "status", "value": status})
 
 
+def _enrich_speak_payload(text):
+    """Enrich speak payload with active vocal style, speed rate, pitch shift, and facial expression blendshapes without hardcoding."""
+    payload = {"type": "speak", "text": text}
+    try:
+        from voice.voice_manager import get_voice_manager
+        v_mgr = get_voice_manager()
+        active = v_mgr.get_active_voice()
+        style = active.get("active_style", "Professional")
+        params = active.get("style_parameters", {})
+        payload["vocal_style"] = style
+        payload["speech_rate"] = params.get("speech_rate", 1.0)
+        payload["pitch_shift"] = params.get("pitch_shift", 0)
+        
+        style_hints = {
+            "Cheerful": {"animation": "SmileBig", "blendshapes": {"joy_intensity": 0.85, "mouth_smile": 0.9}},
+            "Soft": {"animation": "IdleSad", "blendshapes": {"gentle_intensity": 0.70, "eye_softness": 0.8}},
+            "Energetic": {"animation": "IdleCheer", "blendshapes": {"energy_intensity": 0.95, "brow_raise": 0.7}},
+            "Calm": {"animation": "IdleCalm", "blendshapes": {"calm_intensity": 0.80, "eye_relaxed": 0.75}},
+            "Professional": {"animation": "IdleNeutral", "blendshapes": {"neutral_intensity": 0.90, "mouth_smile": 0.3}}
+        }
+        hint_info = style_hints.get(style, {"animation": "IdleNeutral", "blendshapes": {}})
+        payload["facial_expression_hint"] = hint_info["animation"]
+        payload["blendshapes"] = hint_info["blendshapes"]
+    except Exception as _err:
+        print(f"[avatar_bridge.py] Silenced voice style enrichment error: {_err}")
+    return payload
+
+
 def push_speak(text):
     """Push speak text to Unity for lip sync. Called from run_vivy.py."""
-    _schedule_broadcast({"type": "speak", "text": text})
+    _schedule_broadcast(_enrich_speak_payload(text))
 
 
 def push_animation(animation_name):
@@ -413,6 +442,7 @@ async def _monitor_shared_files():
     _last_viewport_mtime          = 0.0
     _last_web_interaction_mtime   = 0.0
     _last_circadian_state_mtime   = 0.0
+    _last_voice_event_mtime       = 0.0
 
     while True:
         try:
@@ -450,7 +480,7 @@ async def _monitor_shared_files():
                     _last_reply_mtime = mtime
                     text = _read_file(REPLY_TXT)
                     if text:
-                        await _broadcast({"type": "speak", "text": text})
+                        await _broadcast(_enrich_speak_payload(text))
 
             # Monitor load avatar command changes
             if os.path.exists(LOAD_AVATAR_TXT):
@@ -481,7 +511,35 @@ async def _monitor_shared_files():
                     _last_lip_sync_trigger_mtime = mtime
                     lip_text = _read_file(LIP_SYNC_TRIGGER_TXT)
                     if lip_text:
-                        await _broadcast({"type": "speak", "text": lip_text})
+                        await _broadcast(_enrich_speak_payload(lip_text))
+
+            # Monitor last_voice_event.json — written by VoiceManager when style or voice changes
+            if os.path.exists(VOICE_EVENT_JSON):
+                mtime = os.path.getmtime(VOICE_EVENT_JSON)
+                if mtime > _last_voice_event_mtime:
+                    _last_voice_event_mtime = mtime
+                    try:
+                        with open(VOICE_EVENT_JSON, "r", encoding="utf-8") as _vf:
+                            _v_data = json.loads(_vf.read())
+                        evt_type = _v_data.get("event")
+                        style = _v_data.get("style", _v_data.get("voice", {}).get("active_style", "Professional"))
+                        style_anim_map = {
+                            "Cheerful": "SmileBig",
+                            "Soft": "IdleSad",
+                            "Energetic": "IdleCheer",
+                            "Calm": "IdleCalm",
+                            "Professional": "IdleNeutral"
+                        }
+                        trigger_anim = style_anim_map.get(style, "IdleNeutral")
+                        await _broadcast({
+                            "type": "voice_style",
+                            "event": evt_type,
+                            "style": style,
+                            "animation_hint": trigger_anim,
+                            "timestamp": time.time()
+                        })
+                    except Exception as _ve:
+                        print(f"[AvatarBridge] Failed to parse last_voice_event.json: {_ve}")
 
             # Monitor viewport.txt — written by web_server.py
             if os.path.exists(VIEWPORT_TXT):

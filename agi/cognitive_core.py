@@ -105,6 +105,19 @@ class GeneralCognitiveCore:
                 tool_hint = f"Autonomous Tool Execution ({tool_res.get('tool_selected')}): {tool_res.get('result')}" if tool_res.get("tool_selected", "none") != "none" else ""
 
                 context_blocks = [blk for blk in [wm_hint, kg_hint, be_hint, sk_hint, le_hint, lp_hint, sim_hint, job_hint, tool_hint] if blk]
+
+                # 6.5 Incorporate Relationship Intelligence Layer (Human Conversation Layer & Internal State Awareness)
+                try:
+                    from relationship import get_relationship_engine
+                    rel_eng = get_relationship_engine()
+                    hcl = rel_eng.execute_human_conversation_layer(user_text, mem)
+                    enhanced_plan["relationship_intelligence"] = hcl
+                    enhanced_plan["internal_state_awareness"] = rel_eng.get_internal_state()
+                    if hcl.get("natural_response_directive"):
+                        context_blocks.append(hcl["natural_response_directive"])
+                except Exception as rel_err:
+                    print(f"[GeneralCognitiveCore] Relationship Intelligence pre-turn warning: {rel_err}")
+
                 enhanced_plan["agi_cognitive_grounding"] = "\n".join(context_blocks)
                 enhanced_plan["tool_invocation_result"] = tool_res
                 enhanced_plan["meta_directive"] = self.mc.generate_meta_reasoning_prompt(user_text, enhanced_plan)
@@ -146,6 +159,13 @@ class GeneralCognitiveCore:
                 # 5. Register high-reward turn experiences with Continual Model Adaptation Engine
                 self.ad.register_high_reward_experience(user_text, ai_reply, eval_score, [str(topic)])
                 self.ad.execute_controlled_adaptation_cycle()
+
+                # 6. Execute Relationship Intelligence Self-Reflection & Experiential Learning Loop
+                try:
+                    from relationship import get_relationship_engine
+                    get_relationship_engine().execute_self_reflection_and_learning_loop(user_text, ai_reply, eval_score)
+                except Exception as rel_err:
+                    print(f"[GeneralCognitiveCore] Relationship Intelligence post-turn warning: {rel_err}")
 
             except Exception as _err:
                 print(f"[GeneralCognitiveCore] Post-turn evaluation exception caught: {_err}")

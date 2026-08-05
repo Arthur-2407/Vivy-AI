@@ -1,5 +1,5 @@
 {
-  "last_updated": 1785612258.2225547,
+  "last_updated": 1785948072.6951115,
   "total_skills": 7,
   "skills": {
     "conversational_empathy": {
@@ -12,9 +12,9 @@
     },
     "code_reasoning": {
       "level": 4,
-      "xp": 505.0,
+      "xp": 835.0,
       "next_tier_xp": 900.0,
-      "success_rate": 0.995,
+      "success_rate": 0.998,
       "status": "active",
       "description": "Analyzing software structures and syntactic patterns"
     },
@@ -49,9 +49,5 @@
       "success_rate": 0.85,
       "version": 1.0
     }
-  },
-  "conversational_flow": {
-    "success_rate": 0.9879,
-    "version": 1.2
   }
 }

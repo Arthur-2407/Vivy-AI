@@ -55,11 +55,29 @@ class LanguageDetector:
                 "hi": {"name": "Hindi", "script_range_start": 2304, "script_range_end": 2431, "script_ranges": [[2304, 2431]], "use_localized_tts": False, "honorific": "आप"},
                 "ja": {"name": "Japanese", "script_range_start": 12352, "script_range_end": 12799, "script_ranges": [[12288, 12799], [19968, 40959]], "use_localized_tts": False, "honorific": "さん"},
                 "zh": {"name": "Chinese", "script_range_start": 19968, "script_range_end": 40959, "script_ranges": [[19968, 40959], [13312, 19903]], "use_localized_tts": False, "honorific": "您"},
-                "fr": {"name": "French", "script_range_start": -1, "script_range_end": -1, "script_ranges": [], "use_localized_tts": False, "honorific": ""}
+                "fr": {"name": "French", "script_range_start": -1, "script_range_end": -1, "script_ranges": [], "use_localized_tts": False, "honorific": ""},
+                "ko": {"name": "Korean", "script_range_start": 44032, "script_range_end": 55215, "script_ranges": [[44032, 55215], [12592, 12687]], "use_localized_tts": False, "honorific": "님"},
+                "ru": {"name": "Russian", "script_range_start": 1024, "script_range_end": 1279, "script_ranges": [[1024, 1279]], "use_localized_tts": False, "honorific": ""},
+                "es": {"name": "Spanish", "script_range_start": -1, "script_range_end": -1, "script_ranges": [], "use_localized_tts": False, "honorific": ""},
+                "de": {"name": "German", "script_range_start": -1, "script_range_end": -1, "script_ranges": [], "use_localized_tts": False, "honorific": ""},
+                "it": {"name": "Italian", "script_range_start": -1, "script_range_end": -1, "script_ranges": [], "use_localized_tts": False, "honorific": ""},
+                "ar": {"name": "Arabic", "script_range_start": 1536, "script_range_end": 1791, "script_ranges": [[1536, 1791]], "use_localized_tts": True, "honorific": ""},
+                "pt": {"name": "Portuguese", "script_range_start": -1, "script_range_end": -1, "script_ranges": [], "use_localized_tts": False, "honorific": ""},
+                "ta": {"name": "Tamil", "script_range_start": 2944, "script_range_end": 3071, "script_ranges": [[2944, 3071]], "use_localized_tts": True, "honorific": ""},
+                "te": {"name": "Telugu", "script_range_start": 3072, "script_range_end": 3199, "script_ranges": [[3072, 3199]], "use_localized_tts": True, "honorific": ""},
+                "mr": {"name": "Marathi", "script_range_start": 2304, "script_range_end": 2431, "script_ranges": [[2304, 2431]], "use_localized_tts": True, "honorific": "तुमची"},
+                "gu": {"name": "Gujarati", "script_range_start": 2688, "script_range_end": 2815, "script_ranges": [[2688, 2815]], "use_localized_tts": True, "honorific": ""},
+                "ml": {"name": "Malayalam", "script_range_start": 3328, "script_range_end": 3455, "script_ranges": [[3328, 3455]], "use_localized_tts": True, "honorific": ""},
+                "pa": {"name": "Punjabi", "script_range_start": 2560, "script_range_end": 2687, "script_ranges": [[2560, 2687]], "use_localized_tts": True, "honorific": ""},
+                "kn": {"name": "Kannada", "script_range_start": 3200, "script_range_end": 3327, "script_ranges": [[3200, 3327]], "use_localized_tts": True, "honorific": ""}
             },
             "linguistic_fingerprints": {
                 "fr": ["qu'est-ce", "qu'est", "que", "qui", "aimes", "manger", "peux", "dire", "comment", "faire", "une", "les", "ingrédients", "nécessaires", "pourquoi", "quand", "oui", "merci", "bonjour", "salut", "vous", "nous", "recette", "cuisiner"],
-                "ja": ["watashi", "anata", "boku", "kimi", "to", "deeto", "ikanai", "iku", "suki", "daijoubu", "nani", "doushite", "ohayo", "konnichiwa", "arigatou", "tabetai"]
+                "ja": ["watashi", "anata", "boku", "kimi", "to", "deeto", "ikanai", "iku", "suki", "daijoubu", "nani", "doushite", "ohayo", "konnichiwa", "arigatou", "tabetai"],
+                "es": ["hola", "buenos", "días", "cómo", "estás", "qué", "tal", "gracias", "por", "favor", "amigo", "muchas", "bienvenido"],
+                "de": ["hallo", "guten", "morgen", "wie", "geht", "dir", "danke", "bitte", "ja", "nein", "alles", "gut", "warum"],
+                "it": ["ciao", "buongiorno", "come", "stai", "grazie", "prego", "perché", "molto", "bene", "amico"],
+                "ru": ["privet", "spasibo", "khorosho", "kak", "dela", "dobro", "pojaluy"]
             }
         }
 
@@ -147,7 +165,7 @@ class LanguageDetector:
                     break
 
             if not matched_dialect:
-                # Fallback check for standard Indic and CJK ideographs if unmapped in config
+                # Fallback check for standard Indic, Cyrillic, Hangul and CJK ideographs if unmapped in config
                 if 0x0900 <= cp <= 0x097F:
                     script_counts["hi"] = script_counts.get("hi", 0) + 1
                 elif 0x0B00 <= cp <= 0x0B7F:
@@ -156,6 +174,16 @@ class LanguageDetector:
                     script_counts["bn"] = script_counts.get("bn", 0) + 1
                 elif 0x3000 <= cp <= 0x30FF or 0x4E00 <= cp <= 0x9FFF:
                     script_counts["ja"] = script_counts.get("ja", 0) + 1
+                elif 0x0400 <= cp <= 0x04FF:
+                    script_counts["ru"] = script_counts.get("ru", 0) + 1
+                elif 0xAC00 <= cp <= 0xD7AF or 0x3130 <= cp <= 0x318F:
+                    script_counts["ko"] = script_counts.get("ko", 0) + 1
+                elif 0x0600 <= cp <= 0x06FF:
+                    script_counts["ar"] = script_counts.get("ar", 0) + 1
+                elif 0x0B80 <= cp <= 0x0BFF:
+                    script_counts["ta"] = script_counts.get("ta", 0) + 1
+                elif 0x0C00 <= cp <= 0x0C7F:
+                    script_counts["te"] = script_counts.get("te", 0) + 1
 
         if not total_valid_chars or not script_counts:
             return {"code": self.default_lang, "name": "English", "confidence": 0.95, "source": "ascii_fallback"}
@@ -165,17 +193,16 @@ class LanguageDetector:
         ratio = count / total_valid_chars
 
         if best_code == "en":
-            if ratio < 0.3:
-                # Check if Indic or regional characters exist alongside English punctuation/numbers
-                for regional_code in ["or", "hi", "bn", "ja", "zh", "ru", "ko"]:
-                    if script_counts.get(regional_code, 0) >= 2:
-                        meta = self.dialect_mapping.get(regional_code, {})
-                        return {
-                            "code": regional_code,
-                            "name": meta.get("name", regional_code.upper()),
-                            "confidence": 0.98,
-                            "source": "unicode_script_frequency"
-                        }
+            # Check if Indic, CJK, Arabic, or Cyrillic characters exist alongside English words (bilingual code-switching)
+            for regional_code in ["or", "hi", "bn", "ja", "zh", "ru", "ko", "ar", "ta", "te", "mr", "gu", "ml", "pa", "kn"]:
+                if script_counts.get(regional_code, 0) >= 3 or (script_counts.get(regional_code, 0) >= 1 and ratio < 0.8):
+                    meta = self.dialect_mapping.get(regional_code, {})
+                    return {
+                        "code": regional_code,
+                        "name": meta.get("name", regional_code.upper()),
+                        "confidence": 0.98,
+                        "source": "unicode_script_frequency"
+                    }
 
             # Tier 3: Evaluate configured Latin linguistic fingerprints (e.g. French, Spanish, German, Romaji)
             if self.fingerprints and len(text.strip()) > 1:
@@ -184,7 +211,12 @@ class LanguageDetector:
                 best_fp_code = None
                 best_fp_score = 0
                 for lang_code, markers in self.fingerprints.items():
-                    score = sum(1 for marker in markers if (marker in text_tokens or marker in text_lower))
+                    score = 0
+                    for marker in markers:
+                        if marker in text_tokens:
+                            score += 2 if len(marker) >= 5 else 1
+                        elif (" " in marker or len(marker) >= 5) and marker in text_lower:
+                            score += 1
                     if score > best_fp_score and score >= 1:
                         best_fp_score = score
                         best_fp_code = lang_code
@@ -208,3 +240,15 @@ class LanguageDetector:
             "confidence": min(1.0, 0.5 + (ratio * 0.5)),
             "source": "unicode_script_frequency"
         }
+
+import threading
+_global_detector = None
+_detector_lock = threading.Lock()
+
+def get_detector() -> LanguageDetector:
+    global _global_detector
+    if _global_detector is None:
+        with _detector_lock:
+            if _global_detector is None:
+                _global_detector = LanguageDetector()
+    return _global_detector

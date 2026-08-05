@@ -1,10 +1,30 @@
 import os
 import re
 import sys
+import importlib.util
+import types
 import numpy as np
 import sounddevice as sd
 import soundfile as sf
 from contextlib import contextmanager
+
+# [COMPATIBILITY POLYFILL] Inject mock pkg_resources for modern setuptools environments where pkg_resources is omitted
+try:
+    import pkg_resources
+except ImportError:
+    _mock_pkg = types.ModuleType("pkg_resources")
+    _mock_pkg.get_distribution = lambda name: types.SimpleNamespace(version="2.0.10")
+    def _mock_resource_filename(package_or_requirement, resource_name):
+        try:
+            spec = importlib.util.find_spec(package_or_requirement)
+            if spec and spec.origin:
+                return os.path.join(os.path.dirname(spec.origin), resource_name.replace("/", os.sep))
+        except Exception:
+            pass
+        return resource_name
+    _mock_pkg.resource_filename = _mock_resource_filename
+    sys.modules["pkg_resources"] = _mock_pkg
+
 
 # ===============================
 # Create recordings folder
@@ -43,6 +63,30 @@ print(f"Selected voice: {selected_voice}")
 # ===============================
 _tts_instance = None
 
+def configure_female_voice(engine):
+    """Ensure pyttsx3 engine uses an expressive female vocal identity (e.g. Zira, Haruka) and never defaults to a male voice like David."""
+    try:
+        voices = engine.getProperty('voices')
+        best_voice = None
+        # Prioritize high quality female voice profiles
+        for v in voices:
+            v_lower = (getattr(v, 'name', '') + getattr(v, 'id', '')).lower()
+            if any(k in v_lower for k in ['zira', 'haruka', 'female', 'woman', 'hazel', 'hazem', 'eva', 'anime']) and not any(m in v_lower for m in ['david', 'mark', 'male']):
+                best_voice = v
+                break
+        if not best_voice and voices:
+            # Fallback to any non-male voice if available
+            for v in voices:
+                v_lower = (getattr(v, 'name', '') + getattr(v, 'id', '')).lower()
+                if not any(m in v_lower for m in ['david', 'mark', 'male']):
+                    best_voice = v
+                    break
+        if best_voice:
+            engine.setProperty('voice', best_voice.id)
+        engine.setProperty('rate', 175)
+    except Exception as err:
+        print(f"[Voice] Voice configuration exception (non-fatal): {err}")
+
 def _get_tts():
     """Return the singleton TTS instance, creating it on first call.
     The TTS library import itself is deferred to here so that module-level
@@ -70,14 +114,27 @@ def _get_tts():
                 print("[Voice] Initialized Chatterbox TTS")
             except ImportError:
                 # 3. Fallback to Coqui TTS (Tacotron2-DDC)
-                from TTS.api import TTS
-                with suppress_output():
-                    _tts_instance = TTS(
-                        model_name="tts_models/en/ljspeech/tacotron2-DDC",
-                        progress_bar=False,
-                        gpu=False
-                    )
-                print("[Voice] Initialized Coqui TTS (Fallback)")
+                try:
+                    from TTS.api import TTS
+                    with suppress_output():
+                        _tts_instance = TTS(
+                            model_name="tts_models/en/ljspeech/tacotron2-DDC",
+                            progress_bar=False,
+                            gpu=False
+                        )
+                    print("[Voice] Initialized Coqui TTS (Fallback)")
+                except Exception as e3:
+                    print(f"[Voice] Coqui TTS failed ({e3}), initializing offline pyttsx3 engine as Step 4 resilient fallback.")
+                    class _OfflinePyTTSX3Engine:
+                        def __init__(self):
+                            import pyttsx3
+                            self._engine_class = pyttsx3
+                        def tts_to_file(self, text, file_path, speaker=None, **kwargs):
+                            engine = self._engine_class.init()
+                            configure_female_voice(engine)
+                            engine.save_to_file(text, file_path)
+                            engine.runAndWait()
+                    _tts_instance = _OfflinePyTTSX3Engine()
     return _tts_instance
 
 class _LazyTTSProxy:
@@ -220,16 +277,32 @@ def speak(text):
 def generate_tts_only(text, output_path):
     text = clean_text(text)
     
-    # Ensure folder exists
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    # Ensure folder exists safely without failing on relative root paths
+    if os.path.dirname(output_path):
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
     
-    # Generate speech
-    with suppress_output():
-        tts.tts_to_file(
-            text=text,
-            file_path=output_path,
-            speaker=None
-        )
+    # Generate speech with resilient error recovery
+    try:
+        with suppress_output():
+            tts.tts_to_file(
+                text=text,
+                file_path=output_path,
+                speaker=None
+            )
+    except Exception as synth_err:
+        print(f"[Voice] Primary synthesis exception ({synth_err}), executing resilient pyttsx3 offline fallback...")
+        try:
+            import pyttsx3
+            eng = pyttsx3.init()
+            configure_female_voice(eng)
+            eng.save_to_file(text, output_path)
+            eng.runAndWait()
+        except Exception as fb_err:
+            print(f"[Voice] Fallback engine error: {fb_err}")
+            # Ensure file exists even on complete audio driver exhaustion to prevent downstream RVC crash
+            if not os.path.exists(output_path):
+                import numpy as _np, soundfile as _sf
+                _sf.write(output_path, _np.zeros(22050, dtype=_np.float32), 22050)
 
     # Load audio
     data, samplerate = sf.read(output_path, dtype="float32")

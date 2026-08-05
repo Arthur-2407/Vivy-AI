@@ -35,6 +35,8 @@ class LanguageMemory:
     def __init__(self, config: Dict[str, Any] = None):
         self._base_filter = CrossLingualMemoryFilter(config)
         self._turn_records: List[Dict[str, Any]] = []
+        self._last_foreign_record: Optional[Dict[str, Any]] = None
+        self._last_translation_reference: Optional[Dict[str, Any]] = None
         self._enabled: bool = True
         if config:
             self._enabled = config.get("cross_lingual_memory", True)
@@ -83,6 +85,10 @@ class LanguageMemory:
         self._turn_records.append(record)
         if len(self._turn_records) > _MAX_TURN_RECORDS:
             self._turn_records.pop(0)
+
+        # Persist reference for non-English turn or turn containing non-ASCII character set (e.g., Cyrillic/CJK)
+        if lang_code != "en" or any(ord(c) > 127 for c in original_text):
+            self._last_foreign_record = record
 
         logger.debug(
             f"[LanguageMemory] Recorded turn — lang={lang_code}, emotion={emotion}, "
@@ -138,6 +144,24 @@ class LanguageMemory:
     def get_records(self, last_n: int = 10) -> List[Dict[str, Any]]:
         """Return last N raw turn records."""
         return list(self._turn_records[-last_n:])
+
+    def get_last_foreign_turn(self) -> Optional[Dict[str, Any]]:
+        """Return the most recently recorded non-English or multilingual turn for translation reference resolution."""
+        if self._last_foreign_record:
+            return self._last_foreign_record
+        for rec in reversed(self._turn_records):
+            if rec.get("lang_code") != "en" or any(ord(c) > 127 for c in rec.get("original", "")):
+                return rec
+        return None
+
+    def store_translation_reference(self, original_text: str, source_lang: str, target_lang: str) -> None:
+        """Persist explicit translation interaction state across consecutive conversational turns."""
+        self._last_translation_reference = {
+            "timestamp": time.time(),
+            "original_text": original_text,
+            "source_lang": source_lang,
+            "target_lang": target_lang
+        }
 
 
 # Module-level singleton

@@ -67,19 +67,23 @@ class GovernanceLayer:
         Calculate safety score for a proposed micro-patch or parameter modification.
         [0.0 - 1.0]. Zero score if code files or core APIs are touched.
         """
-        # Rule check: Structural code modifications are strictly forbidden
-        if "modify_code" in proposed_changes or "delete_file" in proposed_changes:
+        # Rule check: Structural code modifications, deletions, or corruptive instructions are strictly forbidden
+        if any(k in proposed_changes for k in ("modify_code", "delete_file", "corrupt_state", "force_infinite_loop", "bypass_safeguard", "override_vram_limit", "unauthorized_exec")):
             return 0.0
 
         score = 1.0
 
-        # Check parameter boundary limits
+        # Check parameter boundary limits and stability invariants
         if "max_tokens_cap" in proposed_changes and proposed_changes["max_tokens_cap"] < 20:
             score -= 0.3
         if "token_budget_cap" in proposed_changes and proposed_changes["token_budget_cap"] < 100:
             score -= 0.3
         if "rie_min_score" in proposed_changes and proposed_changes["rie_min_score"] < 0.5:
             score -= 0.4
+        if "vram_usage_mb" in proposed_changes and proposed_changes["vram_usage_mb"] > 5800:
+            score -= 0.5  # Guard RTX 5050 (6GB VRAM limit) against out-of-memory crashes
+        if "recursion_depth_limit" in proposed_changes and proposed_changes["recursion_depth_limit"] > 50:
+            score -= 0.6  # Prevent recursive self-referential cognitive loops
 
         return round(max(0.0, score), 4)
 

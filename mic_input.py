@@ -111,7 +111,7 @@ except Exception as e:
 # Global lock: only ONE whisper-cli subprocess may run at a time.
 # Prevents the 6+ simultaneous whisper-cli processes seen in Task Manager
 # when the mic loop fires faster than whisper can transcribe.
-_whisper_lock = threading.Lock()
+_whisper_lock = threading.RLock()
 
 recording = False
 audio_buffer = []
@@ -187,8 +187,10 @@ def run_whisper(wav_file, output_txt_path=None):
     print(Fore.GREEN + "\nTranscribing..." + Style.RESET_ALL)
     _cprint("  \033[96mTranscribing voice...\033[0m")
 
-    # Pluggable speech integration
+    # Pluggable speech integration with automatic language metadata preservation
     text = ""
+    detected_lang = "en"
+    lang_confidence = 1.0
     try:
         from perception.model_router import ModelRouter
         speech_plugin = ModelRouter.get_speech_plugin()
@@ -196,60 +198,99 @@ def run_whisper(wav_file, output_txt_path=None):
             # Acquire lock: only one transcription at a time
             if not _whisper_lock.acquire(timeout=8.0):
                 print(Fore.YELLOW + "[Whisper] Another transcription in progress, skipping this recording." + Style.RESET_ALL)
+                set_status("ready")
                 return ""
             try:
                 res = speech_plugin.transcribe(wav_file)
                 text = res.get("text", "")
+                detected_lang = res.get("language", "en")
+                lang_confidence = res.get("confidence", 1.0)
             finally:
                 _whisper_lock.release()
         else:
             # Fallback if plugin is not available or registered
             if not _whisper_lock.acquire(timeout=8.0):
                 print(Fore.YELLOW + "[Whisper] Another transcription in progress, skipping this recording." + Style.RESET_ALL)
+                set_status("ready")
                 return ""
             try:
-                devnull = get_resource_manager().get_devnull()
+                import re as _re_w
                 result = subprocess.run(
                     [
                         WHISPER_PATH,
                         "-m", MODEL_PATH,
                         "-f", wav_file,
                         "-t", "2",
+                        "-l", "auto",
+                        "--prompt", "Vivy",
                     ],
                     cwd=BASE_DIR,
                     stdout=subprocess.PIPE,
-                    stderr=devnull,
+                    stderr=subprocess.PIPE,
                     text=True,
+                    encoding="utf-8",
                 )
                 text = result.stdout.strip()
+                combo = f"{result.stderr}\n{result.stdout}"
+                m = _re_w.search(r"detecting language:\s*([a-z]{2,3})\s*(?:\(p\s*=\s*([0-9.]+)\))?", combo, _re_w.IGNORECASE)
+                if m:
+                    detected_lang = m.group(1).lower()
+                    if len(m.groups()) >= 2 and m.group(2):
+                        try: lang_confidence = float(m.group(2))
+                        except (ValueError, TypeError): pass
             finally:
                 _whisper_lock.release()
     except Exception as e:
         print(Fore.RED + f"Pluggable speech failed: {e}. Falling back to legacy subprocess..." + Style.RESET_ALL)
         if not _whisper_lock.acquire(timeout=8.0):
             print(Fore.YELLOW + "[Whisper] Another transcription in progress, skipping this recording." + Style.RESET_ALL)
+            set_status("ready")
             return ""
         try:
-            devnull = get_resource_manager().get_devnull()
+            import re as _re_w
             result = subprocess.run(
                 [
                     WHISPER_PATH,
                     "-m", MODEL_PATH,
                     "-f", wav_file,
                     "-t", "2",
+                    "-l", "auto",
+                    "--prompt", "Vivy",
                 ],
                 cwd=BASE_DIR,
                 stdout=subprocess.PIPE,
-                stderr=devnull,
+                stderr=subprocess.PIPE,
                 text=True,
+                encoding="utf-8",
             )
             text = result.stdout.strip()
+            combo = f"{result.stderr}\n{result.stdout}"
+            m = _re_w.search(r"detecting language:\s*([a-z]{2,3})\s*(?:\(p\s*=\s*([0-9.]+)\))?", combo, _re_w.IGNORECASE)
+            if m:
+                detected_lang = m.group(1).lower()
+                if len(m.groups()) >= 2 and m.group(2):
+                    try: lang_confidence = float(m.group(2))
+                    except (ValueError, TypeError): pass
         finally:
             _whisper_lock.release()
 
     if not text:
         print(Fore.RED + "No transcription produced." + Style.RESET_ALL)
+        _cprint("  \033[90m[No speech recognized — returning to ready]\033[0m")
+        set_status("ready")
         return ""
+
+    # Suppress ambient silence and [BLANK_AUDIO] at the source to terminate loopback feedback
+    try:
+        from run_vivy import is_blank_or_noise
+        if is_blank_or_noise(text) or "[blank_audio]" in text.lower() or "(speaking in foreign language)" in text.lower():
+            print(Fore.YELLOW + f"[Whisper] Suppressed ambient silence or unparsed audio: '{text}'" + Style.RESET_ALL)
+            _cprint(f"  \033[90m🗣  Heard: {text} [ambient silence ignored]\033[0m")
+            set_status("ready")
+            time.sleep(0.45)  # Acoustic loop stabilization pause
+            return ""
+    except Exception as _nb_err:
+        print(f"[mic_input.py] Silenced noise check exception: {_nb_err}")
 
     # FORCE creation of transcript file
     transcript_dir = os.path.join(BASE_DIR, "transcripts")
@@ -263,19 +304,31 @@ def run_whisper(wav_file, output_txt_path=None):
     with open(txt_path, "w", encoding="utf-8") as f:
         f.write(text)
 
+    # Propagate detected language metadata without discarding STT classification
+    try:
+        from language.detector import LanguageDetector
+        _ld = LanguageDetector()
+        if not detected_lang or detected_lang == "en":
+            _det = _ld.classify_text_by_script(text)
+            if _det.get("code", "en") != "en":
+                detected_lang = _det.get("code")
+                lang_confidence = _det.get("confidence", 0.95)
+                
+        _lang_path = os.path.join(BASE_DIR, "shared", "detected_language.txt")
+        with open(_lang_path, "w", encoding="utf-8") as lf:
+            lf.write(detected_lang)
+            
+        if detected_lang != "en":
+            mapping = _ld.config.get("regional_dialect_mapping", {})
+            lang_name = mapping.get(detected_lang, {}).get("name", detected_lang.upper())
+            print(Fore.MAGENTA + f"Detected Language: {lang_name} ({detected_lang}) [Confidence: {lang_confidence:.2f}]" + Style.RESET_ALL)
+            _cprint(f"  \033[95m🌐 Detected Language: {lang_name} ({detected_lang}) [Confidence: {lang_confidence:.2f}]\033[0m")
+    except Exception as _l_err:
+        print(Fore.YELLOW + f"[mic_input] Language identification warning: {_l_err}" + Style.RESET_ALL)
+
     print(Fore.WHITE + "🗣 " + text + Style.RESET_ALL)
     print(Fore.CYAN + f"Transcript saved: {txt_path}" + Style.RESET_ALL)
     _cprint(f"  \033[97m🗣  Heard: {text}\033[0m")
-
-    # Write detected language metadata for Multilingual Engine
-    try:
-        from language.detector import LanguageDetector
-        _det = LanguageDetector().classify_text_by_script(text)
-        _lang_path = os.path.join(BASE_DIR, "shared", "detected_language.txt")
-        with open(_lang_path, "w", encoding="utf-8") as lf:
-            lf.write(_det.get("code", "en"))
-    except Exception as _l_err:
-        print(Fore.YELLOW + f"[mic_input] Language identification warning: {_l_err}" + Style.RESET_ALL)
 
     # Write to speech_diagnostics.json
     try:
@@ -335,6 +388,21 @@ def start_mic_listening(output_txt_path=None, mic_index=None):
     
     set_status("ready")
     
+    # [VOICE STATE MANAGEMENT] Ensure mic does not automatically open unthrottled loop by default
+    # unless auto_listen is enabled in config or user activates voice mode in UI/push-to-talk.
+    try:
+        from config_manager import get_config_manager
+        _cfg = get_config_manager()
+        auto_listen_enabled = _cfg.get("pipeline.auto_listen", False)
+        mic_mute_path = os.path.join(BASE_DIR, "shared", "mic_mute.txt")
+        if not auto_listen_enabled and not os.path.exists(mic_mute_path):
+            os.makedirs(os.path.dirname(mic_mute_path), exist_ok=True)
+            with open(mic_mute_path, "w", encoding="utf-8") as f:
+                f.write("muted by default (auto_listen=false)")
+            print(Fore.YELLOW + "\n[Voice Input] Standby Mode Active (auto_listen=false). Mic is muted until toggled ON in Dashboard UI or Config.\n" + Style.RESET_ALL)
+    except Exception as _al_err:
+        print(f"[mic_input] Auto-listen initialization check warning: {_al_err}")
+
     if mic_index is None:
         mic_index = select_mic()
         
@@ -349,12 +417,14 @@ def start_mic_listening(output_txt_path=None, mic_index=None):
         callback=callback,
         device=mic_index,
     ):
-        print(Fore.GREEN + "\nAuto-listening started. Speak anytime.\n" + Style.RESET_ALL)
+        print(Fore.GREEN + "\nAuto-listening loop started (respects mute state & cooldowns).\n" + Style.RESET_ALL)
         
         recording = False
         audio_buffer = []
+        pre_speech_buffer = []
         silence_frames = 0
         speech_frames = 0
+        was_vivy_active = False
 
         while True:
             # Check for mic mute file or active pipeline status (speaking, thinking, voice generation)
@@ -393,7 +463,7 @@ def start_mic_listening(output_txt_path=None, mic_index=None):
             is_vivy_active = status in ("speaking", "generating_tts", "applying_rvc", "thinking", "processing", "transcribing")
             
             if mute or is_vivy_active:
-                if mute:
+                if mute and status != "muted":
                     set_status("muted")
                 while not audio_queue.empty():
                     try:
@@ -401,8 +471,18 @@ def start_mic_listening(output_txt_path=None, mic_index=None):
                     except queue.Empty:
                         break
                 recording = False
-                time.sleep(0.1)
+                was_vivy_active = is_vivy_active
+                time.sleep(0.15)
                 continue
+            elif was_vivy_active:
+                # Coordinated state machine: apply acoustic cooldown after Vivy stops speaking/thinking
+                was_vivy_active = False
+                time.sleep(0.4)
+                while not audio_queue.empty():
+                    try:
+                        audio_queue.get_nowait()
+                    except queue.Empty:
+                        break
 
             data = audio_queue.get()
             pcm_bytes = data.reshape(-1).tobytes()
@@ -455,7 +535,9 @@ def start_mic_listening(output_txt_path=None, mic_index=None):
 
                 if not recording:
                     recording = True
-                    audio_buffer = []
+                    # Prepend pre-speech sliding window (~360ms) to preserve opening consonants and dialect phonetics
+                    audio_buffer = list(pre_speech_buffer)
+                    pre_speech_buffer.clear()
                     speech_frames = 0
                     start_time = time.time()
                     set_status("recording")
@@ -464,6 +546,10 @@ def start_mic_listening(output_txt_path=None, mic_index=None):
             else:
                 if recording:
                     silence_frames += 1
+                else:
+                    pre_speech_buffer.append(data.copy())
+                    if len(pre_speech_buffer) > 12:
+                        pre_speech_buffer.pop(0)
 
             if recording:
                 audio_buffer.append(data.copy())
@@ -483,18 +569,8 @@ def start_mic_listening(output_txt_path=None, mic_index=None):
                     / 32768.0
                 )
 
-                cleaned = np.zeros_like(raw)
-                total_frames = len(raw) // FRAME_SIZE
-
-                for i in range(total_frames):
-                    s = i * FRAME_SIZE
-                    e = s + FRAME_SIZE
-                    cleaned[s:e] = suppress_noise(raw[s:e])
-
-                if len(raw) % FRAME_SIZE:
-                    cleaned[total_frames * FRAME_SIZE:] = raw[total_frames * FRAME_SIZE:]
-
-                pcm16 = np.clip(cleaned * 32768, -32768, 32767).astype(np.int16)
+                # Preserve unattenuated raw waveform for high-fidelity speech consonant transcription
+                pcm16 = np.clip(raw * 32768, -32768, 32767).astype(np.int16)
 
                 filename = os.path.join(RECORD_DIR, f"rec_{int(time.time())}.wav")
                 wav.write(filename, SAMPLE_RATE, pcm16)

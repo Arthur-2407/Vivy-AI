@@ -219,6 +219,30 @@ if __name__ == "__main__":
                     print(f"[run_vivy.py] Silenced exception: {_err}")
         if _cleaned > 0:
             print(f"[run_vivy] Startup cleanup: removed {_cleaned} orphaned .tmp/.lock/.flag files from shared/")
+            
+        # ── SESSION FRESH START RESET ──────────────────────────────────────────
+        # Guarantee clean state across execution restarts: wipe residual I/O files
+        # and enforce standby voice mode on boot if auto_listen is disabled in config.
+        try:
+            from config.config_manager import get_config_manager
+            _cfg = get_config_manager()
+            _auto_listen = _cfg.get("pipeline.auto_listen", False)
+            _mute_path = os.path.join(SHARED_DIR, "mic_mute.txt")
+            if not _auto_listen:
+                with open(_mute_path, "w", encoding="utf-8") as _mf:
+                    _mf.write("muted on startup (auto_listen=false)")
+                print("[run_vivy] Fresh Session Start: Standby mode enforced (mic muted by default).")
+            elif os.path.exists(_mute_path):
+                try: os.remove(_mute_path)
+                except Exception: pass
+                
+            for _stale in ["user_text.txt", "reply_text.txt", "input_source.txt"]:
+                _sp = os.path.join(SHARED_DIR, _stale)
+                if os.path.exists(_sp):
+                    try: os.remove(_sp)
+                    except Exception: pass
+        except Exception as _st_err:
+            print(f"[run_vivy] Session fresh start cleanup warning: {_st_err}")
     except Exception as _err:
         print(f"[run_vivy.py] Silenced exception: {_err}")  # Non-fatal: cleanup is best-effort
 
@@ -353,6 +377,20 @@ def is_blank_or_noise(text):
         return True
 
     if re.match(r"^\[[^\]]*\]$", text_clean) or re.match(r"^\([^)]*\)$", text_clean):
+        return True
+
+    # [ACOUSTIC HALLUCINATION GUARD] Detect consecutive repetitive character or syllable loops (4+ identical 1-4 char sequences)
+    # Prevents auto-regressive Whisper hallucinations on ambient room hiss (e.g. '...............', 'aaaaaaa', or 'ಲಿಲಿಲಿಲಿಲಿ')
+    if re.search(r"(.{1,4})\1{3,}", text_clean):
+        return True
+
+    # Detect repetitive word loops (e.g. 'yeah yeah yeah yeah yeah', 'the the the the the')
+    if re.search(r"\b(\w+)(?:\s+\1\b){3,}", text_clean, re.IGNORECASE):
+        return True
+
+    # Detect exceptionally low informational variety on short outputs (e.g. length >= 6 with only 1 or 2 unique non-space symbols)
+    _no_space = text_clean.replace(" ", "").replace(".", "").replace(":", "")
+    if len(_no_space) >= 6 and (len(set(_no_space)) / len(_no_space)) < 0.25:
         return True
 
     return False
@@ -868,6 +906,7 @@ while _run_main_loop:
 
                 # Check for noise or blank transcriptions
                 if is_blank_or_noise(user_input):
+                    set_status("ready")
                     continue
                 
                 if is_proactive:
@@ -894,6 +933,18 @@ while _run_main_loop:
 
                 is_voice_turn = (input_source == "voice")
                 print(f"Input source mode: {input_source}")
+                if is_voice_turn:
+                    try:
+                        _umeta_path = os.path.join(SHARED_DIR, "user_turn_meta.json")
+                        with open(_umeta_path, "w", encoding="utf-8") as _u_f:
+                            json.dump({
+                                "sender": "user",
+                                "text": user_input,
+                                "source": "voice",
+                                "timestamp": time.time()
+                            }, _u_f, indent=2)
+                    except Exception as _umeta_err:
+                        print(f"[run_vivy] Warning: Failed writing user_turn_meta: {_umeta_err}")
 
                 # [MULTILINGUAL v2.0] Step 1-5: Hybrid Language Intelligence Layer — detect, context, profile, localize
                 detected_lang_code = "en"
@@ -1228,17 +1279,23 @@ while _run_main_loop:
                     # Run Voice Cloning (RVC) using the venv_rvc python environment
                     rvc_disabled = os.path.exists(os.path.join(SHARED_DIR, "rvc_disable.txt"))
                     if not rvc_disabled:
-                        set_status("applying_rvc:Applying voice cloning...")
-                        # Update indicator label without restarting thread
-                        with _indicator_lock:
-                            _indicator_label = "Applying voice cloning"
-                        print("Applying RVC voice cloning...")
-                        subprocess.run([
-                            rvc_python,
-                            voice_cloning_script,
-                            "--input", TTS_WAV,
-                            "--output", RVC_WAV
-                        ])
+                        if os.path.exists(TTS_WAV) and os.path.getsize(TTS_WAV) > 100:
+                            set_status("applying_rvc:Applying voice cloning...")
+                            # Update indicator label without restarting thread
+                            with _indicator_lock:
+                                _indicator_label = "Applying voice cloning"
+                            print("Applying RVC voice cloning...")
+                            subprocess.run([
+                                rvc_python,
+                                voice_cloning_script,
+                                "--input", TTS_WAV,
+                                "--output", RVC_WAV
+                            ])
+                        else:
+                            print(f"[RVC Guard] TTS file '{TTS_WAV}' missing or incomplete. Skipping RVC cloning to prevent subprocess error.")
+                            if os.path.exists(RVC_WAV):
+                                try: os.remove(RVC_WAV)
+                                except Exception: pass
                     else:
                         print("RVC voice cloning disabled. Skipping...")
                         if os.path.exists(RVC_WAV):
@@ -1326,6 +1383,15 @@ while _run_main_loop:
         stop_indicator()
         console_print("\n  Vivy AI Pipeline shut down. Goodbye!", _ANSI_PINK)
         print("\nExiting Vivy AI Pipeline Server.")
+        
+        # Restore standby microphone mute file upon server shutdown so next launch starts fresh in standby
+        try:
+            from config.config_manager import get_config_manager
+            if not get_config_manager().get("pipeline.auto_listen", False):
+                with open(os.path.join(SHARED_DIR, "mic_mute.txt"), "w", encoding="utf-8") as _mf:
+                    _mf.write("muted on shutdown")
+        except Exception:
+            pass
         
         # Restore standard system streams before running teardown functions
         try:

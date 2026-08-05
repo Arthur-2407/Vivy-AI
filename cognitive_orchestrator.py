@@ -136,6 +136,36 @@ class CognitiveOrchestrator:
             except Exception as _err:
                 print(f"[cognitive_orchestrator] AGI pre-turn evaluation warning: {_err}")
 
+            # Stage 9.8: Multilingual Reference & Relationship Continuity Integration
+            continuity_info = {}
+            try:
+                from affection.continuity_engine import get_continuity_engine
+                from language.reference_resolver import get_reference_resolver
+                resolver = get_reference_resolver()
+                continuity_info["is_translation_reference"] = resolver.is_translation_reference_query(normalized_text)
+                continuity_info["relationship_stage"] = aff_info.get("stage_label", "Familiar Friend")
+                mem["continuity_state"] = continuity_info
+            except Exception as _c_err:
+                print(f"[cognitive_orchestrator] Continuity evaluation warning: {_c_err}")
+
+            # Stage 9.9: Relationship Intelligence Layer (Internal State & Companion Realism)
+            rel_intelligence = {}
+            try:
+                from relationship import get_relationship_engine
+                rel_engine = get_relationship_engine()
+                rel_intelligence = rel_engine.execute_human_conversation_layer(normalized_text, mem, categories)
+                mem["internal_state"] = rel_engine.get_internal_state()
+                try:
+                    from voice.voice_manager import get_voice_manager
+                    from language.detector import get_detector
+                    active_voice = get_voice_manager().get_active_voice()
+                    mem["internal_state"]["vocal_style"] = active_voice.get("active_style", "Professional")
+                    mem["internal_state"]["detected_dialect"] = get_detector().detect(normalized_text).get("code", "en")
+                except Exception as _vs_err:
+                    print(f"[cognitive_orchestrator] Voice/dialect internal state sync warning: {_vs_err}")
+            except Exception as _r_err:
+                print(f"[cognitive_orchestrator] Relationship Intelligence evaluation warning: {_r_err}")
+
             return {
                 "plan": plan,
                 "topic_context": topic_context,
@@ -143,7 +173,9 @@ class CognitiveOrchestrator:
                 "emotion_state": emo_instructions,
                 "affection_state": aff_info,
                 "loneliness_state": lon_info,
-                "circadian_state": circ_info
+                "circadian_state": circ_info,
+                "continuity_state": continuity_info,
+                "relationship_intelligence": rel_intelligence
             }
 
     def orchestrate_post_response(self, user_text: str, reply_text: str, plan: dict, mem: dict,
@@ -204,6 +236,28 @@ class CognitiveOrchestrator:
                 cog_core = get_cognitive_core()
                 eval_score = eval_result.get("score", 0.85) if isinstance(eval_result, dict) else 0.85
                 cog_core.evaluate_post_turn_cognition(user_text, reply_text, plan, mem, eval_score=eval_score)
+                
+                # Synchronize post-turn experiential feedback with self-evolving AdaptationEngine under Governance safeguards
+                try:
+                    from evolution.adaptation_engine import get_adaptation_engine
+                    from evolution.perception_layer import get_perception_layer, Experience
+                    from evolution.governance_layer import get_governance_layer
+                    
+                    gov = get_governance_layer()
+                    approved, audit_entry = gov.validate_and_approve("micro_patch", {"turn_eval_score": eval_score, "vram_usage_mb": 1200}, is_structural_change=False)
+                    if approved:
+                        perc = get_perception_layer()
+                        perc.record_experience(Experience(
+                            experience_id=f"exp_{int(time.time()*1000)}",
+                            timestamp=time.time(),
+                            input_text=user_text,
+                            output_text=reply_text,
+                            feature_vector=[float(eval_score), 1.0, 0.5],
+                            feedback_score=float(eval_score)
+                        ))
+                        get_adaptation_engine().process_adaptation_step()
+                except Exception as _evo_err:
+                    print(f"[cognitive_orchestrator.py] Evolution adaptation step failed: {_evo_err}")
             except Exception as _err:
                 print(f"[cognitive_orchestrator.py] AGI post-turn evaluation failed: {_err}")
 

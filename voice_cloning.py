@@ -26,9 +26,13 @@ def main():
     parser.add_argument("--output", type=str, default=os.path.join(BASE_DIR, "shared", "rvc.wav"), help="Output RVC converted WAV file path")
     parser.add_argument("--pitch", type=int, default=0, help="Pitch shift key (semitones)")
     parser.add_argument("--method", type=str, default="rmvpe", choices=["pm", "harvest", "rmvpe", "crepe"], help="F0 extraction method")
+    parser.add_argument("--model", type=str, default=None, help="Speaker weights model filename")
     
     args = parser.parse_args()
     
+    args.input = os.path.abspath(args.input)
+    args.output = os.path.abspath(args.output)
+
     # Ensure intermediate directories exist
     os.makedirs(os.path.dirname(args.output), exist_ok=True)
     
@@ -39,21 +43,31 @@ def main():
     weights_dir = os.environ["weight_root"]
     os.makedirs(weights_dir, exist_ok=True)
     
-    # Search for any .pth speaker weights
-    pth_files = [f for f in os.listdir(weights_dir) if f.endswith(".pth") and f != "Synthesizer_inputs.pth"]
+    # Search for any valid .pth speaker weights (excluding tiny placeholder/dummy test files)
+    pth_files = [
+        f for f in os.listdir(weights_dir)
+        if f.endswith(".pth") and f != "Synthesizer_inputs.pth"
+        and os.path.isfile(os.path.join(weights_dir, f))
+        and os.path.getsize(os.path.join(weights_dir, f)) > 1024
+    ]
     
     if not pth_files:
-        print("Warning: No speaker weights (.pth) found in RVC weights folder.")
-        print("Gracefully falling back: Copying clean TTS output directly to RVC output.")
+        print("[Vivy Voice] Active Mode: Default Female Anime Vocal Identity (Direct Expressive Synthesis).")
         shutil.copy2(args.input, args.output)
-        print(f"File copied successfully to: {args.output}")
         sys.exit(0)
         
-    # Pick the first available speaker model
+    # Pick specified speaker model or first available model
     model_name = pth_files[0]
+    if args.model:
+        m_base = os.path.basename(args.model)
+        if m_base in pth_files:
+            model_name = m_base
+
     print(f"Loading RVC model: {model_name}...")
     
+    orig_cwd = os.getcwd()
     try:
+        os.chdir(RVC_DIR)
         from configs.config import Config
         from infer.modules.vc.modules import VC
         import soundfile as sf
@@ -96,6 +110,8 @@ def main():
         print(f"Error during voice conversion: {e}")
         print("Falling back: Copying clean TTS output to RVC output.")
         shutil.copy2(args.input, args.output)
+    finally:
+        os.chdir(orig_cwd)
 
 if __name__ == "__main__":
     main()

@@ -71,6 +71,7 @@ class PromptLocalizer:
             f"The user is speaking in {lang_name} ({lang_code}).",
             f"You MUST respond natively and fluently in {lang_name} ({lang_code}).",
             f"Tone: {tone}. Formality: {formality}. Writing style: {writing_style}.",
+            f"Polyglot Competence Rule: You are a universal polyglot AI companion fluent in all human languages. NEVER state or imply that you only speak a limited set of languages (such as only English and German) or that you cannot respond in {lang_name}.",
         ]
 
         if honorific:
@@ -81,7 +82,7 @@ class PromptLocalizer:
 
         if is_code_switching:
             lines.append(
-                "Note: The user is mixing languages in this session — follow their lead and respond in their most recent language."
+                "Note: The user is mixing languages in this session — follow their lead and respond in their most recent language without hesitation."
             )
 
         if context_hint:
@@ -91,6 +92,7 @@ class PromptLocalizer:
             f"Do NOT respond in English unless the user switches back to English. "
             f"Every word of your reply must be in {lang_name}."
         )
+
 
         directive = "\n[" + "\n".join(lines) + "]"
         logger.debug(f"[PromptLocalizer] Built directive for {lang_name} ({lang_code})")

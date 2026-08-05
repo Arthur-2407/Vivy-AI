@@ -50,16 +50,16 @@ class WhisperCppSpeechPlugin(BaseSpeechPlugin):
             from mic_input import _whisper_lock
         except ImportError:
             import threading
-            _whisper_lock = threading.Lock()
+            _whisper_lock = threading.RLock()
 
         if not _whisper_lock.acquire(timeout=6.0):
             logger.info("[WhisperCpp] Another whisper transcription is in progress system-wide. Skipping duplicate invocation.")
             return {"text": "", "confidence": 0.0, "timestamps": [], "speaker_id": "speaker_0"}
 
         try:
+            import re
             from resource_manager import get_resource_manager
-            devnull = get_resource_manager().get_devnull()
-            logger.info(f"[WhisperCpp] Transcribing: {audio_path}")
+            logger.info(f"[WhisperCpp] Transcribing with auto language detection: {audio_path}")
             result = subprocess.run(
                 [
                     self._whisper_path,
@@ -68,9 +68,11 @@ class WhisperCppSpeechPlugin(BaseSpeechPlugin):
                     "-t", self._threads,
                     "-nt",
                     "-np",
+                    "-l", "auto",
+                    "--prompt", "Vivy",
                 ],
                 stdout=subprocess.PIPE,
-                stderr=devnull,
+                stderr=subprocess.PIPE,
                 text=True,
                 encoding="utf-8",
             )
@@ -80,10 +82,26 @@ class WhisperCppSpeechPlugin(BaseSpeechPlugin):
             
             # Simple heuristic confidence score based on output length and subprocess success
             confidence = 0.95 if result.returncode == 0 and text else 0.0
+            
+            detected_lang = "en"
+            combo_log = f"{result.stderr}\n{result.stdout}"
+            m_lang = re.search(r"detecting language:\s*([a-z]{2,3})\s*(?:\(p\s*=\s*([0-9.]+)\))?", combo_log, re.IGNORECASE)
+            if not m_lang:
+                m_lang = re.search(r"lang(?:uage)?\s*[:=]\s*([a-z]{2,3})", combo_log, re.IGNORECASE)
+            if not m_lang:
+                m_lang = re.search(r"^\s*\[([a-z]{2,3})\]", text, re.IGNORECASE)
+            if m_lang:
+                detected_lang = m_lang.group(1).lower()
+                if len(m_lang.groups()) >= 2 and m_lang.group(2):
+                    try:
+                        confidence = float(m_lang.group(2))
+                    except (ValueError, TypeError):
+                        pass
 
             return {
                 "text": text,
                 "confidence": confidence,
+                "language": detected_lang,
                 "timestamps": timestamps,
                 "speaker_id": "speaker_0"  # default session speaker ID
             }
@@ -142,7 +160,14 @@ class FasterWhisperSpeechPlugin(BaseSpeechPlugin):
 
         try:
             logger.info(f"[FasterWhisper] Transcribing: {audio_path}")
-            segments, info = self._model.transcribe(audio_path, beam_size=5)
+            segments, info = self._model.transcribe(
+                audio_path,
+                beam_size=5,
+                initial_prompt="Vivy",
+                vad_filter=True,
+                vad_parameters={"min_silence_duration_ms": 400},
+                condition_on_previous_text=False
+            )
             
             text_chunks = []
             timestamps = []

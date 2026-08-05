@@ -830,8 +830,13 @@ def monitor_pipeline():
     print("[Monitor] Starting background pipeline monitor...")
     
     last_reply_ts = 0.0
+    last_user_ts = 0.0
     thinking_start_time = 0.0
     reply_meta_file = os.path.join(SHARED_DIR, "reply_meta.json")
+    user_meta_file = os.path.join(SHARED_DIR, "user_turn_meta.json")
+    if os.path.exists(user_meta_file):
+        try: last_user_ts = os.path.getmtime(user_meta_file)
+        except Exception: pass
 
     # Initialize mtime watermark and capture initial startup greeting if present
     if os.path.exists(REPLY_TXT):
@@ -882,6 +887,24 @@ def monitor_pipeline():
                         thinking_start_time = 0.0
                 except Exception as _err:
                     print(f"[web_server.py] Silenced exception: {_err}")
+
+            if os.path.exists(user_meta_file):
+                try:
+                    _u_mtime = os.path.getmtime(user_meta_file)
+                    if _u_mtime > last_user_ts:
+                        last_user_ts = _u_mtime
+                        with open(user_meta_file, "r", encoding="utf-8") as _uf:
+                            _udata = json.load(_uf)
+                        _u_text = _udata.get("text", "").strip()
+                        if _u_text and not (chat_history and chat_history[-1].get("sender") == "user" and chat_history[-1].get("text") == _u_text):
+                            chat_history.append({
+                                "sender": "user",
+                                "text": _u_text,
+                                "timestamp": int(float(_udata.get("timestamp", now)) * 1000)
+                            })
+                            print(f"[Monitor] Synchronized spoken voice turn to web dashboard: {_u_text}")
+                except Exception as _u_err:
+                    print(f"[web_server.py] Silenced user sync exception: {_u_err}")
 
             meta_ts = 0.0
             if os.path.exists(reply_meta_file):
@@ -2401,6 +2424,164 @@ def get_rvc_models():
         except Exception as _err:
             print(f"[web_server.py] Silenced exception: {_err}")
     return jsonify(models)
+
+
+# =====================================================================
+# VOICE IDENTITY MANAGEMENT SYSTEM REST & REAL-TIME ENDPOINTS (/api/voice/*)
+# =====================================================================
+@app.route("/api/voice/profiles", methods=["GET"])
+def get_voice_profiles_api():
+    try:
+        from voice.voice_manager import get_voice_manager
+        mgr = get_voice_manager()
+        lang_filter = request.args.get("language", None)
+        min_qual = int(request.args.get("min_quality", "0"))
+        profiles = mgr.db.list_profiles(language_filter=lang_filter, min_quality=min_qual)
+        active = mgr.get_active_voice()
+        return jsonify({
+            "success": True,
+            "profiles": profiles,
+            "active_voice_id": active["voice_id"],
+            "active_style": active.get("active_style", "Professional")
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e), "profiles": []}), 500
+
+@app.route("/api/voice/select", methods=["POST"])
+def select_voice_api():
+    try:
+        from voice.voice_manager import get_voice_manager
+        data = request.json or {}
+        voice_id_or_name = data.get("voice", "vivy_anime_01")
+        style = data.get("style", None)
+        mgr = get_voice_manager()
+        success = mgr.select_voice(voice_id_or_name, style_name=style)
+        return jsonify({"success": success, "active_voice": mgr.get_active_voice()})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/voice/styles", methods=["GET"])
+def get_voice_styles_api():
+    try:
+        from voice.voice_profiles import get_voice_profile_manager
+        from voice.voice_manager import get_voice_manager
+        pm = get_voice_profile_manager()
+        mgr = get_voice_manager()
+        active = mgr.get_active_voice()
+        styles_meta = [pm.get_style_parameters(s) for s in pm.list_styles()]
+        return jsonify({"success": True, "styles": styles_meta, "active_style": active.get("active_style", "Professional")})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/voice/upload", methods=["POST"])
+def upload_voice_sample_api():
+    try:
+        if 'file' not in request.files:
+            return jsonify({"success": False, "error": "No file part in request"}), 400
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({"success": False, "error": "No file selected"}), 400
+        
+        from voice.voice_validation import VoiceQualityAnalyzer
+        voice_uploads_dir = os.path.join(SHARED_DIR, "voice_uploads")
+        os.makedirs(voice_uploads_dir, exist_ok=True)
+        file_path = os.path.join(voice_uploads_dir, file.filename)
+        file.save(file_path)
+        
+        analyzer = VoiceQualityAnalyzer()
+        audit = analyzer.analyze_audio_sample(file_path)
+        return jsonify({"success": True, "file_path": file_path, "filename": file.filename, "analysis": audit})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/voice/train", methods=["POST"])
+def train_voice_model_api():
+    try:
+        from voice.voice_training import get_voice_training_manager
+        data = request.json or {}
+        audio_path = data.get("audio_path", "")
+        voice_name = data.get("voice_name", "Custom Voice")
+        voice_id = data.get("voice_id", None)
+        iterations = int(data.get("iterations", 1))
+        is_retrain = bool(data.get("is_retrain", False))
+        base_quality = data.get("base_quality", None)
+
+        if not audio_path or not os.path.exists(audio_path):
+            return jsonify({"success": False, "error": "Audio source path invalid or file missing on host."}), 400
+
+        tm = get_voice_training_manager()
+        job = tm.enqueue_training_job(
+            audio_path=audio_path,
+            voice_name=voice_name,
+            voice_id=voice_id,
+            iterations=iterations,
+            is_retrain=is_retrain,
+            base_quality=base_quality
+        )
+        return jsonify({"success": True, "job": job})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/voice/train/progress", methods=["GET"])
+def get_voice_train_progress_api():
+    try:
+        from voice.voice_training import get_voice_training_manager
+        from voice.voice_manager import get_voice_manager
+        tm = get_voice_training_manager()
+        mgr = get_voice_manager()
+        since = float(request.args.get("since", "0"))
+        events = mgr.get_recent_events(since_timestamp=since)
+        return jsonify({"success": True, "progress": tm.get_progress(), "events": events, "timestamp": time.time()})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/voice/confirm", methods=["POST"])
+def confirm_save_voice_api():
+    try:
+        from voice.voice_manager import get_voice_manager
+        data = request.json or {}
+        voice_id = data.get("voice_id", "")
+        name = data.get("name", "").strip()
+        model_filename = data.get("model_filename", "")
+        quality_score = int(data.get("quality_score", 90))
+        iterations = int(data.get("iterations", 1))
+        favorite = bool(data.get("favorite", True))
+
+        if not name or not model_filename:
+            return jsonify({"success": False, "error": "Name and model filename are required."}), 400
+
+        mgr = get_voice_manager()
+        prof = mgr.db.register_profile(
+            name=name,
+            model_filename=model_filename,
+            language_support=["en", "ja", "hi", "es", "ru"],
+            quality_score=quality_score,
+            training_iterations=iterations,
+            favorite=favorite,
+            voice_id=voice_id or None
+        )
+        # Immediately switch to newly confirmed voice without server restart
+        mgr.select_voice(prof["voice_id"])
+        return jsonify({"success": True, "profile": prof, "message": f"Voice '{name}' registered and activated successfully."})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/voice/preview_audio", methods=["GET"])
+def serve_voice_preview_audio_api():
+    try:
+        from flask import send_file
+        filename = request.args.get("file", "")
+        preview_path = os.path.join(SHARED_DIR, "previews", os.path.basename(filename))
+        if not os.path.exists(preview_path):
+            fallback_path = os.path.join(SHARED_DIR, "voice_uploads", os.path.basename(filename))
+            if os.path.exists(fallback_path):
+                preview_path = fallback_path
+        if os.path.exists(preview_path):
+            return send_file(preview_path, as_attachment=False)
+        return jsonify({"success": False, "error": "Preview audio file not found on disk."}), 404
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
 
 @app.route("/api/upload", methods=["POST"])
 def upload_file():
