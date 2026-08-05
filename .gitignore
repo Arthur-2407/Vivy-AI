@@ -113,3 +113,13 @@ models/nlp/*-ct2/
 models/**/*-ct2/
 .gemini/
 .system_generated/
+
+# ── Demo & Unnecessary Test Files ──
+demo/
+test_*.wav
+*dummy_evolve_test*.bak*
+dummy_test.txt
+*tester*.py
+test_fix_verification.py
+test_runtime_validation.py
+test_shmem.py
