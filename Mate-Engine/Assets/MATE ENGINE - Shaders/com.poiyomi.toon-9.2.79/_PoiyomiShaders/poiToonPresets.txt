@@ -1,5 +1,0 @@
-# Poiyomi Toon Shader Presets Configuration
-# Default presets and custom shader property configurations are stored and loaded from here.
-[Default]
-shader=Poiyomi/Toon/Default
-version=9.2.79
