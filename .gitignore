@@ -36,8 +36,24 @@ scratch/
 *.flac
 *.m4a
 *.flag
-vivy_startup*.log
+
+# Ignore all text files but keep requirements.txt
+*.txt
+!requirements.txt
+
+# Specific logs and reports requested
+Animation_Inventory_Report.txt
+Deep_Audit_Report.txt
+Final_PreRepair_Report.txt
+Forensic_Audit_Report.txt
+Live_Runtime_Audit.txt
+run_audit.flag
 runtime_animator_diag.txt
+scratch_animations.txt
+ui_search.txt
+
+# Startup logs
+vivy_startup*.log
 mock_unity*.log
 
 # ── OS Generated Files ──
