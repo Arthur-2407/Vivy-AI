@@ -31,7 +31,7 @@ class VoiceDatabase:
             defaults = [
                 {
                     "voice_id": "natural_anime_01",
-                    "name": "Natural Anime Girl",
+                    "name": "Vivy Default Voice",
                     "model_filename": "natural_anime_female.pth",
                     "language_support": ["en", "ja", "hi", "es", "ru", "fr", "ko", "pt", "de", "zh", "it", "ar", "all"],
                     "training_iterations": 1,
@@ -145,6 +145,11 @@ class VoiceDatabase:
                                 if k not in unwanted_ids and v.get("name") not in unwanted_names:
                                     cleaned[k] = v
                             self.profiles = cleaned
+                            
+                            if "natural_anime_01" in self.profiles:
+                                if self.profiles["natural_anime_01"].get("name") == "Natural Anime Girl":
+                                    self.profiles["natural_anime_01"]["name"] = "Vivy Default Voice"
+                                    self.save_database()
                 except Exception as e:
                     print(f"[VoiceDatabase] Load warning: {e}")
 

@@ -165,13 +165,14 @@ Vivy's voice system is a fully modular, neural identity platform — not a simpl
 - **Genuine Neural RVC Training**: `voice_training.py` executes a real, full RVC (Retrieval-based Voice Conversion) neural training lifecycle as genuine subprocesses:
   - Audio preprocessing → RMVPE F0 extraction → HuBERT feature extraction → Generator + Discriminator neural training → FAISS index compilation.
   - Live `subprocess.Popen` stdout streaming — every Epoch, Generator Loss, Discriminator Loss, and ETA is streamed to the UI in real time.
+  - **Dynamic CPU Workload Balancing**: Automatic resource detection prevents OS hardware lockups during heavy F0 extraction by dynamically routing core counts.
   - Automatic VRAM governor enforces `batch_size=4` and disables CUDA tensor caching for RTX safety.
   - Pre-flight `DatasetAnalyzer` (via `librosa` + `soundfile`) validates audio for clipping, silence ratio, and bit depth before any GPU load begins.
 - **Objective Acoustic Similarity Validation**: After training, Vivy does not invent a score. It uses:
   - **SpeechBrain ECAPA-TDNN** speaker embedding cosine similarity.
   - **librosa** F0 RMSE (pitch alignment) and Mel Cepstral Distortion (MCD).
   - Scores are a weighted average of objective acoustic metrics. If evaluation fails, the UI shows *"Similarity could not be evaluated"* — never a fabricated percentage.
-- **Voice Database** (`voice_database.py`): Persistent SQLite-backed store for all registered voice identities, styles, and training metadata.
+- **Voice Database & Rebranding**: The default baseline profile is **"Vivy Default Voice"** (with intelligent backward-compatible in-memory ID migration to preserve existing `natural_anime_01` datasets). Persistent SQLite/JSON-backed store for all registered voice identities.
 - **Side-by-Side Preview** (`voice_preview.py`): Generates original vs. cloned benchmark clips for direct UI comparison playback.
 
 ---
@@ -291,6 +292,7 @@ A full Flask application serving a rich browser-based control interface:
 - Live chat with audio playback, real-time cognitive state readouts, and telemetry.
 - Screen share and camera feed capture directly from the browser.
 - Voice Identity Dashboard: train, preview, compare, and switch voice identities with live training metrics.
+- **Real-time Pipeline Monitoring**: Standalone background telemetry daemon pushes live hardware metrics (CPU/VRAM) and async workflow anomalies to the UI.
 - Developer Diagnostic Dashboard with prompt trace, WebSocket monitor, and pipeline analytics.
 - **60+ REST API endpoints** covering every subsystem.
 

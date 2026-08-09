@@ -40,7 +40,7 @@ def test_voice_database_crud(temp_workspace):
     # Check defaults initialized
     profiles = db.list_profiles()
     assert len(profiles) >= 1, "Should generate single baseline female anime vocal identity."
-    assert any("Natural Anime" in p["name"] for p in profiles)
+    assert any("Vivy Default Voice" in p["name"] for p in profiles)
     
     # Register new custom profile
     res = db.register_profile(
@@ -94,7 +94,7 @@ def test_voice_manager_realtime_switching(temp_workspace):
     success_voice = mgr.select_voice(voice_id_or_name="natural_anime_01", style_name="Soft")
     assert success_voice is True
     new_active = mgr.get_active_voice()
-    assert new_active["name"] == "Natural Anime Girl"
+    assert new_active["name"] == "Vivy Default Voice"
     assert new_active["active_style"] == "Soft"
     assert new_active["style_parameters"]["pitch_shift"] == -1
 

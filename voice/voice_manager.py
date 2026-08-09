@@ -40,7 +40,7 @@ class VoiceManager:
                 else:
                     profile = {
                         "voice_id": "natural_anime_01",
-                        "name": "Natural Anime Girl",
+                        "name": "Vivy Default Voice",
                         "model_filename": "natural_anime_female.pth",
                         "language_support": ["en", "ja", "hi", "es", "ru", "fr", "ko", "pt", "de", "zh", "it", "ar", "all"],
                         "quality_score": 99
@@ -49,7 +49,7 @@ class VoiceManager:
             style_params = self.profile_mgr.get_style_parameters(self.active_style)
             return {
                 "voice_id": profile.get("voice_id", "natural_anime_01"),
-                "name": profile.get("name", "Natural Anime Girl"),
+                "name": profile.get("name", "Vivy Default Voice"),
                 "model_filename": profile.get("model_filename", "natural_anime_female.pth"),
                 "language_support": profile.get("language_support", ["en", "ja", "hi", "es", "ru", "fr", "all"]),
                 "quality_score": profile.get("quality_score", 99),
@@ -72,7 +72,7 @@ class VoiceManager:
                 name = profile["name"]
             else:
                 prof = self.db.get_profile(self.active_voice_id)
-                name = prof["name"] if prof else "Natural Anime Girl"
+                name = prof["name"] if prof else "Vivy Default Voice"
 
             if style_name and style_name in self.profile_mgr.list_styles():
                 self.active_style = style_name

@@ -36,7 +36,7 @@ class LanguageVoiceRouter:
         strategy = {
             "lang_code": lang_code,
             "voice_id": selected_vid,
-            "voice_name": active_voice.get("name", "Natural Anime Girl"),
+            "voice_name": active_voice.get("name", "Vivy Default Voice"),
             "model_filename": active_voice.get("model_filename", "natural_anime_female.pth"),
             "active_style": active_voice.get("active_style", "Professional"),
             "style_params": active_voice.get("style_parameters", {}),
