@@ -2653,6 +2653,33 @@
                             <div class="empty-state">Loading voice identities...</div>
                         </div>
                     </div>
+                    </div>
+                </div>
+
+                <!-- VOICE PREVIEW MODAL -->
+                <div id="voice-preview-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+                    <div class="glass-card" style="width:90%; max-width:500px; padding:24px; position:relative; border:1px solid var(--accent-cyan);">
+                        <button onclick="closePreviewModal()" style="position:absolute; top:12px; right:12px; background:none; border:none; color:var(--text-secondary); font-size:20px; cursor:pointer;">&times;</button>
+                        <h3 style="margin-top:0; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
+                            👁️ Preview Voice
+                        </h3>
+                        <div style="font-size:13px; color:var(--accent-cyan); margin-bottom:16px; font-weight:bold;">
+                            Selected: <span id="preview-voice-name"></span>
+                        </div>
+                        <input type="hidden" id="preview-voice-id">
+                        
+                        <label class="input-label" style="display:block; margin-bottom:6px;">Prompt Text</label>
+                        <textarea id="preview-prompt-input" class="home-input-field" style="width:100%; height:100px; padding:10px; resize:none; margin-bottom:12px;" placeholder="Enter custom text here to preview the voice..."></textarea>
+                        
+                        <div id="preview-status" style="font-size:12px; color:var(--text-secondary); margin-bottom:12px; height:18px;"></div>
+                        
+                        <audio id="preview-audio-player" style="width:100%; margin-bottom:16px; display:none;" controls></audio>
+                        
+                        <div style="display:flex; gap:10px; justify-content:flex-end;">
+                            <button id="btn-preview-stop" onclick="stopPreviewPlayback()" style="display:none; padding:10px 16px; border-radius:8px; border:none; font-weight:bold; cursor:pointer; background:rgba(255,0,0,0.2); color:var(--accent-pink);">Stop Playback</button>
+                            <button id="btn-preview-generate" onclick="generateVoicePreview()" style="padding:10px 20px; border-radius:8px; border:none; font-weight:bold; cursor:pointer; background:var(--accent-cyan); color:#000;">Generate Preview</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- SUB-TAB 2: CLONE & UPLOAD -->
@@ -2699,11 +2726,71 @@
                     <div class="glass-card" id="vh-progress-container">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                             <div class="input-label" style="font-size:15px; margin:0;">⚡ Active Training Queue & VRAM Scheduler</div>
-                            <span id="vh-job-status-badge" style="background:rgba(255,255,255,0.1); padding:4px 10px; border-radius:12px; font-size:11px; font-weight:bold;">STANDBY</span>
+                            <div style="display:flex; gap:10px; align-items:center;">
+                                <button id="btn-cancel-training" onclick="cancelVoiceTraining()" style="display:none; background:rgba(255,0,0,0.15); border:1px solid rgba(255,0,0,0.3); color:var(--accent-pink); padding:4px 10px; border-radius:12px; font-size:11px; font-weight:bold; cursor:pointer;" title="Abort the active neural training">🛑 Cancel Training</button>
+                                <span id="vh-job-status-badge" style="background:rgba(255,255,255,0.1); padding:4px 10px; border-radius:12px; font-size:11px; font-weight:bold;">STANDBY</span>
+                            </div>
                         </div>
                         <div id="vh-stage-text" style="font-size:13px; color:var(--accent-cyan); margin-bottom:8px; font-weight:600;">Standby for voice training tasks...</div>
                         <div class="game-xp-container" style="width:100%; height:12px; margin-bottom:8px; border-radius:6px; background:rgba(0,0,0,0.4);"><div class="game-xp-fill" style="width:0%; background:linear-gradient(90deg, var(--accent-cyan), var(--accent-green)); transition:width 0.4s;" id="vh-progress-bar"></div></div>
                         <div id="vh-stage-msg" style="font-size:12px; color:var(--text-secondary);">RTX 5050 VRAM governor active. Non-essential background jobs will pause automatically during neural epochs.</div>
+                        <div id="vh-live-stats" style="display:none; margin-top:12px; padding:10px; background:rgba(0,0,0,0.3); border-radius:8px; border:1px solid rgba(0,229,255,0.15);">
+                            <div style="font-size:12px; color:var(--text-secondary); margin-bottom:6px; font-weight:bold; letter-spacing:0.5px;">LIVE TRAINING METRICS</div>
+                            <div style="display:flex; gap:20px; flex-wrap:wrap; font-size:13px;">
+                                <div><strong>Epochs:</strong> <span id="vh-stat-epochs" style="color:var(--accent-cyan);">0 / 0</span></div>
+                                <div><strong>Time/Epoch:</strong> <span id="vh-stat-time" style="color:var(--accent-green);">-- s</span></div>
+                                <div><strong>ETA:</strong> <span id="vh-stat-eta" style="color:var(--accent-pink);">-- s</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LIVE VOICE PREVIEW SANDBOX -->
+                    <div class="glass-card" id="vh-preview-sandbox" style="margin-bottom:16px; border-left:4px solid var(--accent-pink);">
+                        <div class="input-label" style="font-size:15px; margin-bottom:12px;">🎭 Live Voice Preview Sandbox</div>
+                        <p style="font-size:12px; color:var(--text-secondary); margin-top:0; margin-bottom:12px;">
+                            Test any of your trained RVC models in real-time. Select a voice, type a prompt, and hear the results instantly.
+                        </p>
+                        
+                        <div style="display:flex; flex-direction:column; gap:12px;">
+                            <div>
+                                <label class="input-label" style="display:block; margin-bottom:6px; font-size:11px;">Select Voice Model</label>
+                                <select id="vh-preview-voice-select" class="home-input-field" style="width:100%; height:38px; padding:0 12px; appearance:none;">
+                                    <option value="" disabled selected>Loading voices...</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="input-label" style="display:block; margin-bottom:6px; font-size:11px;">Test Prompt</label>
+                                <textarea id="vh-preview-prompt" class="home-input-field" style="width:100%; height:80px; padding:12px; resize:none;" placeholder="Type something for the clone to say..."></textarea>
+                            </div>
+                            
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <button onclick="generateInlineVoicePreview()" id="btn-generate-preview" style="padding:10px 24px; background:var(--accent-pink); color:#000; border:none; border-radius:8px; font-weight:bold; cursor:pointer; font-size:13px; display:flex; align-items:center; gap:8px;">
+                                    <span>▶ Generate Preview</span>
+                                </button>
+                                
+                                <div id="vh-preview-loading" style="display:none; align-items:center; gap:8px; font-size:12px; color:var(--accent-cyan);">
+                                    <span class="spinner" style="width:16px; height:16px; border:2px solid rgba(0,229,255,0.3); border-top-color:var(--accent-cyan); border-radius:50%; animation:spin 1s linear infinite;"></span>
+                                    Synthesizing Neural Audio...
+                                </div>
+                            </div>
+                            
+                            <div id="vh-preview-player-container" style="display:none; margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1);">
+                                <div style="font-size:12px; color:var(--text-primary); margin-bottom:8px; font-weight:bold;">Result:</div>
+                                <audio id="vh-preview-audio" controls style="width:100%; height:36px; outline:none;"></audio>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EXISTING RVC VOICES (RETRAINING) -->
+                    <div class="glass-card" id="vh-existing-rvc-container" style="display:none; margin-bottom:16px;">
+                        <div class="input-label" style="font-size:15px; margin-bottom:12px;">🔄 Existing RVC Voices</div>
+                        <p style="font-size:12px; color:var(--text-secondary); margin-top:0; margin-bottom:16px;">
+                            Manage and resume training for your existing RVC clones. You can optionally upload new, higher-quality audio to merge with the existing dataset during retraining.
+                        </p>
+                        <div id="existing-rvc-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:14px;">
+                            <!-- Dynamically populated RVC retrain cards -->
+                        </div>
                     </div>
 
                     <!-- Side-by-Side Comparison Players & Analytics (Displayed upon training completion) -->
@@ -5866,6 +5953,191 @@
                 }
             });
             if (tab === 'voices') fetchVoiceProfiles();
+            if (tab === 'train') fetchExistingRvcVoices();
+            if (tab === 'upload') {
+                uploadedAudioPath = "";
+                document.getElementById('vh-upload-analysis-card').style.display = 'none';
+                document.getElementById('vh-train-controls').style.display = 'none';
+            }
+        }
+
+        async function fetchExistingRvcVoices() {
+            const container = document.getElementById('vh-existing-rvc-container');
+            const grid = document.getElementById('existing-rvc-grid');
+            if (!container || !grid) return;
+            
+            try {
+                const res = await fetch('/api/voice/rvc_projects');
+                const data = await res.json();
+                if (!data.success || !data.profiles || data.profiles.length === 0) {
+                    container.style.display = 'none';
+                    return;
+                }
+                
+                container.style.display = 'block';
+                let html = '';
+                data.profiles.forEach(p => {
+                    const iters = p.training_iterations || 0;
+                    html += `
+                        <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:12px;">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                                <div>
+                                    <div style="font-weight:bold; font-size:14px; color:var(--text-primary); margin-bottom:4px;">${p.name}</div>
+                                    <div style="font-size:11px; color:var(--text-secondary); font-family:monospace;">ID: ${p.voice_id}</div>
+                                </div>
+                                <div style="text-align:right;">
+                                    <div style="font-size:12px; color:var(--text-secondary);">Quality: <strong style="color:var(--accent-cyan);">${p.quality_score || 0}%</strong></div>
+                                    <div style="font-size:12px; color:var(--text-secondary);">Epochs: <strong>${iters}</strong></div>
+                                </div>
+                            </div>
+                            
+                            <div style="border-top:1px dashed rgba(255,255,255,0.1); padding-top:12px;">
+                                <label class="input-label" style="display:block; margin-bottom:6px; font-size:11px;">Incremental Retraining</label>
+                                <div style="display:flex; gap:8px; margin-bottom:10px;">
+                                    <div style="flex:1;">
+                                        <div style="font-size:10px; color:var(--text-secondary); margin-bottom:2px;">Additional Epochs</div>
+                                        <input type="number" id="retrain-iters-${p.voice_id}" class="home-input-field" value="20" min="1" max="100" style="width:100%; height:32px; padding:4px 8px;" oninput="updateTargetEpoch('${p.voice_id}', ${iters})">
+                                    </div>
+                                    <div style="flex:1; text-align:right;">
+                                        <div style="font-size:10px; color:var(--text-secondary); margin-bottom:2px;">Target Epoch</div>
+                                        <div id="retrain-target-${p.voice_id}" style="font-weight:bold; color:var(--accent-green); line-height:32px;">${iters + 20}</div>
+                                    </div>
+                                </div>
+                                <div style="font-size:10px; color:var(--text-secondary); margin-bottom:4px;">Optional: Append new audio source (.wav)</div>
+                                <input type="file" id="retrain-audio-${p.voice_id}" accept=".wav,.mp3,.flac" style="width:100%; padding:6px; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.1); border-radius:6px; font-size:11px; margin-bottom:10px;">
+                                <button onclick="submitRetrain(this, '${p.voice_id}', '${p.name.replace(/'/g, "\\'")}')" style="width:100%; padding:8px; background:rgba(0,229,255,0.15); color:var(--accent-cyan); border:none; border-radius:8px; font-weight:bold; cursor:pointer; font-size:12px;">
+                                    Resume Training
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                grid.innerHTML = html;
+            } catch (e) {
+                console.error("Failed to fetch RVC projects:", e);
+            }
+        }
+        
+        function updateTargetEpoch(voiceId, currentIters) {
+            const addIters = parseInt(document.getElementById('retrain-iters-' + voiceId).value) || 0;
+            document.getElementById('retrain-target-' + voiceId).innerText = currentIters + addIters;
+        }
+
+        async function submitRetrain(btnElement, voiceId, voiceName) {
+            const additionalIters = parseInt(document.getElementById('retrain-iters-' + voiceId).value) || 20;
+            const fileInput = document.getElementById('retrain-audio-' + voiceId);
+            
+            // Set loading state on the button
+            const originalBtnText = btnElement.innerText;
+            btnElement.disabled = true;
+            btnElement.innerText = "Processing... Please wait";
+            btnElement.style.opacity = "0.7";
+            
+            let audioPath = "";
+            if (fileInput.files.length > 0) {
+                btnElement.innerText = "Uploading Audio... Please wait";
+                // Upload the file first
+                const formData = new FormData();
+                formData.append("file", fileInput.files[0]);
+                try {
+                    const upRes = await fetch('/api/voice/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const upData = await upRes.json();
+                    if (upData.success) {
+                        audioPath = upData.file_path;
+                    } else {
+                        alert("Upload failed: " + upData.error);
+                        return;
+                    }
+                } catch (e) {
+                    alert("Upload error: " + e);
+                    return;
+                }
+            }
+            
+            // Dispatch the retrain job
+            try {
+                const res = await fetch('/api/voice/train', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        voice_id: voiceId,
+                        voice_name: voiceName,
+                        audio_path: audioPath,
+                        iterations: additionalIters,
+                        is_retrain: true
+                    })
+                });
+                const data = await res.json();
+                    if (data.success) {
+                        alert("Retraining job added to queue!");
+                        window.scrollTo({top:0, behavior:'smooth'});
+                        if (!trainPollTimer) {
+                            trainPollTimer = setInterval(pollTrainingProgress, 700);
+                        }
+                        pollTrainingProgress();
+                    } else {
+                        alert("Failed to enqueue retrain: " + data.error);
+                    }
+                } catch (e) {
+                    alert("Error starting retrain: " + e);
+                } finally {
+                    btnElement.disabled = false;
+                    btnElement.innerText = originalBtnText;
+                    btnElement.style.opacity = "1";
+                }
+            }
+
+
+        async function renameVoice(voiceId, oldName) {
+            const newName = prompt("Enter new name for voice identity:", oldName);
+            if (!newName || newName.trim() === "" || newName === oldName) return;
+            
+            try {
+                const res = await fetch('/api/voice/rename', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ voice_id: voiceId, new_name: newName.trim() })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    fetchVoiceProfiles();
+                    fetchExistingRvcVoices();
+                } else {
+                    alert("Rename failed: " + data.error);
+                }
+            } catch (e) {
+                console.error("Rename error:", e);
+            }
+        }
+
+        async function removeVoice(voiceId, voiceName) {
+            if (voiceId === 'natural_anime_01') {
+                alert("The default Natural Anime Girl voice cannot be deleted.");
+                return;
+            }
+            if (!confirm(`Are you sure you want to permanently delete the voice "${voiceName}"?\nThis will remove the PyTorch weights and all dataset logs to free up space. This action cannot be undone.`)) {
+                return;
+            }
+            
+            try {
+                const res = await fetch('/api/voice/remove', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ voice_id: voiceId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    fetchVoiceProfiles();
+                    fetchExistingRvcVoices();
+                } else {
+                    alert("Remove failed: " + data.error);
+                }
+            } catch (e) {
+                console.error("Remove error:", e);
+            }
         }
 
         async function fetchVoiceProfiles() {
@@ -5880,6 +6152,18 @@
                 }
                 let html = '';
                 const activeId = data.active_voice_id;
+                
+                const previewSelect = document.getElementById('vh-preview-voice-select');
+                if (previewSelect) {
+                    previewSelect.innerHTML = '<option value="" disabled selected>Select a voice model...</option>';
+                    data.profiles.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.voice_id;
+                        opt.innerText = p.name;
+                        previewSelect.appendChild(opt);
+                    });
+                }
+                
                 data.profiles.forEach(p => {
                     const isActive = (p.voice_id === activeId);
                     const langBadges = (p.language_support || []).map(l => `<span style="background:rgba(255,255,255,0.08); padding:2px 6px; border-radius:4px; font-size:10px; font-weight:700;">${l.toUpperCase()}</span>`).join(' ');
@@ -5891,7 +6175,15 @@
                             <div>
                                 <div style="display:flex; justify-content:space-between; align-items:center;">
                                     <span style="font-size:15px; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:6px;">🎙️ ${p.name}</span>
-                                    <span style="cursor:pointer; font-size:16px;" title="Favorite Status">${starIcon}</span>
+                                    <div style="display:flex; gap:8px; align-items:center;">
+                                        ${p.voice_id !== 'natural_anime_01' ? `
+                                            <button onclick="renameVoice('${p.voice_id}', '${p.name.replace(/'/g, "\\'")}')" style="background:none; border:none; cursor:pointer; font-size:14px;" title="Rename Voice">✏️</button>
+                                            <button onclick="removeVoice('${p.voice_id}', '${p.name.replace(/'/g, "\\'")}')" style="background:none; border:none; cursor:pointer; font-size:14px;" title="Delete Voice">🗑️</button>
+                                        ` : `
+                                            <button onclick="renameVoice('${p.voice_id}', '${p.name.replace(/'/g, "\\'")}')" style="background:none; border:none; cursor:pointer; font-size:14px;" title="Rename Voice">✏️</button>
+                                        `}
+                                        <span style="cursor:pointer; font-size:16px;" title="Favorite Status">${starIcon}</span>
+                                    </div>
                                 </div>
                                 <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">${langBadges}</div>
                             </div>
@@ -5901,9 +6193,14 @@
                                 <span>Iters: <strong>${p.training_iterations || 1}</strong></span>
                             </div>
 
-                            <button onclick="selectVoiceIdentity('${p.voice_id}')" style="width:100%; padding:8px; border-radius:8px; border:none; font-weight:700; cursor:pointer; background:${isActive ? 'var(--accent-green)' : 'rgba(255,255,255,0.1)'}; color:${isActive ? '#000' : 'var(--text-primary)'};">
-                                ${isActive ? '✓ Active Identity' : 'Switch to Voice'}
-                            </button>
+                            <div style="display:flex; gap:8px;">
+                                <button onclick="selectVoiceIdentity('${p.voice_id}')" style="flex:1; padding:8px; border-radius:8px; border:none; font-weight:700; cursor:pointer; background:${isActive ? 'var(--accent-green)' : 'rgba(255,255,255,0.1)'}; color:${isActive ? '#000' : 'var(--text-primary)'};">
+                                    ${isActive ? '✓ Active Identity' : 'Switch to Voice'}
+                                </button>
+                                <button onclick="openPreviewModal('${p.voice_id}', '${p.name.replace(/'/g, "\\'")}')" style="padding:8px 12px; border-radius:8px; border:none; font-weight:700; cursor:pointer; background:rgba(0,229,255,0.15); color:var(--accent-cyan);" title="Preview Voice">
+                                    👁️
+                                </button>
+                            </div>
                         </div>
                     `;
                 });
@@ -5931,6 +6228,132 @@
                 console.error("Voice selection error:", e);
             }
         }
+
+        // --- PREVIEW SYSTEM LOGIC ---
+        function openPreviewModal(voiceId, voiceName) {
+            document.getElementById('preview-voice-id').value = voiceId;
+            document.getElementById('preview-voice-name').innerText = voiceName;
+            document.getElementById('preview-prompt-input').value = "Hello! I am speaking with this custom voice identity right now.";
+            document.getElementById('preview-status').innerText = "";
+            document.getElementById('preview-audio-player').style.display = 'none';
+            document.getElementById('preview-audio-player').src = '';
+            document.getElementById('btn-preview-stop').style.display = 'none';
+            document.getElementById('btn-preview-generate').innerText = 'Generate Preview';
+            document.getElementById('voice-preview-modal').style.display = 'flex';
+        }
+
+        function closePreviewModal() {
+            stopPreviewPlayback();
+            document.getElementById('voice-preview-modal').style.display = 'none';
+        }
+
+        function stopPreviewPlayback() {
+            const player = document.getElementById('preview-audio-player');
+            if (player) {
+                player.pause();
+                player.currentTime = 0;
+            }
+            document.getElementById('btn-preview-stop').style.display = 'none';
+        }
+
+        async function generateInlineVoicePreview() {
+            const voiceSelect = document.getElementById('vh-preview-voice-select');
+            const promptInput = document.getElementById('vh-preview-prompt');
+            const btn = document.getElementById('btn-generate-preview');
+            const loader = document.getElementById('vh-preview-loading');
+            const playerContainer = document.getElementById('vh-preview-player-container');
+            const audioPlayer = document.getElementById('vh-preview-audio');
+            
+            const voiceId = voiceSelect.value;
+            const promptText = promptInput.value.trim();
+            
+            if (!voiceId) {
+                alert("Please select a voice model to preview.");
+                return;
+            }
+            if (!promptText) {
+                alert("Please enter a test prompt for the preview.");
+                return;
+            }
+            
+            btn.style.display = 'none';
+            loader.style.display = 'flex';
+            playerContainer.style.display = 'none';
+            
+            try {
+                const res = await fetch('/api/voice/preview_generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        voice_id: voiceId,
+                        prompt: promptText
+                    })
+                });
+                
+                const data = await res.json();
+                if (data.success && data.preview_url) {
+                    // Force cache bust to ensure new audio loads if previewing same name
+                    audioPlayer.src = data.preview_url + "&t=" + new Date().getTime();
+                    playerContainer.style.display = 'block';
+                    audioPlayer.play().catch(e => console.warn("Autoplay prevented:", e));
+                } else {
+                    alert("Preview generation failed: " + (data.error || "Unknown error"));
+                }
+            } catch (e) {
+                alert("Network error during preview generation: " + e);
+            } finally {
+                btn.style.display = 'flex';
+                loader.style.display = 'none';
+            }
+        }
+
+        async function generateVoicePreview() {
+            const voiceId = document.getElementById('preview-voice-id').value;
+            const prompt = document.getElementById('preview-prompt-input').value.trim();
+            if (!prompt) return;
+
+            const btnGen = document.getElementById('btn-preview-generate');
+            const statusEl = document.getElementById('preview-status');
+            const player = document.getElementById('preview-audio-player');
+            const btnStop = document.getElementById('btn-preview-stop');
+
+            btnGen.disabled = true;
+            btnGen.innerText = "Generating...";
+            statusEl.innerText = "Synthesizing and cloning voice (RPC)...";
+            statusEl.style.color = "var(--accent-cyan)";
+            player.style.display = 'none';
+            btnStop.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/voice/preview_generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ voice_id: voiceId, prompt: prompt })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    statusEl.innerText = "Generation complete. Playing...";
+                    statusEl.style.color = "var(--accent-green)";
+                    player.src = data.preview_url;
+                    player.style.display = 'block';
+                    btnStop.style.display = 'block';
+                    btnGen.innerText = "Regenerate Preview";
+                    player.play();
+                } else {
+                    statusEl.innerText = "Error: " + (data.error || "Unknown failure");
+                    statusEl.style.color = "var(--accent-pink)";
+                    btnGen.innerText = "Retry Generation";
+                }
+            } catch (e) {
+                statusEl.innerText = "Error: Network failure";
+                statusEl.style.color = "var(--accent-pink)";
+                btnGen.innerText = "Retry Generation";
+                console.error("Preview error:", e);
+            } finally {
+                btnGen.disabled = false;
+            }
+        }
+        // -----------------------------
 
         const styleSelectEl = document.getElementById('voice-expressive-style-select');
         if (styleSelectEl) {
@@ -5982,7 +6405,7 @@
             }
         }
 
-        async function startVoiceTraining(isRetrain) {
+        async function startVoiceTraining(isRetrain, additionalEpochs = 0) {
             if (!uploadedAudioPath) {
                 alert("No audio file path identified. Please re-upload your audio sample.");
                 return;
@@ -5994,7 +6417,8 @@
             
             let baseQual = null;
             if (isRetrain && lastTrainingResult) {
-                iters += 1;
+                const prevIters = lastTrainingResult.iterations || iters;
+                iters = prevIters + additionalEpochs;
                 baseQual = lastTrainingResult.quality_audit ? lastTrainingResult.quality_audit.overall_score : 80;
                 if (itersEl) itersEl.value = iters;
             }
@@ -6015,7 +6439,8 @@
                         voice_name: voiceName,
                         iterations: iters,
                         is_retrain: isRetrain,
-                        base_quality: baseQual
+                        base_quality: baseQual,
+                        voice_id: isRetrain && lastTrainingResult ? lastTrainingResult.voice_id : null
                     })
                 });
                 const data = await res.json();
@@ -6023,6 +6448,14 @@
                     currentTrainingJob = data.job;
                     if (trainPollTimer) clearInterval(trainPollTimer);
                     trainPollTimer = setInterval(pollTrainingProgress, 700);
+                    
+                    // Clear frontend state to prevent audio contamination on subsequent jobs
+                    uploadedAudioPath = null;
+                    document.getElementById('vh-upload-analysis-card').style.display = 'none';
+                    if (!isRetrain) {
+                        const nameInput = document.getElementById('vh-new-voice-name');
+                        if (nameInput) nameInput.value = '';
+                    }
                 } else {
                     alert("Failed to enqueue training job: " + data.error);
                 }
@@ -6031,9 +6464,25 @@
             }
         }
 
+        async function cancelVoiceTraining() {
+            if (!confirm("Are you sure you want to abort the active training job? If this is a new voice, the dataset will be purged.")) return;
+            try {
+                const res = await fetch('/api/voice/train/cancel', { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    console.log("Training canceled successfully.");
+                } else {
+                    alert("Cancel failed: " + data.error);
+                }
+            } catch (e) {
+                console.error("Cancel training error:", e);
+            }
+        }
+
         async function pollTrainingProgress() {
             try {
-                const res = await fetch('/api/voice/train/progress');
+                const jobIdParam = currentTrainingJob ? `?job_id=${currentTrainingJob.job_id}` : '';
+                const res = await fetch(`/api/voice/train/progress${jobIdParam}`);
                 const data = await res.json();
                 if (!data.success || !data.progress) return;
                 
@@ -6042,10 +6491,42 @@
                 const txt = document.getElementById('vh-stage-text');
                 const msg = document.getElementById('vh-stage-msg');
                 const badge = document.getElementById('vh-job-status-badge');
+                const btnCancel = document.getElementById('btn-cancel-training');
+
+                if (btnCancel) {
+                    btnCancel.style.display = (prog.status === 'training' || prog.status === 'queuing') ? 'block' : 'none';
+                }
+
+                // If polling isn't active but the backend is training (e.g. after page refresh), start it
+                if (prog.status === 'training' || prog.status === 'queuing') {
+                    if (badge && badge.innerText === 'STANDBY') {
+                        badge.innerText = "TRAINING ACTIVE";
+                        badge.style.background = "var(--accent-cyan)";
+                        badge.style.color = "#000";
+                    }
+                    if (!trainPollTimer) {
+                        trainPollTimer = setInterval(pollTrainingProgress, 700);
+                    }
+                }
 
                 if (bar) bar.style.width = `${prog.percent || 0}%`;
                 if (txt) txt.innerText = `${prog.stage_label || 'Working'} (${prog.percent || 0}%)`;
                 if (msg) msg.innerText = prog.message || "Optimizing custom speaker weights in background...";
+
+                // Handle live stats from the training subprocess
+                if (prog.system_stats && prog.system_stats.epoch !== undefined) {
+                    const stats = prog.system_stats;
+                    const statsDiv = document.getElementById('vh-live-stats');
+                    if (statsDiv) statsDiv.style.display = 'block';
+                    
+                    const epEl = document.getElementById('vh-stat-epochs');
+                    const timeEl = document.getElementById('vh-stat-time');
+                    const etaEl = document.getElementById('vh-stat-eta');
+                    
+                    if (epEl) epEl.innerText = `${stats.epoch || 0} / ${stats.total_epochs || '?'}`;
+                    if (timeEl) timeEl.innerText = stats.time_per_epoch ? `${stats.time_per_epoch} s` : '-- s';
+                    if (etaEl) etaEl.innerText = stats.eta_sec ? `${stats.eta_sec} s` : '-- s';
+                }
 
                 if (prog.status === 'finished') {
                     clearInterval(trainPollTimer);
@@ -6055,6 +6536,9 @@
                         badge.style.background = "var(--accent-green)";
                         badge.style.color = "#000";
                     }
+                    const statsDiv = document.getElementById('vh-live-stats');
+                    if (statsDiv) statsDiv.style.display = 'none';
+                    
                     if (prog.last_completed_job) {
                         lastTrainingResult = prog.last_completed_job;
                         displayComparisonPreviews(lastTrainingResult);
@@ -6064,6 +6548,8 @@
                     clearInterval(trainPollTimer);
                     trainPollTimer = null;
                     if (badge) { badge.innerText = "ERROR"; badge.style.background = "var(--accent-pink)"; }
+                    const statsDiv = document.getElementById('vh-live-stats');
+                    if (statsDiv) statsDiv.style.display = 'none';
                 }
             } catch (e) {
                 console.error("Progress polling error:", e);
@@ -6100,10 +6586,10 @@
                 }
                 if (qa.analytics_breakdown) {
                     const ab = qa.analytics_breakdown;
-                    document.getElementById('qual-sim-pct').innerText = `${ab.similarity_percent || 95}%`;
-                    document.getElementById('qual-pitch-pct').innerText = `${ab.pitch_percent || 94}%`;
-                    document.getElementById('qual-emo-pct').innerText = `${ab.emotion_percent || 92}%`;
-                    document.getElementById('qual-noise-pct').innerText = `${ab.noise_percent || 2}%`;
+                    document.getElementById('qual-sim-pct').innerText = `${ab.similarity_percent !== undefined ? ab.similarity_percent : 0}%`;
+                    document.getElementById('qual-pitch-pct').innerText = `${ab.pitch_alignment_percent !== undefined ? ab.pitch_alignment_percent : 0}%`;
+                    document.getElementById('qual-emo-pct').innerText = `${ab.emotion_preserve_percent !== undefined ? ab.emotion_preserve_percent : 0}%`;
+                    document.getElementById('qual-noise-pct').innerText = `${ab.noise_percent !== undefined ? ab.noise_percent : 0}%`;
                 }
             }
 
@@ -6111,7 +6597,14 @@
         }
 
         function triggerRetrain() {
-            startVoiceTraining(true);
+            const addEpochsStr = prompt("Enter additional epochs to retrain:", "10");
+            if (addEpochsStr === null) return; // user cancelled
+            const addEpochs = parseInt(addEpochsStr, 10);
+            if (isNaN(addEpochs) || addEpochs <= 0) {
+                alert("Please enter a valid number of epochs greater than 0.");
+                return;
+            }
+            startVoiceTraining(true, addEpochs);
         }
 
         function openConfirmModal() {
@@ -6166,6 +6659,7 @@
         fetchTranscripts();
         fetchRVCModels();
         fetchVoiceProfiles();
+        pollTrainingProgress(); // Resume progress tracking if training is running on reload
 
         // Viewport Resize Observer for dynamic camera aspect ratio & resolution synchronization
         let resizeTimeout = null;
@@ -6845,6 +7339,9 @@
                         camCanvas.width = 640;
                         camCanvas.height = 480;
                         camCanvas._ctx = camCanvas.getContext('2d');
+                        // Initialize canvas with a black frame to prevent captureStream bug
+                        camCanvas._ctx.fillStyle = '#000000';
+                        camCanvas._ctx.fillRect(0, 0, 640, 480);
                     }
                     const stream = camCanvas.captureStream(30);
                     camVideo.srcObject = stream;
@@ -6960,8 +7457,19 @@
                             _webcamFpsCounter = 0;
                             _webcamFpsLastReset = now;
                         }
+
+                        if (_backendCameraActive) {
+                            requestAnimationFrame(_runBackendCameraPreviewLoop);
+                        }
+                    };
+                    img.onerror = () => {
+                        URL.revokeObjectURL(objectUrl);
+                        if (_backendCameraActive) {
+                            setTimeout(_runBackendCameraPreviewLoop, 33);
+                        }
                     };
                     img.src = objectUrl;
+                    return; // Wait for onload/onerror to schedule next frame
                 } else {
                     if (camFpsBadge) camFpsBadge.innerText = 'OFFLINE';
                     _webcamFpsCounter = 0;

@@ -152,15 +152,16 @@ class CameraManager:
                 try:
                     cap = cv2.VideoCapture(idx, cv2.CAP_DSHOW if os.name == 'nt' else cv2.CAP_ANY)
                     if cap.isOpened():
+                        cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+                        w, h = self._resolution
+                        cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
+                        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
+                        cap.set(cv2.CAP_PROP_FPS, self._target_fps)
                         ret, test_frame = cap.read()
                         if ret and test_frame is not None:
                             self._cap = cap
                             get_resource_manager().register_handle(self._cap, release_fn=lambda c: c.release(), name="camera_capture")
                             self._device_index = idx
-                            w, h = self._resolution
-                            self._cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
-                            self._cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
-                            self._cap.set(cv2.CAP_PROP_FPS, self._target_fps)
                             self._camera_active = True
                             logger.info(f"[CameraManager] Hardware camera #{idx} opened successfully ({w}x{h}).")
                             break
@@ -390,6 +391,27 @@ class CameraManager:
 
         return None, 0.0
 
+    def get_latest_frame_bytes(self) -> Tuple[Optional[bytes], float]:
+        """Returns tuple of (raw_jpeg_bytes, capture_timestamp) for zero-copy web serving."""
+        if is_camera_disabled():
+            return None, 0.0
+        now = time.time()
+        with self._lock:
+            if hasattr(self, "_latest_frame_bytes") and self._latest_frame_bytes and (now - self._latest_frame_time) <= 10.0:
+                return self._latest_frame_bytes, self._latest_frame_time
+        return None, 0.0
+
+    def get_latest_raw_frame(self) -> Tuple[Optional[np.ndarray], float]:
+        """Returns tuple of (raw_numpy_array, capture_timestamp) for zero-copy AI perception."""
+        if is_camera_disabled():
+            return None, 0.0
+        now = time.time()
+        with self._lock:
+            if hasattr(self, "_latest_raw_frame") and self._latest_raw_frame is not None and (now - self._latest_frame_time) <= 10.0:
+                return self._latest_raw_frame, self._latest_frame_time
+        return None, 0.0
+
+
     def is_active(self) -> bool:
         """Returns True if local webcam or external camera stream is actively sending valid frames."""
         if is_camera_disabled() or self._paused:
@@ -422,7 +444,9 @@ class CameraManager:
     # ── Internal capture loop & Perception dispatch ───────────────────────────
 
     def _capture_loop(self):
-        frame_interval = 1.0 / max(1, self._target_fps)
+        # We remove software frame_interval sleep for hardware camera reads.
+        # cv2.VideoCapture.read() is blocking. Adding sleep on top of it causes 
+        # frames to queue in the OS buffer, leading to severe latency/lag.
         while self._running:
             if is_camera_disabled():
                 if self._cap is not None:
@@ -436,7 +460,6 @@ class CameraManager:
                 time.sleep(0.05)
                 continue
 
-            start_t = time.time()
             if self._cap is not None and self._cap.isOpened():
                 try:
                     ret, frame = self._cap.read()
@@ -444,10 +467,13 @@ class CameraManager:
                         # Encode frame to JPEG base64
                         ret_encode, buf = cv2.imencode('.jpg', frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
                         if ret_encode:
-                            b64_str = base64.b64encode(buf.tobytes()).decode('ascii')
+                            raw_bytes = buf.tobytes()
+                            b64_str = base64.b64encode(raw_bytes).decode('ascii')
                             now = time.time()
                             with self._lock:
                                 self._latest_frame_b64 = b64_str
+                                self._latest_frame_bytes = raw_bytes
+                                self._latest_raw_frame = frame
                                 self._latest_frame_time = now
                                 self._camera_active = True
                                 self._frames_captured += 1
@@ -462,6 +488,7 @@ class CameraManager:
                         time.sleep(1.0)
                         self._cap = cv2.VideoCapture(self._device_index, cv2.CAP_DSHOW if os.name == 'nt' else cv2.CAP_ANY)
                         if self._cap.isOpened():
+                            self._cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
                             w, h = self._resolution
                             self._cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
                             self._cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
@@ -472,10 +499,9 @@ class CameraManager:
                 except Exception as ex:
                     logger.warning(f"[CameraManager] Capture error: {ex}")
                     time.sleep(1.0)
-
-            elapsed = time.time() - start_t
-            sleep_time = max(0.001, frame_interval - elapsed)
-            time.sleep(sleep_time)
+            else:
+                # If no hardware camera, sleep to prevent busy loop for stream fallback mode
+                time.sleep(0.05)
 
     def preprocess_camera_frame(self, img_np: np.ndarray) -> np.ndarray:
         """Apply lighting adaptivity (CLAHE), noise reduction, and image normalization to raw camera frames."""

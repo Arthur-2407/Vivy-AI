@@ -2,6 +2,23 @@ import os
 import sys
 import logging
 
+print(f"=== train.py STARTING ===")
+print(f"sys.executable: {sys.executable}")
+print(f"sys._base_executable: {getattr(sys, '_base_executable', 'NONE')}")
+import multiprocessing
+print(f"current_process: {multiprocessing.current_process().name}")
+
+# Fix: On Windows virtualenvs, multiprocessing.spawn uses sys._base_executable
+# (the global Python) instead of sys.executable (the venv Python) to launch
+# child workers. This causes child processes to run outside the virtualenv,
+# missing all dependencies and deadlocking on gloo init.
+# Override _base_executable at module level so it takes effect before
+# mp.Process is called.
+if sys.executable != getattr(sys, '_base_executable', sys.executable):
+    sys._base_executable = sys.executable
+
+os.environ["PYTORCH_JIT"] = "0"
+os.environ["USE_LIBUV"] = "0"
 logger = logging.getLogger(__name__)
 
 now_dir = os.getcwd()
@@ -93,6 +110,11 @@ class EpochRecorder:
 
 
 def main():
+    # Force multiprocessing to use the venv Python executable
+    import multiprocessing.spawn
+    multiprocessing.spawn._python_exe = sys.executable
+    torch.multiprocessing.set_executable(sys.executable)
+
     n_gpus = torch.cuda.device_count()
 
     if torch.cuda.is_available() == False and torch.backends.mps.is_available() == True:
@@ -103,18 +125,28 @@ def main():
         n_gpus = 1
     os.environ["MASTER_ADDR"] = "localhost"
     os.environ["MASTER_PORT"] = str(randint(20000, 55555))
-    children = []
-    logger = utils.get_logger(hps.model_dir)
-    for i in range(n_gpus):
-        subproc = mp.Process(
-            target=run,
-            args=(i, n_gpus, hps, logger),
-        )
-        children.append(subproc)
-        subproc.start()
 
-    for i in range(n_gpus):
-        children[i].join()
+    logger = utils.get_logger(hps.model_dir)
+
+    print(f"=== DEBUG: n_gpus is {n_gpus} ===")
+    if n_gpus == 1:
+        print("=== DEBUG: Taking n_gpus == 1 branch (direct run) ===")
+        # Single GPU/CPU: run directly in this process to avoid Windows venv
+        # multiprocessing deadlock (sys._base_executable points to global Python)
+        run(0, 1, hps, logger)
+    else:
+        print("=== DEBUG: Taking n_gpus > 1 branch (mp.Process spawn) ===")
+        children = []
+        for i in range(n_gpus):
+            subproc = mp.Process(
+                target=run,
+                args=(i, n_gpus, hps, logger),
+            )
+            children.append(subproc)
+            subproc.start()
+
+        for i in range(n_gpus):
+            children[i].join()
 
 
 def run(rank, n_gpus, hps, logger: logging.Logger):
@@ -154,13 +186,11 @@ def run(rank, n_gpus, hps, logger: logging.Logger):
         collate_fn = TextAudioCollate()
     train_loader = DataLoader(
         train_dataset,
-        num_workers=4,
+        num_workers=0,
         shuffle=False,
-        pin_memory=True,
+        pin_memory=False,
         collate_fn=collate_fn,
         batch_sampler=train_sampler,
-        persistent_workers=True,
-        prefetch_factor=8,
     )
     if hps.if_f0 == 1:
         net_g = RVC_Model_f0(
@@ -198,10 +228,10 @@ def run(rank, n_gpus, hps, logger: logging.Logger):
     # net_d = DDP(net_d, device_ids=[rank], find_unused_parameters=True)
     if hasattr(torch, "xpu") and torch.xpu.is_available():
         pass
-    elif torch.cuda.is_available():
+    elif torch.cuda.is_available() and n_gpus > 1:
         net_g = DDP(net_g, device_ids=[rank])
         net_d = DDP(net_d, device_ids=[rank])
-    else:
+    elif not torch.cuda.is_available() and n_gpus > 1:
         net_g = DDP(net_g)
         net_d = DDP(net_d)
 
@@ -218,8 +248,11 @@ def run(rank, n_gpus, hps, logger: logging.Logger):
         global_step = (epoch_str - 1) * len(train_loader)
         # epoch_str = 1
         # global_step = 0
-    except:  # 如果首次不能加载，加载pretrain
-        # traceback.print_exc()
+    except Exception as e:  # 如果首次不能加载，加载pretrain
+        import traceback
+        if rank == 0:
+            logger.info(f"Failed to load checkpoint: {e}")
+            logger.info(traceback.format_exc())
         epoch_str = 1
         global_step = 0
         if hps.pretrainG != "":
@@ -228,13 +261,13 @@ def run(rank, n_gpus, hps, logger: logging.Logger):
             if hasattr(net_g, "module"):
                 logger.info(
                     net_g.module.load_state_dict(
-                        torch.load(hps.pretrainG, map_location="cpu")["model"]
+                        torch.load(hps.pretrainG, map_location="cpu", weights_only=False)["model"]
                     )
                 )  ##测试不加载优化器
             else:
                 logger.info(
                     net_g.load_state_dict(
-                        torch.load(hps.pretrainG, map_location="cpu")["model"]
+                        torch.load(hps.pretrainG, map_location="cpu", weights_only=False)["model"]
                     )
                 )  ##测试不加载优化器
         if hps.pretrainD != "":
@@ -243,13 +276,13 @@ def run(rank, n_gpus, hps, logger: logging.Logger):
             if hasattr(net_d, "module"):
                 logger.info(
                     net_d.module.load_state_dict(
-                        torch.load(hps.pretrainD, map_location="cpu")["model"]
+                        torch.load(hps.pretrainD, map_location="cpu", weights_only=False)["model"]
                     )
                 )
             else:
                 logger.info(
                     net_d.load_state_dict(
-                        torch.load(hps.pretrainD, map_location="cpu")["model"]
+                        torch.load(hps.pretrainD, map_location="cpu", weights_only=False)["model"]
                     )
                 )
 
@@ -618,6 +651,14 @@ def train_and_evaluate(
         logger.info("====> Epoch: {} {}".format(epoch, epoch_recorder.record()))
     if epoch >= hps.total_epoch and rank == 0:
         logger.info("Training is done. The program is closed.")
+        
+        # [CRITICAL FIX] Always save the latest checkpoint at the very end to prevent retraining from losing progress or starting from 1
+        if hps.if_latest == 0:
+            utils.save_checkpoint(net_g, optim_g, hps.train.learning_rate, epoch, os.path.join(hps.model_dir, "G_{}.pth".format(global_step)))
+            utils.save_checkpoint(net_d, optim_d, hps.train.learning_rate, epoch, os.path.join(hps.model_dir, "D_{}.pth".format(global_step)))
+        else:
+            utils.save_checkpoint(net_g, optim_g, hps.train.learning_rate, epoch, os.path.join(hps.model_dir, "G_2333333.pth"))
+            utils.save_checkpoint(net_d, optim_d, hps.train.learning_rate, epoch, os.path.join(hps.model_dir, "D_2333333.pth"))
 
         if hasattr(net_g, "module"):
             ckpt = net_g.module.state_dict()
@@ -636,5 +677,6 @@ def train_and_evaluate(
 
 
 if __name__ == "__main__":
+    torch.multiprocessing.set_executable(sys.executable)
     torch.multiprocessing.set_start_method("spawn")
     main()

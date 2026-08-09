@@ -371,18 +371,23 @@ class HybridTranslationEngine:
 
         try:
             self._nllb_tokenizer.src_lang = src_nllb
-            tokens = self._nllb_tokenizer(text, return_tensors="pt", truncation=True, max_length=max_tokens)
-            input_ids = tokens["input_ids"][0].tolist()
+            source_tokens = self._nllb_tokenizer.convert_ids_to_tokens(self._nllb_tokenizer.encode(text, truncation=True, max_length=max_tokens))
 
-            # Get target language token id
-            tgt_token = self._nllb_tokenizer.convert_tokens_to_ids(tgt_nllb)
+            # Target language token prefix
+            target_prefix = [tgt_nllb]
 
             result = self._nllb_translator.translate_batch(
-                [input_ids],
-                target_prefix=[[tgt_token]],
+                [source_tokens],
+                target_prefix=[target_prefix],
                 beam_size=beam_size,
             )
-            output_ids = result[0].hypotheses[0]
+            output_tokens = result[0].hypotheses[0]
+            
+            # The output may include the target prefix, decode it cleanly
+            if output_tokens and output_tokens[0] == tgt_nllb:
+                output_tokens = output_tokens[1:]
+                
+            output_ids = self._nllb_tokenizer.convert_tokens_to_ids(output_tokens)
             translated = self._nllb_tokenizer.decode(output_ids, skip_special_tokens=True)
 
             # Score the translation

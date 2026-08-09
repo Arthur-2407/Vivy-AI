@@ -17,6 +17,7 @@ No existing pipeline files are modified by this module.
 """
 
 import os
+import vivy_env
 import sys
 import json
 import time

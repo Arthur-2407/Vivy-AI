@@ -2,6 +2,8 @@ import os
 import sys
 import traceback
 
+now_dir = os.getcwd()
+
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = "0.0"
 
@@ -12,6 +14,10 @@ if len(sys.argv) == 7:
     exp_dir = sys.argv[4]
     version = sys.argv[5]
     is_half = sys.argv[6].lower() == "true"
+    # CPU-only path: blank CUDA_VISIBLE_DEVICES BEFORE any torch/fairseq import
+    # to prevent xformers/CUTLASS FMHA kernel crash on incompatible GPU (sm_120)
+    if device == "cpu":
+        os.environ["CUDA_VISIBLE_DEVICES"] = ""
 else:
     i_gpu = sys.argv[4]
     exp_dir = sys.argv[5]
@@ -25,11 +31,17 @@ import torch
 import torch.nn.functional as F
 
 if "privateuseone" not in device:
-    device = "cpu"
-    if torch.cuda.is_available():
-        device = "cuda"
-    elif torch.backends.mps.is_available():
-        device = "mps"
+    if device != "cpu":
+        if torch.cuda.is_available():
+            device = "cuda"
+            # Disable Flash/MemEfficient SDP to avoid CUTLASS kernel mismatch on unsupported GPUs
+            try:
+                torch.backends.cuda.enable_flash_sdp(False)
+                torch.backends.cuda.enable_mem_efficient_sdp(False)
+            except Exception:
+                pass
+        elif torch.backends.mps.is_available():
+            device = "mps"
 else:
     import torch_directml
 
@@ -52,7 +64,7 @@ def printt(strr):
 
 
 printt(" ".join(sys.argv))
-model_path = "assets/hubert/hubert_base.pt"
+model_path = os.path.join(now_dir, "assets", "hubert", "hubert_base.pt")
 
 printt("exp_dir: " + exp_dir)
 wavPath = "%s/1_16k_wavs" % exp_dir
@@ -85,7 +97,7 @@ if os.access(model_path, os.F_OK) == False:
         "Error: Extracting is shut down because %s does not exist, you may download it from https://huggingface.co/lj1995/VoiceConversionWebUI/tree/main"
         % model_path
     )
-    exit(0)
+    sys.exit(1)
 models, saved_cfg, task = fairseq.checkpoint_utils.load_model_ensemble_and_task(
     [model_path],
     suffix="",

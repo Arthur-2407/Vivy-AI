@@ -30,19 +30,19 @@ class VoiceDatabase:
         with self._lock:
             defaults = [
                 {
-                    "voice_id": "vivy_anime_01",
-                    "name": "Vivy Anime Girl",
-                    "model_filename": "vivy_anime_female.pth",
+                    "voice_id": "natural_anime_01",
+                    "name": "Natural Anime Girl",
+                    "model_filename": "natural_anime_female.pth",
                     "language_support": ["en", "ja", "hi", "es", "ru", "fr", "ko", "pt", "de", "zh", "it", "ar", "all"],
                     "training_iterations": 1,
                     "sample_rate": 48000,
-                    "created": "2026-08-05T12:00:00Z",
-                    "quality_score": 99,
-                    "favorite": True,
-                    "style_compatibility": ["Professional", "Soft", "Cheerful", "Calm", "Energetic"],
+                    "created": "2026-08-09T12:00:00Z",
+                    "quality_score": 95,
+                    "favorite": False,
+                    "style_compatibility": ["Soft", "Calm", "Natural"],
                     "gender": "female",
-                    "vocal_character": "anime_girl",
-                    "description": "Vibrant, expressive female anime vocal identity with automated emotional modulation & multilingual synthesis."
+                    "vocal_character": "natural_anime_girl",
+                    "description": "A more natural, softer female anime vocal identity."
                 }
             ]
             for d in defaults:
@@ -114,7 +114,7 @@ class VoiceDatabase:
 
     def delete_profile(self, voice_id: str) -> bool:
         with self._lock:
-            if voice_id in self.profiles and voice_id != "vivy_anime_01":
+            if voice_id in self.profiles and voice_id != "natural_anime_01":
                 del self.profiles[voice_id]
                 self.save_database()
                 return True

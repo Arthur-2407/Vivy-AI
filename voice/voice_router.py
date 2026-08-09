@@ -36,8 +36,8 @@ class LanguageVoiceRouter:
         strategy = {
             "lang_code": lang_code,
             "voice_id": selected_vid,
-            "voice_name": active_voice.get("name", "Vivy Anime Girl"),
-            "model_filename": active_voice.get("model_filename", "vivy_anime_female.pth"),
+            "voice_name": active_voice.get("name", "Natural Anime Girl"),
+            "model_filename": active_voice.get("model_filename", "natural_anime_female.pth"),
             "active_style": active_voice.get("active_style", "Professional"),
             "style_params": active_voice.get("style_parameters", {}),
             "use_neural_xtts": lang_code.lower() in self.native_neural_dialects or is_supported,

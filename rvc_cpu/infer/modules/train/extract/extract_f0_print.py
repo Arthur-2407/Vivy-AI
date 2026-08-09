@@ -85,9 +85,22 @@ class FeatureInput(object):
             if hasattr(self, "model_rmvpe") == False:
                 from infer.lib.rmvpe import RMVPE
 
-                print("Loading rmvpe model")
+                # Resolve rmvpe.pt absolute path from the rvc root directory (now_dir)
+                rmvpe_model_path = os.path.join(now_dir, "assets", "rmvpe", "rmvpe.pt")
+                if not os.path.exists(rmvpe_model_path):
+                    printt(f"[F0] rmvpe.pt not found at {rmvpe_model_path}, falling back to harvest method")
+                    f0, t = pyworld.harvest(
+                        x.astype(np.double),
+                        fs=self.fs,
+                        f0_ceil=self.f0_max,
+                        f0_floor=self.f0_min,
+                        frame_period=1000 * self.hop / self.fs,
+                    )
+                    f0 = pyworld.stonemask(x.astype(np.double), f0, t, self.fs)
+                    return f0
+                print("Loading rmvpe model from: " + rmvpe_model_path)
                 self.model_rmvpe = RMVPE(
-                    "assets/rmvpe/rmvpe.pt", is_half=False, device="cpu"
+                    rmvpe_model_path, is_half=False, device="cpu"
                 )
             f0 = self.model_rmvpe.infer_from_audio(x, thred=0.03)
         return f0

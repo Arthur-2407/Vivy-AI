@@ -151,7 +151,15 @@ class PerceptionRunner:
         
         # Fast path conversion
         img_np, h, w = (None, 0, 0)
-        if self.gpu_pool.face_detector:
+        
+        # Zero-copy AI memory path
+        if hasattr(self.camera_manager, "get_latest_raw_frame"):
+            raw_np, _ = self.camera_manager.get_latest_raw_frame()
+            if raw_np is not None:
+                img_np = raw_np
+                h, w = img_np.shape[:2]
+
+        if img_np is None and self.gpu_pool.face_detector and frame_b64:
             img_np, h, w = self.gpu_pool.face_detector._to_numpy_bgr(frame_b64)
 
         status_flag = "active"

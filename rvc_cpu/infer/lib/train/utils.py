@@ -19,7 +19,7 @@ logger = logging
 
 def load_checkpoint_d(checkpoint_path, combd, sbd, optimizer=None, load_opt=1):
     assert os.path.isfile(checkpoint_path)
-    checkpoint_dict = torch.load(checkpoint_path, map_location="cpu")
+    checkpoint_dict = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
 
     ##################
     def go(model, bkey):
@@ -70,7 +70,7 @@ def load_checkpoint_d(checkpoint_path, combd, sbd, optimizer=None, load_opt=1):
 
 # def load_checkpoint(checkpoint_path, model, optimizer=None):
 #   assert os.path.isfile(checkpoint_path)
-#   checkpoint_dict = torch.load(checkpoint_path, map_location='cpu')
+#   checkpoint_dict = torch.load(checkpoint_path, map_location='cpu', weights_only=False)
 #   iteration = checkpoint_dict['iteration']
 #   learning_rate = checkpoint_dict['learning_rate']
 #   if optimizer is not None:
@@ -99,7 +99,7 @@ def load_checkpoint_d(checkpoint_path, combd, sbd, optimizer=None, load_opt=1):
 #   return model, optimizer, learning_rate, iteration
 def load_checkpoint(checkpoint_path, model, optimizer=None, load_opt=1):
     assert os.path.isfile(checkpoint_path)
-    checkpoint_dict = torch.load(checkpoint_path, map_location="cpu")
+    checkpoint_dict = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
 
     saved_state_dict = checkpoint_dict["model"]
     if hasattr(model, "module"):
@@ -235,8 +235,7 @@ def plot_spectrogram_to_numpy(spectrogram):
     plt.tight_layout()
 
     fig.canvas.draw()
-    data = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep="")
-    data = data.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+    data = np.asarray(fig.canvas.buffer_rgba(), dtype=np.uint8)[..., :3]
     plt.close()
     return data
 
@@ -266,8 +265,7 @@ def plot_alignment_to_numpy(alignment, info=None):
     plt.tight_layout()
 
     fig.canvas.draw()
-    data = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep="")
-    data = data.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+    data = np.asarray(fig.canvas.buffer_rgba(), dtype=np.uint8)[..., :3]
     plt.close()
     return data
 

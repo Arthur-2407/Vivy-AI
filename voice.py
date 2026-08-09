@@ -25,6 +25,65 @@ except ImportError:
     _mock_pkg.resource_filename = _mock_resource_filename
     sys.modules["pkg_resources"] = _mock_pkg
 
+import json
+import subprocess
+
+# ===============================
+# Emotion-Aware TTS Pipeline
+# ===============================
+def get_current_emotion():
+    try:
+        e_state_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "shared", "emotion_state.json")
+        if os.path.exists(e_state_path):
+            with open(e_state_path, "r", encoding="utf-8") as f:
+                state = json.load(f)
+                return state.get("primary_emotion", "neutral")
+    except Exception as e:
+        print(f"[Voice] Could not read emotion_state.json: {e}")
+    return "neutral"
+
+def synthesize_edge_tts_emotion(text, output_path, emotion_label):
+    rate = "+0%"
+    pitch = "+0Hz"
+    
+    emo = emotion_label.lower()
+    if emo == "joy":
+        rate = "+10%"
+        pitch = "+5Hz"
+    elif emo == "sadness":
+        rate = "-15%"
+        pitch = "-5Hz"
+    elif emo == "anger":
+        rate = "+15%"
+        pitch = "-2Hz"
+    elif emo == "fear":
+        rate = "+5%"
+        pitch = "+10Hz"
+    elif emo == "surprise":
+        rate = "+15%"
+        pitch = "+10Hz"
+    elif emo == "disgust":
+        rate = "-5%"
+        pitch = "-5Hz"
+        
+    edge_tts_cmd = os.path.join(os.path.dirname(sys.executable), "edge-tts")
+    if not os.path.exists(edge_tts_cmd) and not os.path.exists(edge_tts_cmd + ".exe"):
+        edge_tts_cmd = "edge-tts"
+        
+    cmd = [
+        edge_tts_cmd,
+        "--text", text,
+        "--write-media", output_path,
+        "--voice", "en-US-AriaNeural",
+        f"--rate={rate}",
+        f"--pitch={pitch}"
+    ]
+    try:
+        subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return True
+    except Exception as e:
+        print(f"[Voice] Edge-TTS synthesis failed: {e}")
+        return False
 
 # ===============================
 # Create recordings folder
@@ -253,12 +312,20 @@ def speak(text):
     )
 
     # Generate speech
-    with suppress_output():
-        tts.tts_to_file(
-            text=text,
-            file_path=output_file,
-            speaker=None
-        )
+    emotion_label = get_current_emotion()
+    success = False
+    try:
+        success = synthesize_edge_tts_emotion(text, output_file, emotion_label)
+    except Exception as e:
+        print(f"[Voice] Emotion pipeline error: {e}")
+
+    if not success or not os.path.exists(output_file):
+        with suppress_output():
+            tts.tts_to_file(
+                text=text,
+                file_path=output_file,
+                speaker=None
+            )
 
     # Load audio
     data, samplerate = sf.read(output_file, dtype="float32")
@@ -283,12 +350,20 @@ def generate_tts_only(text, output_path):
     
     # Generate speech with resilient error recovery
     try:
-        with suppress_output():
-            tts.tts_to_file(
-                text=text,
-                file_path=output_path,
-                speaker=None
-            )
+        emotion_label = get_current_emotion()
+        success = False
+        try:
+            success = synthesize_edge_tts_emotion(text, output_path, emotion_label)
+        except Exception as e:
+            print(f"[Voice] Emotion pipeline error: {e}")
+
+        if not success or not os.path.exists(output_path):
+            with suppress_output():
+                tts.tts_to_file(
+                    text=text,
+                    file_path=output_path,
+                    speaker=None
+                )
     except Exception as synth_err:
         print(f"[Voice] Primary synthesis exception ({synth_err}), executing resilient pyttsx3 offline fallback...")
         try:

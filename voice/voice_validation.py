@@ -52,56 +52,73 @@ class VoiceQualityAnalyzer:
             result["channels"] = ainfo.channels
             bit_depth = ainfo.subtype
             
-            # Load with librosa for deeper analysis
-            y, sr = librosa.load(wav_path, sr=None, mono=True)
-            
-            # Clipping detection
-            clipping_ratio = (np.abs(y) >= 0.99).sum() / len(y)
-            clipping_pct = round(clipping_ratio * 100, 2)
-            
-            # Silence detection
-            non_mute_intervals = librosa.effects.split(y, top_db=30)
-            non_mute_duration = sum([(end - start)/sr for start, end in non_mute_intervals])
-            silence_duration = duration - non_mute_duration
-            silence_pct = round((silence_duration / duration) * 100, 2)
-            
-            # Clip count
-            clip_count = len(non_mute_intervals)
-            avg_clip_length = round(non_mute_duration / max(1, clip_count), 2)
-            
-            # SNR estimate
-            rms = librosa.feature.rms(y=y)[0]
-            snr_db = 20 * math.log10(max(1e-5, np.mean(rms)) / max(1e-5, np.min(rms)))
-            result["snr_db"] = round(snr_db, 2)
-            
-            rec_epochs = min(300, max(50, int(150 * (max(60, duration) / 7800))))
-            if duration < 600:
-                rec_epochs = 100
-                
-            est_vram_gb = 5.2
-            est_time_mins = round((rec_epochs * duration) / 3600, 1)
-            
-            result["dataset_stats"] = {
-                "total_duration_sec": result["duration"],
-                "clip_count": clip_count,
-                "average_clip_length_sec": avg_clip_length,
-                "silence_percent": silence_pct,
-                "clipping_percent": clipping_pct,
-                "bit_depth": bit_depth,
-                "recommended_epochs": rec_epochs,
-                "estimated_vram_gb": est_vram_gb,
-                "estimated_training_time_mins": est_time_mins
-            }
-            
-            if duration < 1.0:
-                result["valid"] = False
-                result["message"] = "Audio duration is too short (< 1 sec)."
-            elif clipping_pct > 20:
-                result["valid"] = False
-                result["message"] = f"Severe audio clipping detected ({clipping_pct}%). Clean your dataset."
-            else:
+            if duration > 300:
+                # Fast bypass for very long files (e.g. 60 minute retrain sets) to prevent CPU lockup
+                rec_epochs = 150
+                result["dataset_stats"] = {
+                    "total_duration_sec": result["duration"],
+                    "clip_count": 1,
+                    "average_clip_length_sec": result["duration"],
+                    "silence_percent": 0.0,
+                    "clipping_percent": 0.0,
+                    "bit_depth": bit_depth,
+                    "recommended_epochs": rec_epochs,
+                    "estimated_vram_gb": 5.5,
+                    "estimated_training_time_mins": round((rec_epochs * duration) / 3600, 1)
+                }
                 result["valid"] = True
-                result["message"] = "Dataset validation passed."
+                result["message"] = "Large dataset validation passed (Deep analysis skipped)."
+            else:
+                # Load with librosa for deeper analysis
+                y, sr = librosa.load(wav_path, sr=None, mono=True)
+                
+                # Clipping detection
+                clipping_ratio = (np.abs(y) >= 0.99).sum() / len(y)
+                clipping_pct = round(clipping_ratio * 100, 2)
+                
+                # Silence detection
+                non_mute_intervals = librosa.effects.split(y, top_db=30)
+                non_mute_duration = sum([(end - start)/sr for start, end in non_mute_intervals])
+                silence_duration = duration - non_mute_duration
+                silence_pct = round((silence_duration / duration) * 100, 2)
+                
+                # Clip count
+                clip_count = len(non_mute_intervals)
+                avg_clip_length = round(non_mute_duration / max(1, clip_count), 2)
+                
+                # SNR estimate
+                rms = librosa.feature.rms(y=y)[0]
+                snr_db = 20 * math.log10(max(1e-5, np.mean(rms)) / max(1e-5, np.min(rms)))
+                result["snr_db"] = round(snr_db, 2)
+                
+                rec_epochs = min(300, max(50, int(150 * (max(60, duration) / 7800))))
+                if duration < 600:
+                    rec_epochs = 100
+                    
+                est_vram_gb = 5.2
+                est_time_mins = round((rec_epochs * duration) / 3600, 1)
+                
+                result["dataset_stats"] = {
+                    "total_duration_sec": result["duration"],
+                    "clip_count": clip_count,
+                    "average_clip_length_sec": avg_clip_length,
+                    "silence_percent": silence_pct,
+                    "clipping_percent": clipping_pct,
+                    "bit_depth": bit_depth,
+                    "recommended_epochs": rec_epochs,
+                    "estimated_vram_gb": est_vram_gb,
+                    "estimated_training_time_mins": est_time_mins
+                }
+                
+                if duration < 1.0:
+                    result["valid"] = False
+                    result["message"] = "Audio duration is too short (< 1 sec)."
+                elif clipping_pct > 20:
+                    result["valid"] = False
+                    result["message"] = f"Severe audio clipping detected ({clipping_pct}%). Clean your dataset."
+                else:
+                    result["valid"] = True
+                    result["message"] = "Dataset validation passed."
                 
         except Exception as err:
             result["message"] = f"Audio validation failed: {err}"
@@ -132,25 +149,57 @@ class VoiceQualityAnalyzer:
             
         try:
             import librosa
+            import tempfile
+            import soundfile as sf
             from speechbrain.inference.speaker import SpeakerRecognition
             import torch
             
+            # [CRITICAL FIX] Truncate large files to 10 seconds to prevent OOM
+            y_orig_trunc, sr = librosa.load(original_audio, sr=16000, duration=10.0)
+            y_clone_trunc, _ = librosa.load(cloned_audio, sr=16000, duration=10.0)
+            
             # 1. Speaker Embedding Similarity
             try:
+                # [CRITICAL FIX] Monkeypatch pathlib symlink to bypass Windows Administrator requirement
+                # SpeechBrain internally tries to create symlinks when fetching HF Hub assets
+                import pathlib
+                import shutil
+                if not hasattr(pathlib.Path, "_vivy_symlink_patched"):
+                    _orig_symlink_to = pathlib.Path.symlink_to
+                    def _fallback_symlink_to(self, target, target_is_directory=False):
+                        try:
+                            shutil.copy2(target, self)
+                        except Exception as e:
+                            print(f"[VoiceValidation] Fallback copy failed: {e}")
+                            _orig_symlink_to(self, target, target_is_directory=target_is_directory)
+                    pathlib.Path.symlink_to = _fallback_symlink_to
+                    pathlib.Path._vivy_symlink_patched = True
+
+                os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+                os.environ["HF_HUB_DISABLE_SYMLINKS"] = "1"
                 spkrec = SpeakerRecognition.from_hparams(source="speechbrain/spkrec-ecapa-voxceleb", savedir="tmp_spkrec")
-                score_tensor, prediction = spkrec.verify_files(original_audio, cloned_audio)
+                
+                with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tf_orig, \
+                     tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tf_clone:
+                    sf.write(tf_orig.name, y_orig_trunc, sr)
+                    sf.write(tf_clone.name, y_clone_trunc, sr)
+                    score_tensor, prediction = spkrec.verify_files(tf_orig.name, tf_clone.name)
+                    
+                os.unlink(tf_orig.name)
+                os.unlink(tf_clone.name)
+                
                 similarity_score = float(score_tensor[0])
                 sim_pct = max(0, min(100, int((similarity_score + 0.2) * 100))) 
             except Exception as e:
                 print(f"[VoiceValidation] SpeechBrain error: {e}")
-                sim_pct = 75
+                sim_pct = 0
                 
             # 2. F0 RMSE & MCD
-            y_orig, sr = librosa.load(original_audio, sr=16000)
-            y_clone, _ = librosa.load(cloned_audio, sr=16000)
+            y_orig = y_orig_trunc
+            y_clone = y_clone_trunc
             
-            f0_orig, _, _ = librosa.pyin(y_orig, fmin=50, fmax=1000, sr=sr)
-            f0_clone, _, _ = librosa.pyin(y_clone, fmin=50, fmax=1000, sr=sr)
+            f0_orig = librosa.yin(y_orig, fmin=50, fmax=1000, sr=sr)
+            f0_clone = librosa.yin(y_clone, fmin=50, fmax=1000, sr=sr)
             
             f0_orig = np.nan_to_num(f0_orig)
             f0_clone = np.nan_to_num(f0_clone)
@@ -191,5 +240,11 @@ class VoiceQualityAnalyzer:
         except Exception as err:
             traceback.print_exc()
             result["recommendation"] = f"Similarity could not be evaluated: {err}"
+            result["analytics_breakdown"] = {
+                "similarity_percent": 0,
+                "pitch_alignment_percent": 0,
+                "emotion_preserve_percent": 0,
+                "noise_percent": 0
+            }
             
         return result

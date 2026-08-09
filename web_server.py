@@ -1,4 +1,5 @@
 import os
+import vivy_env
 os.environ["VIVY_PROCESS_ROLE"] = "web_server"
 import sys
 import time
@@ -1899,11 +1900,9 @@ def receive_camera_frame():
         try:
             from perception.camera_manager import get_camera_manager
             cam = get_camera_manager()
-            frame_b64, _ = cam.get_latest_frame()
-            if frame_b64:
-                import base64
+            raw_jpg, _ = cam.get_latest_frame_bytes()
+            if raw_jpg:
                 from flask import Response
-                raw_jpg = base64.b64decode(frame_b64)
                 resp = Response(raw_jpg, mimetype="image/jpeg")
                 resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
                 return resp
@@ -2452,11 +2451,69 @@ def select_voice_api():
     try:
         from voice.voice_manager import get_voice_manager
         data = request.json or {}
-        voice_id_or_name = data.get("voice", "vivy_anime_01")
+        voice_id_or_name = data.get("voice", "natural_anime_01")
         style = data.get("style", None)
         mgr = get_voice_manager()
         success = mgr.select_voice(voice_id_or_name, style_name=style)
         return jsonify({"success": success, "active_voice": mgr.get_active_voice()})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/voice/preview_generate", methods=["POST"])
+def generate_voice_preview_api():
+    try:
+        from voice.voice_manager import get_voice_manager
+        import voice
+        import xmlrpc.client
+        
+        data = request.json or {}
+        voice_id = data.get("voice_id")
+        prompt = data.get("prompt")
+        
+        if not voice_id or not prompt:
+            return jsonify({"success": False, "error": "Missing voice_id or prompt"}), 400
+            
+        mgr = get_voice_manager()
+        profile = mgr.db.get_profile(voice_id)
+        if not profile:
+            return jsonify({"success": False, "error": "Voice profile not found"}), 404
+            
+        model_filename = profile.get("model_filename")
+        if not model_filename:
+            return jsonify({"success": False, "error": "No RVC model associated with this profile"}), 400
+            
+        previews_dir = os.path.join(SHARED_DIR, "previews")
+        os.makedirs(previews_dir, exist_ok=True)
+        
+        # Unique ID for concurrent safety
+        req_id = str(uuid.uuid4())[:8]
+        tmp_tts = os.path.join(previews_dir, f"preview_tts_{req_id}.wav")
+        tmp_rvc = os.path.join(previews_dir, f"preview_rvc_{req_id}.wav")
+        
+        # Generate TTS audio base safely
+        voice.generate_tts_only(prompt, tmp_tts)
+        if not os.path.exists(tmp_tts):
+            return jsonify({"success": False, "error": "TTS synthesis failed"}), 500
+            
+        # Ping background RVC RPC server
+        try:
+            proxy = xmlrpc.client.ServerProxy("http://127.0.0.1:8766", allow_none=True)
+            res = proxy.convert_voice(tmp_tts, tmp_rvc, 0, "rmvpe", model_filename)
+            if res.get("status") == "error":
+                return jsonify({"success": False, "error": f"RVC Server Error: {res.get('message')}"}), 500
+        except Exception as rpc_err:
+            return jsonify({"success": False, "error": f"RPC Connection Failed: {str(rpc_err)}"}), 500
+            
+        if not os.path.exists(tmp_rvc):
+            return jsonify({"success": False, "error": "RVC conversion failed to produce audio"}), 500
+            
+        # Cleanup temporary TTS file
+        try: os.remove(tmp_tts)
+        except: pass
+        
+        preview_url = f"/api/voice/preview_audio?file={os.path.basename(tmp_rvc)}"
+        return jsonify({"success": True, "preview_url": preview_url})
+        
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
@@ -2470,6 +2527,81 @@ def get_voice_styles_api():
         active = mgr.get_active_voice()
         styles_meta = [pm.get_style_parameters(s) for s in pm.list_styles()]
         return jsonify({"success": True, "styles": styles_meta, "active_style": active.get("active_style", "Professional")})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/voice/rvc_projects", methods=["GET"])
+def get_rvc_projects_api():
+    try:
+        from voice.voice_manager import get_voice_manager
+        mgr = get_voice_manager()
+        profiles = mgr.db.list_profiles()
+        # Filter out built-in voices (specifically natural_anime_01)
+        rvc_voices = [p for p in profiles if p.get("voice_id") != "natural_anime_01"]
+        return jsonify({"success": True, "profiles": rvc_voices})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/voice/rename", methods=["POST"])
+def rename_voice_api():
+    try:
+        from voice.voice_manager import get_voice_manager
+        data = request.json or {}
+        voice_id = data.get("voice_id")
+        new_name = data.get("new_name")
+        if not voice_id or not new_name:
+            return jsonify({"success": False, "error": "Missing voice_id or new_name"}), 400
+            
+        mgr = get_voice_manager()
+        updated = mgr.db.update_profile(voice_id, {"name": new_name})
+        if not updated:
+            return jsonify({"success": False, "error": "Voice not found"}), 404
+        return jsonify({"success": True, "profile": updated})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/voice/remove", methods=["POST"])
+def remove_voice_api():
+    try:
+        from voice.voice_manager import get_voice_manager
+        data = request.json or {}
+        voice_id = data.get("voice_id")
+        if not voice_id:
+            return jsonify({"success": False, "error": "Missing voice_id"}), 400
+            
+        if voice_id == "natural_anime_01":
+            return jsonify({"success": False, "error": "Cannot delete the built-in system voice."}), 403
+            
+        mgr = get_voice_manager()
+        profile = mgr.db.get_profile(voice_id)
+        if not profile:
+            return jsonify({"success": False, "error": "Voice not found"}), 404
+            
+        model_filename = profile.get("model_filename")
+        
+        # 1. Delete from DB
+        success = mgr.db.delete_profile(voice_id)
+        if not success:
+            return jsonify({"success": False, "error": "Failed to delete profile from database."}), 500
+            
+        # 2. Aggressive disk cleanup
+        try:
+            import shutil
+            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            # Delete weights
+            if model_filename:
+                weights_path = os.path.join(base_dir, "rvc_cpu", "assets", "weights", model_filename)
+                if os.path.exists(weights_path):
+                    os.remove(weights_path)
+            # Delete dataset/logs
+            logs_path = os.path.join(base_dir, "rvc_cpu", "logs", voice_id)
+            if os.path.exists(logs_path):
+                shutil.rmtree(logs_path, ignore_errors=True)
+        except Exception as cleanup_err:
+            print(f"[Cleanup Error] {cleanup_err}")
+            # Non-fatal if we can't clean the disk perfectly, the DB entry is gone
+            
+        return jsonify({"success": True})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
@@ -2504,10 +2636,18 @@ def train_voice_model_api():
         voice_id = data.get("voice_id", None)
         iterations = int(data.get("iterations", 1))
         is_retrain = bool(data.get("is_retrain", False))
+        job_mode = "INCREMENTAL_RETRAINING" if is_retrain else "FRESH_TRAINING"
+        
+        # Enforce Mode Separation: Fresh Training MUST NOT inherit an existing voice ID
+        if not is_retrain:
+            voice_id = None
         base_quality = data.get("base_quality", None)
 
-        if not audio_path or not os.path.exists(audio_path):
+        # Allow empty audio path ONLY if it's an incremental retrain
+        if job_mode == "FRESH_TRAINING" and (not audio_path or not os.path.exists(audio_path)):
             return jsonify({"success": False, "error": "Audio source path invalid or file missing on host."}), 400
+        elif job_mode == "INCREMENTAL_RETRAINING" and audio_path and not os.path.exists(audio_path):
+            return jsonify({"success": False, "error": "Provided audio source path does not exist."}), 400
 
         tm = get_voice_training_manager()
         job = tm.enqueue_training_job(
@@ -2515,10 +2655,33 @@ def train_voice_model_api():
             voice_name=voice_name,
             voice_id=voice_id,
             iterations=iterations,
-            is_retrain=is_retrain,
+            job_mode=job_mode,
             base_quality=base_quality
         )
         return jsonify({"success": True, "job": job})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/voice/train/cancel", methods=["POST"])
+def cancel_voice_train_api():
+    try:
+        from voice.voice_training import get_voice_training_manager
+        tm = get_voice_training_manager()
+        success = tm.cancel_training()
+        if not success:
+            return jsonify({"success": False, "error": "No active training job to cancel."}), 400
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/voice/train/alert", methods=["POST"])
+def voice_train_alert_api():
+    try:
+        from voice.voice_manager import get_voice_manager
+        mgr = get_voice_manager()
+        data = request.json or {}
+        mgr.notify_realtime_event("training_alert", data)
+        return jsonify({"success": True})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
@@ -2530,8 +2693,9 @@ def get_voice_train_progress_api():
         tm = get_voice_training_manager()
         mgr = get_voice_manager()
         since = float(request.args.get("since", "0"))
+        job_id = request.args.get("job_id", "")
         events = mgr.get_recent_events(since_timestamp=since)
-        return jsonify({"success": True, "progress": tm.get_progress(), "events": events, "timestamp": time.time()})
+        return jsonify({"success": True, "progress": tm.get_progress(job_id), "events": events, "timestamp": time.time()})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 

@@ -9,17 +9,44 @@ venv_rvc/
 .vscode/
 .vs/
 
-# ── AI Model Weights & Checkpoints (Prevent GitHub >100MB errors) ──
+# ── AI Model Weights, Checkpoints & FAISS Indices (Prevent GitHub >100MB errors) ──
 *.gguf
 *.pt
 *.pth
 *.bin
 *.onnx
+*.index
+*.npy
+*.npz
+*.pkl
+*.pickle
+*.h5
+*.tfevents*
+events.out.tfevents.*
 models/*.gguf
 models/*.bin
 models/*.pt
 rvc_cpu/**/*.pth
 rvc_cpu/**/*.pt
+rvc_cpu/**/*.index
+rvc_cpu/**/*.npy
+
+# ── RVC Training Logs & Datasets (Private User Voice Data) ──
+logs/
+rvc_cpu/logs/
+rvc_cpu/assets/weights/
+rvc_cpu/assets/indices/
+rvc_cpu/assets/logs/
+Retrieval-based-Voice-Conversion-WebUI-main/logs/
+Retrieval-based-Voice-Conversion-WebUI-main/assets/weights/
+Retrieval-based-Voice-Conversion-WebUI-main/assets/indices/
+dataset/
+datasets/
+raw/
+audios/
+uploads/
+user_voices/
+tmp_spkrec/
 
 # ── Runtime State, Audio Recordings & Shared IPC Buffers ──
 shared/
@@ -36,6 +63,9 @@ scratch/
 *.flac
 *.m4a
 *.flag
+crash_log*.txt
+train_crash*.txt
+pip_out.txt
 
 # Ignore all text files but keep requirements.txt and important configs
 *.txt
@@ -143,3 +173,22 @@ test_fix_verification.py
 test_runtime_validation.py
 test_shmem.py
 VIVY AI MASTER HYPERPROMPT.md
+
+# ── AI Cache Migration & Private State ──
+model_cache/
+database/memory_embeddings.json
+relationship/relationship_state.json
+vivy_history.json
+vivy_learning_schedule.json
+vivy_skill_memory.json
+
+# ── Temporary Fix & Test Scripts ──
+cleanup_rvc.py
+patch_torch_load.py
+demo_run.py
+test_*.py
+vivy_env.py
+
+# ── RVC Generated Folders ──
+rvc_cpu/i18n/
+rvc_cpu/infer/modules/train/index/

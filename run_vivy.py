@@ -1,4 +1,5 @@
 import os
+import vivy_env
 os.environ["VIVY_PROCESS_ROLE"] = "runner"
 import sys
 import time
@@ -801,6 +802,19 @@ if __name__ == "__main__":
     # Run voice cloning configurations definitions
     rvc_python = os.path.join(BASE_DIR, "venv_rvc", "Scripts", "python.exe")
     voice_cloning_script = os.path.join(BASE_DIR, "voice_cloning.py")
+    
+    # Start persistent RVC RPC server
+    try:
+        rvc_process = subprocess.Popen(
+            [rvc_python, voice_cloning_script, "--server", "--port", "8766"],
+            stdout=log_file,
+            stderr=log_file
+        )
+        get_resource_manager().register_subprocess(rvc_process, name="rvc_server")
+        print(f"[run_vivy] RVC Server process started (PID {rvc_process.pid}) on http://127.0.0.1:8766")
+    except Exception as e:
+        print(f"[run_vivy] Error starting RVC server: {e}")
+
 
     # Write last output to reply_text.txt and set emotion
     try:
@@ -848,6 +862,14 @@ while _run_main_loop:
                     print(f"[run_vivy] Error auto-restarting web server: {_w_re_err}")
 
             if avatar_process is not None and avatar_process.poll() is not None:
+                print(f"[run_vivy] Warning: Avatar Bridge process (PID {avatar_process.pid}) exited with code {avatar_process.returncode}.")
+            
+            try:
+                import xmlrpc.client
+                # Ping RVC server natively
+                pass
+            except Exception:
+                pass
                 avatar_disable_flag = os.path.join(SHARED_DIR, "avatar_disable.txt")
                 if not os.path.exists(avatar_disable_flag):
                     avatar_python = os.path.join(BASE_DIR, "venv_avatar", "Scripts", "python.exe")
@@ -1284,13 +1306,17 @@ while _run_main_loop:
                             # Update indicator label without restarting thread
                             with _indicator_lock:
                                 _indicator_label = "Applying voice cloning"
-                            print("Applying RVC voice cloning...")
-                            subprocess.run([
-                                rvc_python,
-                                voice_cloning_script,
-                                "--input", TTS_WAV,
-                                "--output", RVC_WAV
-                            ])
+                            print("Applying RVC voice cloning via RPC server...")
+                            import xmlrpc.client
+                            try:
+                                proxy = xmlrpc.client.ServerProxy("http://127.0.0.1:8766", allow_none=True)
+                                res = proxy.convert_voice(TTS_WAV, RVC_WAV, 0, "rmvpe", "")
+                                if res["status"] == "error":
+                                    print(f"RVC RPC error: {res['message']}")
+                            except Exception as rpc_err:
+                                print(f"RVC RPC failed: {rpc_err}. Falling back to clean TTS.")
+                                import shutil
+                                shutil.copy2(TTS_WAV, RVC_WAV)
                         else:
                             print(f"[RVC Guard] TTS file '{TTS_WAV}' missing or incomplete. Skipping RVC cloning to prevent subprocess error.")
                             if os.path.exists(RVC_WAV):

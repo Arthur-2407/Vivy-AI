@@ -23,7 +23,7 @@ class VoiceManager:
         self._lock = threading.RLock()
         self.db = get_voice_database(storage_path=db_path)
         self.profile_mgr = get_voice_profile_manager()
-        self.active_voice_id = "vivy_anime_01"
+        self.active_voice_id = "natural_anime_01"
         self.active_style = "Professional"
         self.live_event_queue: List[Dict[str, Any]] = []
 
@@ -39,18 +39,18 @@ class VoiceManager:
                     self.active_voice_id = profs[0]["voice_id"]
                 else:
                     profile = {
-                        "voice_id": "vivy_anime_01",
-                        "name": "Vivy Anime Girl",
-                        "model_filename": "vivy_anime_female.pth",
+                        "voice_id": "natural_anime_01",
+                        "name": "Natural Anime Girl",
+                        "model_filename": "natural_anime_female.pth",
                         "language_support": ["en", "ja", "hi", "es", "ru", "fr", "ko", "pt", "de", "zh", "it", "ar", "all"],
                         "quality_score": 99
                     }
             
             style_params = self.profile_mgr.get_style_parameters(self.active_style)
             return {
-                "voice_id": profile.get("voice_id", "vivy_anime_01"),
-                "name": profile.get("name", "Vivy Anime Girl"),
-                "model_filename": profile.get("model_filename", "vivy_anime_female.pth"),
+                "voice_id": profile.get("voice_id", "natural_anime_01"),
+                "name": profile.get("name", "Natural Anime Girl"),
+                "model_filename": profile.get("model_filename", "natural_anime_female.pth"),
                 "language_support": profile.get("language_support", ["en", "ja", "hi", "es", "ru", "fr", "all"]),
                 "quality_score": profile.get("quality_score", 99),
                 "active_style": self.active_style,
@@ -72,7 +72,7 @@ class VoiceManager:
                 name = profile["name"]
             else:
                 prof = self.db.get_profile(self.active_voice_id)
-                name = prof["name"] if prof else "Vivy Anime Girl"
+                name = prof["name"] if prof else "Natural Anime Girl"
 
             if style_name and style_name in self.profile_mgr.list_styles():
                 self.active_style = style_name
@@ -135,7 +135,15 @@ class VoiceManager:
                 import json
                 with open(tmp_f, "w", encoding="utf-8") as f:
                     json.dump(event, f, ensure_ascii=False)
-                os.replace(tmp_f, os.path.join(shared_dir, "last_voice_event.json"))
+                
+                # Retry loop to bypass Windows file locks (WinError 5)
+                target_f = os.path.join(shared_dir, "last_voice_event.json")
+                for _ in range(5):
+                    try:
+                        os.replace(tmp_f, target_f)
+                        break
+                    except OSError:
+                        time.sleep(0.05)
             except Exception as _e:
                 print(f"[VoiceManager] Event file persistence warning: {_e}")
 
