@@ -2140,6 +2140,60 @@
         #home-gpu-pill {
             display: inline-flex !important;
         }
+
+        /* Voice Tab Input Bar Styles */
+        .voice-tab-input-container {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 6px 8px 6px 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .voice-tab-input-container input::placeholder {
+            color: #999;
+        }
+        .voice-tab-dictate-btn {
+            background: transparent;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+        .voice-tab-dictate-btn:hover {
+            color: #333;
+        }
+        .voice-tab-dictate-btn.active {
+            color: var(--accent-pink);
+        }
+        .voice-tab-live-btn {
+            background: #4caf50;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+            transition: transform 0.2s, background 0.2s;
+        }
+        .voice-tab-live-btn:hover {
+            transform: scale(1.05);
+        }
+        .voice-tab-live-btn.active {
+            background: var(--accent-pink);
+            box-shadow: 0 4px 10px rgba(255, 51, 102, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -2373,94 +2427,76 @@
             </div>
         </div>
 
+        
         <!-- ==================== TAB PANEL: VOICE ==================== -->
         <div class="tab-panel" id="tab-voice">
-            <div class="voice-grid">
-                <!-- Left half: Whisper Ticker -->
-                <div class="glass-card transcripts-card">
-                    <div class="input-label" style="font-size: 14px; margin-bottom: 12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <span>Whisper Audio Ticker</span>
-                            <div class="status-glass-pill" id="voice-stt-pill" title="Speech Recognition & Voice TTS">
-                                <span style="font-size:13px;">🎙️</span>
-                                <span class="pill-label">Voice Engine:</span>
-                                <span class="pill-value" id="voice-stt-text">Whisper + RVC Ready</span>
+            <div style="display:flex; flex-direction:column; gap:16px; padding:20px; max-width:1200px; margin:0 auto; width:100%;">
+                
+                <!-- Universal Voice/Chat Input Bar -->
+                <div class="voice-tab-input-container">
+                    <input type="text" id="voice-tab-chat-input" placeholder="Ask anything" style="flex:1; border:none; outline:none; background:transparent; font-size:16px; color:#333; font-family:inherit;">
+                    <button id="voice-tab-dictate-btn" class="voice-tab-dictate-btn" title="Toggle Dictation (Mic)">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                        </svg>
+                    </button>
+                    <button id="voice-tab-live-btn" class="voice-tab-live-btn" title="Live Voice Mode / Send Text">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" id="voice-tab-live-icon">
+                            <path d="M12 3v18M8 8v8M4 11v2M16 8v8M20 11v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div id="vh-panel-voices" class="voice-hub-panel" style="display:flex; flex-direction:column; gap:16px;">
+                    <div class="glass-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                            <div class="input-label" style="font-size:15px; margin:0;">Available Vocal Profiles</div>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <div class="status-glass-pill" title="Dynamic Emotion & Multilingual Modulation Engine">
+                                    <span style="font-size:13px;">🎭</span>
+                                    <span class="pill-label">Expression & Tone:</span>
+                                    <span class="pill-value sync-emotion-text" style="color:var(--accent-cyan); font-weight:700;">Dynamic Emotion & Multilingual Sync Active</span>
+                                </div>
                             </div>
                         </div>
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <div class="status-glass-pill" title="Live Emotion">
-                                <span style="font-size:13px;">😊</span>
-                                <span class="pill-label">Emotion:</span>
-                                <span class="pill-value sync-emotion-text">Relaxed</span>
-                            </div>
-                            <div class="status-glass-pill" title="Brain Mode">
-                                <span style="font-size:13px;">🧠</span>
-                                <span class="pill-label">Mode:</span>
-                                <span class="pill-value sync-brain-text">Companion</span>
-                            </div>
-                            <div id="voice-live-container"></div>
+                        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">Select any vocal identity below to instantly update Vivy's conversational speech engine in real time without server restart.</p>
+                        
+                        <div id="voice-profile-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:14px;">
+                            <!-- Dynamically loaded voice profile cards -->
+                            <div class="empty-state">Loading voice identities...</div>
                         </div>
-                    </div>
-                    <div class="transcript-list" id="transcripts-box">
-                        <div class="empty-state">No transcriptions relaying. Speak into the microphone.</div>
                     </div>
                 </div>
 
-                <!-- Right half: Audio adjustments / sliders -->
-                <div class="glass-card">
-                    <div class="input-label" style="font-size: 14px; margin-bottom: 20px;">Relational Profile Settings</div>
-                    
-                    <div class="audio-sliders">
-                        <div class="input-group">
-                            <label for="memory-name" class="input-label">User Profile Name</label>
-                            <input type="text" id="memory-name" class="text-input" placeholder="Enter name...">
+                <!-- VOICE PREVIEW MODAL -->
+                <div id="voice-preview-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+                    <div class="glass-card" style="width:90%; max-width:500px; padding:24px; position:relative; border:1px solid var(--accent-cyan);">
+                        <button onclick="closePreviewModal()" style="position:absolute; top:12px; right:12px; background:none; border:none; color:var(--text-secondary); font-size:20px; cursor:pointer;">&times;</button>
+                        <h3 style="margin-top:0; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
+                            👁️ Preview Voice
+                        </h3>
+                        <div style="font-size:13px; color:var(--accent-cyan); margin-bottom:16px; font-weight:bold;">
+                            Selected: <span id="preview-voice-name"></span>
                         </div>
-
-                        <div class="slider-group">
-                            <div class="slider-header">
-                                <label for="memory-humor" class="input-label">Humor Matrix Scale</label>
-                                <span id="humor-val">0.6</span>
-                            </div>
-                            <input type="range" id="memory-humor" min="0" max="1" step="0.05" value="0.6" class="slider-input">
+                        <input type="hidden" id="preview-voice-id">
+                        
+                        <label class="input-label" style="display:block; margin-bottom:6px;">Prompt Text</label>
+                        <textarea id="preview-prompt-input" class="home-input-field" style="width:100%; height:100px; padding:10px; resize:none; margin-bottom:12px;" placeholder="Enter custom text here to preview the voice..."></textarea>
+                        
+                        <div id="preview-status" style="font-size:12px; color:var(--text-secondary); margin-bottom:12px; height:18px;"></div>
+                        
+                        <audio id="preview-audio-player" style="width:100%; margin-bottom:16px; display:none;" controls></audio>
+                        
+                        <div style="display:flex; gap:10px; justify-content:flex-end;">
+                            <button id="btn-preview-stop" onclick="stopPreviewPlayback()" style="display:none; padding:10px 16px; border-radius:8px; border:none; font-weight:bold; cursor:pointer; background:rgba(255,0,0,0.2); color:var(--accent-pink);">Stop Playback</button>
+                            <button id="btn-preview-generate" onclick="generateVoicePreview()" style="padding:10px 20px; border-radius:8px; border:none; font-weight:bold; cursor:pointer; background:var(--accent-cyan); color:#000;">Generate Preview</button>
                         </div>
-
-                        <div class="slider-group">
-                            <div class="slider-header">
-                                <label for="memory-playful" class="input-label">Playfulness Scale</label>
-                                <span id="playful-val">0.7</span>
-                            </div>
-                            <input type="range" id="memory-playful" min="0" max="1" step="0.05" value="0.7" class="slider-input">
-                        </div>
-
-                        <div class="input-group">
-                            <label class="input-label">Identified Likes</label>
-                            <div class="tags-container" id="likes-container">
-                                <input type="text" id="add-like-input" class="tag-add-input" placeholder="+ Add">
-                            </div>
-                        </div>
-
-                        <div class="input-group">
-                            <label class="input-label">Identified Dislikes</label>
-                            <div class="tags-container" id="dislikes-container">
-                                <input type="text" id="add-dislike-input" class="tag-add-input" placeholder="+ Add">
-                            </div>
-                        </div>
-
-                        <div class="metadata-badge">
-                            <span>Relational Tone</span>
-                            <span id="memory-tone" class="value">Neutral</span>
-                        </div>
-
-                        <div class="metadata-badge">
-                            <span>Conversation Arc</span>
-                            <span id="memory-arc" class="value">None</span>
-                        </div>
-
-                        <button class="save-btn" id="save-memory-btn">Sync Personality Matrix</button>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <!-- ==================== TAB PANEL: SCREEN SHARING ==================== -->
         <div class="tab-panel" id="tab-screen">
@@ -2626,61 +2662,13 @@
                         <span style="font-size:12px; color:var(--text-secondary);">Real-Time Multilingual RVC Cloning & Expressive Vocal Modulation</span>
                     </div>
                     <div style="display:flex; gap:8px;">
-                        <button class="header-tab-btn active" id="btn-vh-voices" onclick="switchVoiceHubTab('voices')" style="padding:8px 14px; font-size:13px;">🎙️ Active Voices</button>
                         <button class="header-tab-btn" id="btn-vh-upload" onclick="switchVoiceHubTab('upload')" style="padding:8px 14px; font-size:13px;">📤 Clone & Upload</button>
                         <button class="header-tab-btn" id="btn-vh-train" onclick="switchVoiceHubTab('train')" style="padding:8px 14px; font-size:13px;">⚡ Train & Preview</button>
                         <button class="header-tab-btn" id="btn-vh-settings" onclick="switchVoiceHubTab('settings')" style="padding:8px 14px; font-size:13px;">⚙️ RVC Settings</button>
                     </div>
                 </div>
 
-                <!-- SUB-TAB 1: ACTIVE VOICES -->
-                <div id="vh-panel-voices" class="voice-hub-panel" style="display:flex; flex-direction:column; gap:16px;">
-                    <div class="glass-card">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-                            <div class="input-label" style="font-size:15px; margin:0;">Available Vocal Profiles</div>
-                            <div style="display:flex; align-items:center; gap:8px;">
-                                <div class="status-glass-pill" title="Dynamic Emotion & Multilingual Modulation Engine">
-                                    <span style="font-size:13px;">🎭</span>
-                                    <span class="pill-label">Expression & Tone:</span>
-                                    <span class="pill-value sync-emotion-text" style="color:var(--accent-cyan); font-weight:700;">Dynamic Emotion & Multilingual Sync Active</span>
-                                </div>
-                            </div>
-                        </div>
-                        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">Select any vocal identity below to instantly update Vivy's conversational speech engine in real time without server restart.</p>
-                        
-                        <div id="voice-profile-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:14px;">
-                            <!-- Dynamically loaded voice profile cards -->
-                            <div class="empty-state">Loading voice identities...</div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
 
-                <!-- VOICE PREVIEW MODAL -->
-                <div id="voice-preview-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
-                    <div class="glass-card" style="width:90%; max-width:500px; padding:24px; position:relative; border:1px solid var(--accent-cyan);">
-                        <button onclick="closePreviewModal()" style="position:absolute; top:12px; right:12px; background:none; border:none; color:var(--text-secondary); font-size:20px; cursor:pointer;">&times;</button>
-                        <h3 style="margin-top:0; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
-                            👁️ Preview Voice
-                        </h3>
-                        <div style="font-size:13px; color:var(--accent-cyan); margin-bottom:16px; font-weight:bold;">
-                            Selected: <span id="preview-voice-name"></span>
-                        </div>
-                        <input type="hidden" id="preview-voice-id">
-                        
-                        <label class="input-label" style="display:block; margin-bottom:6px;">Prompt Text</label>
-                        <textarea id="preview-prompt-input" class="home-input-field" style="width:100%; height:100px; padding:10px; resize:none; margin-bottom:12px;" placeholder="Enter custom text here to preview the voice..."></textarea>
-                        
-                        <div id="preview-status" style="font-size:12px; color:var(--text-secondary); margin-bottom:12px; height:18px;"></div>
-                        
-                        <audio id="preview-audio-player" style="width:100%; margin-bottom:16px; display:none;" controls></audio>
-                        
-                        <div style="display:flex; gap:10px; justify-content:flex-end;">
-                            <button id="btn-preview-stop" onclick="stopPreviewPlayback()" style="display:none; padding:10px 16px; border-radius:8px; border:none; font-weight:bold; cursor:pointer; background:rgba(255,0,0,0.2); color:var(--accent-pink);">Stop Playback</button>
-                            <button id="btn-preview-generate" onclick="generateVoicePreview()" style="padding:10px 20px; border-radius:8px; border:none; font-weight:bold; cursor:pointer; background:var(--accent-cyan); color:#000;">Generate Preview</button>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- SUB-TAB 2: CLONE & UPLOAD -->
                 <div id="vh-panel-upload" class="voice-hub-panel" style="display:none; flex-direction:column; gap:16px;">
@@ -4016,8 +4004,7 @@
         const settingsAudioPerception = document.getElementById('settings-audio-perception');
         const settingsProactivity = document.getElementById('settings-proactivity');
 
-        const transcriptsBox = document.getElementById('transcripts-box');
-        const audioPlayer = document.getElementById('audio-player');
+                const audioPlayer = document.getElementById('audio-player');
 
         // Screen Sharing Elements
         const btnBrowserShare = document.getElementById('btn-browser-share');
@@ -4072,8 +4059,7 @@
             } else if (targetTab === 'tab-chat') {
                 fetchHistory();
             } else if (targetTab === 'tab-voice') {
-                fetchTranscripts();
-                if (typeof loadMemory === 'function') loadMemory();
+                if (typeof fetchVoiceProfiles === 'function') fetchVoiceProfiles();
             } else if (targetTab === 'tab-home') {
                 if (typeof fetchStatus === 'function') fetchStatus();
             } else if (targetTab === 'tab-avatar') {
@@ -4566,23 +4552,8 @@
         const rvcWeightsBox = document.getElementById('rvc-weights-box');
         const cloningStatusLabel = document.getElementById('cloning-status-label');
 
-        // Memory Profile
-        const memoryName = document.getElementById('memory-name');
-        const memoryHumor = document.getElementById('memory-humor');
-        const memoryPlayful = document.getElementById('memory-playful');
-        const humorVal = document.getElementById('humor-val');
-        const playfulVal = document.getElementById('playful-val');
-        const likesContainer = document.getElementById('likes-container');
-        const dislikesContainer = document.getElementById('dislikes-container');
-        const addLikeInput = document.getElementById('add-like-input');
-        const addDislikeInput = document.getElementById('add-dislike-input');
-        const memoryTone = document.getElementById('memory-tone');
-        const memoryArc = document.getElementById('memory-arc');
-        const saveMemoryBtn = document.getElementById('save-memory-btn');
-
         let chatHistoryLength = 0;
-        let memoryData = { likes: [], dislikes: [] };
-        let configData = {};
+                let configData = {};
         let screenStream = null;
         let lastConnectedState = null; // Transition tracing variable
 
@@ -4882,34 +4853,6 @@
             }
         }
 
-        // Fetch whisper transcript history
-        async function fetchTranscripts() {
-            try {
-                const response = await fetch('/api/transcripts');
-                const transcripts = await response.json();
-                
-                let html = '';
-                if (transcripts.length === 0) {
-                    html = '<div class="empty-state">No transcriptions relaying. Speak into the microphone.</div>';
-                } else {
-                    transcripts.forEach(item => {
-                        html += `
-                            <div class="transcript-item">
-                                <div class="transcript-meta">
-                                    <span>${item.filename.replace('.txt', '')}</span>
-                                    <span>${formatTime(item.timestamp)}</span>
-                                </div>
-                                <div class="transcript-text">${item.text}</div>
-                            </div>
-                        `;
-                    });
-                }
-                transcriptsBox.innerHTML = html;
-            } catch (e) {
-                console.error("Error loading transcripts:", e);
-            }
-        }
-
         // Load Toggle Config Toggles
         async function loadConfig() {
             try {
@@ -4930,8 +4873,16 @@
                 // Sync Home control buttons styling
                 if (configData.voice_input) {
                     homeMicBtn.classList.add('active');
+                    if (document.getElementById('voice-tab-dictate-btn')) {
+                        document.getElementById('voice-tab-dictate-btn').classList.add('active');
+                        document.getElementById('voice-tab-live-btn').classList.add('active');
+                    }
                 } else {
                     homeMicBtn.classList.remove('active');
+                    if (document.getElementById('voice-tab-dictate-btn')) {
+                        document.getElementById('voice-tab-dictate-btn').classList.remove('active');
+                        document.getElementById('voice-tab-live-btn').classList.remove('active');
+                    }
                 }
                 
                 cloningStatusLabel.innerText = configData.voice_cloning ? "Enabled" : "Disabled";
@@ -5067,138 +5018,7 @@
             el.addEventListener('change', saveConfig);
         });
 
-        // Load Memory Core
-        async function loadMemory() {
-            try {
-                const response = await fetch('/api/memory');
-                memoryData = await response.json();
-                
-                memoryName.value = memoryData.name || '';
-                
-                const style = memoryData.style || { humor: 0.6, playful: 0.7 };
-                memoryHumor.value = style.humor;
-                humorVal.innerText = style.humor;
-                memoryPlayful.value = style.playful;
-                playfulVal.innerText = style.playful;
-                
-                memoryTone.innerText = memoryData.tone || 'Neutral';
-                memoryTone.className = `value ${memoryData.tone ? memoryData.tone.toLowerCase() : 'neutral'}`;
-                
-                const arc = memoryData.arc || { topic: null, stage: 0 };
-                if (arc.topic) {
-                    memoryArc.innerText = `${arc.topic} (Stage ${arc.stage})`;
-                } else {
-                    memoryArc.innerText = 'None';
-                }
-                
-                renderTagChips();
-            } catch (e) {
-                console.error("Error loading memory:", e);
-            }
-        }
 
-        // Render tag chips for likes/dislikes
-        function renderTagChips() {
-            // Render Likes
-            const likesList = likesContainer.querySelectorAll('.tag-chip');
-            likesList.forEach(el => el.remove());
-            
-            (memoryData.likes || []).forEach((like, idx) => {
-                const chip = document.createElement('div');
-                chip.className = 'tag-chip';
-                chip.innerHTML = `
-                    ${like}
-                    <span class="remove" onclick="removeTag('likes', ${idx})">&times;</span>
-                `;
-                likesContainer.insertBefore(chip, addLikeInput);
-            });
-
-            // Render Dislikes
-            const dislikesList = dislikesContainer.querySelectorAll('.tag-chip');
-            dislikesList.forEach(el => el.remove());
-            
-            (memoryData.dislikes || []).forEach((dislike, idx) => {
-                const chip = document.createElement('div');
-                chip.className = 'tag-chip dislike';
-                chip.innerHTML = `
-                    ${dislike}
-                    <span class="remove" onclick="removeTag('dislikes', ${idx})">&times;</span>
-                `;
-                dislikesContainer.insertBefore(chip, addDislikeInput);
-            });
-        }
-
-        // Remove Tag chip
-        window.removeTag = function(type, index) {
-            memoryData[type].splice(index, 1);
-            renderTagChips();
-        };
-
-        // Add Tag chip on Enter
-        addLikeInput.addEventListener('keydown', e => {
-            if (e.key === 'Enter' && addLikeInput.value.trim().length > 0) {
-                if (!memoryData.likes) memoryData.likes = [];
-                memoryData.likes.push(addLikeInput.value.trim());
-                addLikeInput.value = '';
-                renderTagChips();
-            }
-        });
-        addDislikeInput.addEventListener('keydown', e => {
-            if (e.key === 'Enter' && addDislikeInput.value.trim().length > 0) {
-                if (!memoryData.dislikes) memoryData.dislikes = [];
-                memoryData.dislikes.push(addDislikeInput.value.trim());
-                addDislikeInput.value = '';
-                renderTagChips();
-            }
-        });
-
-        // Sliders Listeners
-        memoryHumor.addEventListener('input', e => humorVal.innerText = e.target.value);
-        memoryPlayful.addEventListener('input', e => playfulVal.innerText = e.target.value);
-
-        // Sync Memory Parameters
-        saveMemoryBtn.addEventListener('click', async () => {
-            saveMemoryBtn.innerText = "Syncing personality...";
-            saveMemoryBtn.disabled = true;
-            
-            const payload = {
-                name: memoryName.value.trim() || null,
-                likes: memoryData.likes,
-                dislikes: memoryData.dislikes,
-                style: {
-                    humor: parseFloat(memoryHumor.value),
-                    playful: parseFloat(memoryPlayful.value)
-                }
-            };
-            
-            try {
-                const response = await fetch('/api/memory', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json();
-                
-                if (result.success) {
-                    saveMemoryBtn.innerText = "Sync Successful!";
-                    saveMemoryBtn.style.background = 'linear-gradient(135deg, #00c6ff, #0072ff)';
-                    setTimeout(() => {
-                        saveMemoryBtn.innerText = "Sync Personality Matrix";
-                        saveMemoryBtn.style.background = '';
-                        saveMemoryBtn.disabled = false;
-                    }, 1500);
-                    loadMemory();
-                } else {
-                    alert("Error saving memory: " + result.error);
-                    saveMemoryBtn.innerText = "Sync Personality Matrix";
-                    saveMemoryBtn.disabled = false;
-                }
-            } catch (e) {
-                console.error("Error saving memory:", e);
-                saveMemoryBtn.innerText = "Sync Personality Matrix";
-                saveMemoryBtn.disabled = false;
-            }
-        });
 
         // Send Text message to Vivy from Chat or Home Input
         async function sendMessage(textSourceEl) {
@@ -5939,7 +5759,7 @@
         let lastTrainingResult = null;
 
         function switchVoiceHubTab(tab) {
-            ['voices', 'upload', 'train', 'settings'].forEach(t => {
+            ['upload', 'train', 'settings'].forEach(t => {
                 const btn = document.getElementById(`btn-vh-${t}`);
                 const pnl = document.getElementById(`vh-panel-${t}`);
                 if (btn && pnl) {
@@ -5952,8 +5772,7 @@
                     }
                 }
             });
-            if (tab === 'voices') fetchVoiceProfiles();
-            if (tab === 'train') fetchExistingRvcVoices();
+                        if (tab === 'train') fetchExistingRvcVoices();
             if (tab === 'upload') {
                 uploadedAudioPath = "";
                 document.getElementById('vh-upload-analysis-card').style.display = 'none';
@@ -6406,7 +6225,7 @@
         }
 
         async function startVoiceTraining(isRetrain, additionalEpochs = 0) {
-            if (!uploadedAudioPath) {
+            if (!isRetrain && !uploadedAudioPath) {
                 alert("No audio file path identified. Please re-upload your audio sample.");
                 return;
             }
@@ -6640,7 +6459,7 @@
                 if (data.success) {
                     document.getElementById('vh-confirm-box').style.display = 'none';
                     alert(`🎉 Voice "${finalName}" confirmed and activated! Vivy is now speaking with this voice identity.`);
-                    switchVoiceHubTab('voices');
+                    window.switchTab('tab-voice');
                 } else {
                     alert("Confirmation error: " + data.error);
                 }
@@ -6652,11 +6471,9 @@
         // Initialize Everything
         PreviewWindowManager.init();
         loadConfig();
-        loadMemory();
-        fetchStatus();
+                fetchStatus();
         fetchAvatarStatus();
         fetchHistory();
-        fetchTranscripts();
         fetchRVCModels();
         fetchVoiceProfiles();
         pollTrainingProgress(); // Resume progress tracking if training is running on reload
@@ -7643,10 +7460,58 @@
         setInterval(fetchStatus, 400);
         setInterval(fetchAvatarStatus, 500);
         setInterval(fetchHistory, 1000);
-        setInterval(fetchTranscripts, 2000);
         setInterval(loadConfig, 3000);
         setInterval(fetchCognitiveState, 1500);
         setInterval(fetchLiveIndicators, 1000);
+
+        // Voice Tab Input UI Bindings
+        const voiceTabChatInput = document.getElementById('voice-tab-chat-input');
+        const voiceTabDictateBtn = document.getElementById('voice-tab-dictate-btn');
+        const voiceTabLiveBtn = document.getElementById('voice-tab-live-btn');
+        const voiceTabLiveIcon = document.getElementById('voice-tab-live-icon');
+
+        async function toggleVoiceTabMic() {
+            try {
+                const response = await fetch('/api/mic/toggle', { method: 'POST' });
+                const result = await response.json();
+                if (result.success) {
+                    loadConfig();
+                }
+            } catch (e) {
+                console.error("Error toggling mic from voice tab:", e);
+            }
+        }
+
+        if (voiceTabDictateBtn) {
+            voiceTabDictateBtn.addEventListener('click', toggleVoiceTabMic);
+        }
+
+        if (voiceTabLiveBtn) {
+            voiceTabLiveBtn.addEventListener('click', () => {
+                if (voiceTabChatInput.value.trim() !== '') {
+                    sendMessage(voiceTabChatInput);
+                    voiceTabLiveIcon.innerHTML = '<path d="M12 3v18M8 8v8M4 11v2M16 8v8M20 11v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+                } else {
+                    toggleVoiceTabMic();
+                }
+            });
+        }
+
+        if (voiceTabChatInput) {
+            voiceTabChatInput.addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                    sendMessage(voiceTabChatInput);
+                    voiceTabLiveIcon.innerHTML = '<path d="M12 3v18M8 8v8M4 11v2M16 8v8M20 11v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+                }
+            });
+            voiceTabChatInput.addEventListener('input', () => {
+                if (voiceTabChatInput.value.trim() !== '') {
+                    voiceTabLiveIcon.innerHTML = '<path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>';
+                } else {
+                    voiceTabLiveIcon.innerHTML = '<path d="M12 3v18M8 8v8M4 11v2M16 8v8M20 11v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+                }
+            });
+        }
 
         setTimeout(refreshAvatarFrame, 500);
     </script>

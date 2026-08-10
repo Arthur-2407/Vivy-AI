@@ -292,6 +292,7 @@ A full Flask application serving a rich browser-based control interface:
 - Live chat with audio playback, real-time cognitive state readouts, and telemetry.
 - Screen share and camera feed capture directly from the browser.
 - Voice Identity Dashboard: train, preview, compare, and switch voice identities with live training metrics.
+- **Universal Voice Tab Input Bar**: A seamless "Ask anything" UI within the Voice tab allowing instant text messaging, microphone dictation, and Live Voice toggle integration.
 - **Real-time Pipeline Monitoring**: Standalone background telemetry daemon pushes live hardware metrics (CPU/VRAM) and async workflow anomalies to the UI.
 - Developer Diagnostic Dashboard with prompt trace, WebSocket monitor, and pipeline analytics.
 - **60+ REST API endpoints** covering every subsystem.
