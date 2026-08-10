@@ -42,14 +42,8 @@ namespace VivyAI.Editor
             if (targetController != null)
             {
                 var window = ScriptableObject.CreateInstance<VivyAnimatorGenerator>();
-                // Use reflection or direct call since GenerateAnimator is private.
-                // We'll just temporarily make it internal or call it via reflection.
-                var method = typeof(VivyAnimatorGenerator).GetMethod("GenerateAnimator", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                if (method != null)
-                {
-                    method.Invoke(window, new object[] { targetController, registryFilePath });
-                    Debug.Log("[HeadlessGenerator] Modernization pipeline complete.");
-                }
+                window.GenerateAnimator(targetController, registryFilePath, true);
+                Debug.Log("[HeadlessGenerator] Modernization pipeline complete.");
             }
         }
     }

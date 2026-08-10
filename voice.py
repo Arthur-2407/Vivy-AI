@@ -106,12 +106,23 @@ def suppress_output():
 # ===============================
 # Available voices (declared immediately — model loads lazily)
 # ===============================
-print("Available voices:")
-print("0: ljspeech_female (default)")
-
-voices = ["ljspeech_female"]
-selected_voice = voices[0]
-print(f"Selected voice: {selected_voice}")
+print("Available voices (managed by Voice Identity System):")
+try:
+    from voice.voice_manager import get_voice_manager
+    mgr = get_voice_manager()
+    active = mgr.get_active_voice()
+    profiles = mgr.db.list_profiles()
+    for idx, p in enumerate(profiles):
+        print(f"{idx}: {p.get('name')} ({p.get('model_filename')})")
+    
+    voices = [p.get("name") for p in profiles]
+    selected_voice = active.get("name")
+    print(f"Selected voice: {selected_voice} ({active.get('model_filename')})")
+except Exception as e:
+    print("0: ljspeech_female (default)")
+    voices = ["ljspeech_female"]
+    selected_voice = voices[0]
+    print(f"Selected voice: {selected_voice}")
 
 # ===============================
 # Lazy TTS loader — defers Coqui TTS model init to first call.

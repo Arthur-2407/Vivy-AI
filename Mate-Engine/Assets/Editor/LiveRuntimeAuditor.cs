@@ -15,7 +15,7 @@ namespace VivyAI.Editor
     {
         public static string reportPath = "d:/Vivy/Live_Runtime_Audit.txt";
         private static bool auditRunning = false;
-        private const string AUTO_AUDIT_KEY = "Vivy_AutoRunLiveRuntimeAudit";
+        private const string AUTO_AUDIT_KEY = "Vivy_AutoRunLiveRuntimeAudit_V3";
 
         static LiveRuntimeAuditor()
         {

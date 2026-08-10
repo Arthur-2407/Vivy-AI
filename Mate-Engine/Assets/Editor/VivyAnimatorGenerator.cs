@@ -42,7 +42,7 @@ namespace VivyAI.Editor
             }
         }
 
-        private void GenerateAnimator(AnimatorController controller, string jsonPath)
+        public void GenerateAnimator(AnimatorController controller, string jsonPath, bool isHeadless = false)
         {
             string jsonContent = File.ReadAllText(jsonPath);
 
@@ -198,7 +198,10 @@ namespace VivyAI.Editor
 
             GenerateValidationReports(controller, mappingResults);
 
-            EditorUtility.DisplayDialog("Success", "Deterministic generation complete. Check d:/Vivy/Reports/ for full evidence.", "OK");
+            if (!isHeadless)
+            {
+                EditorUtility.DisplayDialog("Success", "Deterministic generation complete. Check d:/Vivy/Reports/ for full evidence.", "OK");
+            }
         }
 
         private void GenerateValidationReports(AnimatorController controller, List<ResolvedMapping> mappings)

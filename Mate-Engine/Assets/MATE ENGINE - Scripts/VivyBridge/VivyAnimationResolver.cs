@@ -20,40 +20,11 @@ public class VivyAnimationResolver : MonoBehaviour
                     _knownBools.Add(param.name);
                 }
             }
-            DumpAnimatorDiagnostics();
+            // Removed DumpAnimatorDiagnostics() to prevent auto-report generation and startup freeze
         }
     }
 
-    private void DumpAnimatorDiagnostics()
-    {
-        try
-        {
-            string log = $"Animator Diagnostics:\nApplyRootMotion: {_animator.applyRootMotion}\n";
-            log += $"Has Transform: {transform.position}\n";
-            for (int i = 0; i < _animator.layerCount; i++)
-            {
-                log += $"Layer {i}: {_animator.GetLayerName(i)} | Weight: {_animator.GetLayerWeight(i)}\n";
-                var clipInfo = _animator.GetCurrentAnimatorClipInfo(i);
-                foreach (var info in clipInfo)
-                {
-                    log += $"  - Playing Clip: {(info.clip != null ? info.clip.name : "NULL")}\n";
-                }
-            }
 
-            // Dump all parameters and their types
-            log += "\nParameters:\n";
-            foreach (var param in _animator.parameters)
-            {
-                log += $"  {param.name} ({param.type})\n";
-            }
-
-            System.IO.File.WriteAllText("d:/Vivy/runtime_animator_diag.txt", log);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Diag failed: " + e.Message);
-        }
-    }
 
     public void PlayAnimation(string animId)
     {

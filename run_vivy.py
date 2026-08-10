@@ -3,6 +3,15 @@ import vivy_env
 os.environ["VIVY_PROCESS_ROLE"] = "runner"
 import sys
 import time
+
+# Start Pipeline Workers
+import threading
+from pipeline.queues import text_queue, token_queue
+from pipeline.manager import pipeline_manager
+import uuid
+
+pipeline_manager.start()
+
 import subprocess
 import threading
 import itertools
@@ -911,14 +920,41 @@ while _run_main_loop:
                 except Exception as e:
                     print(f"[run_vivy] Proactivity engine dynamic management error: {e}")
 
-        if os.path.exists(USER_TXT):
+        user_input = None
+        input_source = "text"
+        is_partial = False
+        
+        # Poll text_queue first
+        try:
+            user_input_event = text_queue.get(timeout=0.1)
+            if user_input_event["type"] == "partial":
+                # Step 7: Lightweight speculative prep only
+                print(f"\r  \033[96m[Listening...]\033[0m {user_input_event['text']}", end="", flush=True)
+                is_partial = True
+                user_input = user_input_event["text"]
+            elif user_input_event["type"] == "final":
+                user_input = user_input_event["text"]
+                input_source = "voice"
+                print() # clear partial line
+        except Exception:
+            pass
+
+        # Fallback to UI USER_TXT
+        if not user_input and os.path.exists(USER_TXT):
             with open(USER_TXT, "r", encoding="utf-8") as f:
-                user_input = f.read().strip()
-            
-            if user_input:
-                # Clear user_text.txt immediately to acknowledge receipt
+                ui_text = f.read().strip()
+            if ui_text:
                 with open(USER_TXT, "w", encoding="utf-8") as f:
                     f.write("")
+                user_input = ui_text
+                input_source = "text"
+
+        if user_input and is_partial:
+            # Step 7: Do not run authoritative cognitive pipeline on partials!
+            # Placeholder for lightweight intent prediction (Optimization 11)
+            continue
+            
+        if user_input:
                 
                 # Check for proactive trigger prefix
                 is_proactive = False
@@ -1087,11 +1123,55 @@ while _run_main_loop:
                     _query_to_llm = user_input
                     if multilingual_prompt_hint:
                         _query_to_llm = user_input + multilingual_prompt_hint
-                    reply, history = conversation.generate_reply_internal(
-                        _query_to_llm, history, mem, screen_ctx,
-                        perception_context=perception_ctx,
-                        perception_state=perception_state
-                    )
+                    if is_voice_turn:
+                        active_response_id = str(uuid.uuid4())
+                        
+                        stream_gen = conversation.generate_reply_internal(
+                            _query_to_llm, history, mem, screen_ctx,
+                            perception_context=perception_ctx,
+                            perception_state=perception_state,
+                            stream=True,
+                            response_context=active_response_id
+                        )
+                        
+                        import mic_input
+                        reply = ""
+                        print("Vivy: ", end="", flush=True)
+                        
+                        for item in stream_gen:
+                            # Step 8: Interruption & Cancellation Check
+                            # If VAD detects speech while generating, abort!
+                            if mic_input.recording:
+                                print("\n[Pipeline] Interrupted by user! Cancelling response...")
+                                pipeline_manager.cancel_response(active_response_id)
+                                break
+                                
+                            item["response_id"] = active_response_id
+                            token_queue.put(item)
+                            
+                            if item["type"] == "token":
+                                print(item["text"], end="", flush=True)
+                            elif item["type"] == "final_state":
+                                history = item.get("history", history)
+                                reply = item.get("reply", reply)
+                                
+                        print()
+                        
+                        if pipeline_manager.is_cancelled(active_response_id):
+                            # Drop the memory updates for cancelled turns
+                            reply = ""
+                            continue
+                            
+                        # Apply Multilingual v2.0 localization on final text if needed
+                        if not is_proactive:
+                            if _language_manager is not None:
+                                reply = _language_manager.process_output(reply, detected_lang_code)
+                    else:
+                        reply, history = conversation.generate_reply_internal(
+                            _query_to_llm, history, mem, screen_ctx,
+                            perception_context=perception_ctx,
+                            perception_state=perception_state
+                        )
                     # [MULTILINGUAL v2.0] Output localization — LanguageManager (NLLB + Qwen) or legacy translator
                     if not is_proactive:
                         if _language_manager is not None:
@@ -1275,8 +1355,14 @@ while _run_main_loop:
 
                 
                 if is_voice_turn:
-                    # Generate TTS WAV — show live indicator
-                    set_status("generating_tts:Generating voice response...")
+                    # Async pipeline handles audio playback via workers.
+                    # We just wait for the playback queue to drain before resuming.
+                    from pipeline.queues import playback_queue
+                    set_status("speaking")
+                    playback_queue.join()
+                    stop_indicator("  ✓ Done speaking.")
+                    
+                    if False: pass # Skip legacy generation since pipeline handled it
                     start_indicator("Generating voice")
                     print("Generating TTS output...")
 

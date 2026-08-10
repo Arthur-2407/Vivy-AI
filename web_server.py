@@ -1536,44 +1536,7 @@ def send_message():
         print(f"[web_server] Error queuing send_message: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
-@app.route("/api/memory", methods=["GET", "POST"])
-def route_memory():
-    if request.method == "GET":
-        return jsonify(load_memory())
-    else:
-        new_mem = request.get_json() or {}
-        # Basic validation: load current memory, merge keys, and save
-        current_mem = load_memory()
-        for k, v in new_mem.items():
-            if k in current_mem:
-                current_mem[k] = v
-        if save_memory(current_mem):
-            return jsonify({"success": True, "memory": current_mem})
-        else:
-            return jsonify({"success": False, "error": "Failed to save memory file"}), 500
 
-@app.route("/api/transcripts", methods=["GET"])
-def get_transcripts():
-    transcripts = []
-    if os.path.exists(TRANSCRIPTS_DIR):
-        try:
-            for fname in os.listdir(TRANSCRIPTS_DIR):
-                if fname.endswith(".txt"):
-                    fpath = os.path.join(TRANSCRIPTS_DIR, fname)
-                    mtime = os.path.getmtime(fpath)
-                    with open(fpath, "r", encoding="utf-8") as f:
-                        text = f.read().strip()
-                    if text:
-                        transcripts.append({
-                            "filename": fname,
-                            "text": text,
-                            "timestamp": int(mtime * 1000)
-                        })
-            # Sort by timestamp descending (newest first)
-            transcripts.sort(key=lambda x: x["timestamp"], reverse=True)
-        except Exception as e:
-            return jsonify({"success": False, "error": str(e)}), 500
-    return jsonify(transcripts[:30]) # Return last 30 transcripts
 
 _shmem = None
 

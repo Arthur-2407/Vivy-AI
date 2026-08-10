@@ -1,3 +1,4 @@
+from pipeline.manager import pipeline_manager
 import os, json, time, random, re, sys
 import requests
 import urllib.parse
@@ -5378,7 +5379,7 @@ def classify_perception_modality(user_text: str) -> tuple:
     return True, True
 
 
-def generate_reply_internal(user, history, mem, screen_context="", perception_context="", perception_state=None):
+def generate_reply_internal(user, history, mem, screen_context="", perception_context="", perception_state=None, stream=False, response_context=None):
     t_start = time.time()
     
     # Wait for fresh frame if screen sharing is active and this is a perception query
@@ -5481,7 +5482,12 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
         history.append("Vivy: " + reply)
         mem["last_reply"] = reply
         save(mem)
-        return reply, history
+    if stream:
+        def early_gen():
+            yield {'type': 'token', 'text': reply}
+            yield {'type': 'final_state', 'history': history, 'reply': reply}
+        return early_gen()
+    return reply, history
     mem["last_user_time"] = t_start
 
     # ══════════════════════════════════════════════════════════════════════════
@@ -5501,6 +5507,11 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
                 mem["last_reply"] = anticipation_reply
                 mem["_prev_user_time"] = t_start
                 save(mem)
+                if stream:
+                    def early_gen():
+                        yield {'type': 'token', 'text': anticipation_reply}
+                        yield {'type': 'final_state', 'history': history, 'reply': anticipation_reply}
+                    return early_gen()
                 return anticipation_reply, history
         mem["_prev_user_time"] = t_start
     except Exception as _r_cont_err:
@@ -5525,6 +5536,11 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
                 history.append("Vivy: " + resolved_reply)
                 mem["last_reply"] = resolved_reply
                 save(mem)
+                if stream:
+                    def early_gen():
+                        yield {'type': 'token', 'text': resolved_reply}
+                        yield {'type': 'final_state', 'history': history, 'reply': resolved_reply}
+                    return early_gen()
                 return resolved_reply, history
     except Exception as _ref_err:
         print(f"[DialogueRouter] Translation reference resolution warning: {_ref_err}")
@@ -5623,6 +5639,11 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
             reply_text = f"Unknown diagnostic command: {cmd}"
             
         print(f"[DiagnosticsCommand] Executed {cmd} directly.")
+        if stream:
+            def early_gen():
+                yield {'type': 'token', 'text': reply_text}
+                yield {'type': 'final_state', 'history': history, 'reply': reply_text}
+            return early_gen()
         return reply_text, history
 
     _is_perception_query = is_perception_query_check(user, perception_state)
@@ -5882,13 +5903,97 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
             elif categories and ("screen" in categories or "audio_query" in categories):
                 run_max_tokens = max(run_max_tokens, 450)
             
-            out = llm(
-                build(mem, history, user, search_context, current_emotion, categories, reaction_directive, director_state, screen_context, perception_context, perception_state, wants_vision=wants_vision, wants_audio=wants_audio),
-                max_tokens=run_max_tokens,
-                temperature=run_temp,
-                stop=["<|im_end|>", "<|im_start|>", "<|endoftext|>", "\nYou:", "\nVivy:", "<|user|>", "<|system|>"]
-            )
-            raw = out["choices"][0]["text"]
+            if stream:
+                out = llm(
+                    build(mem, history, user, search_context, current_emotion, categories, reaction_directive, director_state, screen_context, perception_context, perception_state, wants_vision=wants_vision, wants_audio=wants_audio),
+                    max_tokens=run_max_tokens,
+                    temperature=run_temp,
+                    stop=["<|im_end|>", "<|im_start|>", "<|endoftext|>", "\nYou:", "\nVivy:", "<|user|>", "<|system|>"],
+                    stream=True
+                )
+                def _stream_generator():
+                    raw_acc = ""
+                    in_think_block = False
+                    buffer = ""
+                    
+                    if micro_reaction:
+                        yield {'type': 'token', 'text': micro_reaction + " "}
+                        
+                    for chunk in out:
+                        if response_context and pipeline_manager.is_cancelled(response_context):
+                            break
+                        tok = chunk["choices"][0]["text"]
+                        raw_acc += tok
+                        buffer += tok
+                        
+                        if not in_think_block:
+                            tag_idx = buffer.find("<think")
+                            if tag_idx != -1:
+                                if buffer.find("<think>") != -1:
+                                    if tag_idx > 0:
+                                        yield {'type': 'token', 'text': buffer[:tag_idx]}
+                                    in_think_block = True
+                                    buffer = buffer[buffer.find("<think>")+7:]
+                                else:
+                                    if tag_idx > 0:
+                                        yield {'type': 'token', 'text': buffer[:tag_idx]}
+                                        buffer = buffer[tag_idx:]
+                            else:
+                                yield {'type': 'token', 'text': buffer}
+                                buffer = ""
+                        else:
+                            end_idx = buffer.find("</think>")
+                            if end_idx != -1:
+                                in_think_block = False
+                                buffer = buffer[end_idx+8:]
+                            else:
+                                if len(buffer) > 8:
+                                    buffer = buffer[-8:]
+                    
+                    if buffer and not in_think_block and "<think" not in buffer:
+                        yield {'type': 'token', 'text': buffer}
+                        
+                    if response_context and pipeline_manager.is_cancelled(response_context):
+                        return
+                        
+                    # End of stream, finalize reply
+                    t_clean = clean(raw_acc, user, mem)
+                    if not t_clean and raw_acc:
+                        raw_clean = _THINK_BLOCK_RE.sub("", raw_acc).strip()
+                        raw_clean = _THINK_TAG_RE.sub("", raw_clean).strip()
+                        t_clean = clean(raw_clean, user, mem)
+                        if not t_clean: t_clean = raw_clean
+                            
+                    reply = t_clean
+                    if micro_reaction and not reply.lower().startswith(micro_reaction.lower().strip("—. ")):
+                        reply = micro_reaction + " " + reply
+                        
+                    p_state = mem.get("planner_state", {})
+                    s_plan = mem.get("strategy_plan", {})
+                    if (p_state.get("ask_question") or s_plan.get("ask_question")) and "?" not in reply:
+                        reply = generate_followup_question(user, reply, mem, categories)
+                        
+                    reply = add_emoji(reply, mem.get("tone", "neutral"))
+                    history.append("Vivy: " + reply)
+                    mem["last_reply"] = reply
+                    
+                    try:
+                        self_evolution_reflection(user, reply, mem, perception_context=perception_context, perception_state=perception_state)
+                        self_reflection(user, reply, mem)
+                    except Exception as e: print("Reflection error:", e)
+                    
+                    save(mem)
+                    yield {'type': 'final_state', 'history': history, 'reply': reply}
+                
+                return _stream_generator()
+            else:
+                out = llm(
+                    build(mem, history, user, search_context, current_emotion, categories, reaction_directive, director_state, screen_context, perception_context, perception_state, wants_vision=wants_vision, wants_audio=wants_audio),
+                    max_tokens=run_max_tokens,
+                    temperature=run_temp,
+                    stop=["<|im_end|>", "<|im_start|>", "<|endoftext|>", "\nYou:", "\nVivy:", "<|user|>", "<|system|>"]
+                )
+                raw = out["choices"][0]["text"]
         except Exception as le:
             print(f"LLM call exception on attempt {attempt}: {le}")
             raw = ""
@@ -6081,6 +6186,11 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
             print(f"[ExperienceReplay] Logging warning: {_replay_err}")
 
     save(mem)
+    if stream:
+        def early_gen():
+            yield {'type': 'token', 'text': reply}
+            yield {'type': 'final_state', 'history': history, 'reply': reply}
+        return early_gen()
     return reply, history
 
 if __name__ == "__main__":

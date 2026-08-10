@@ -21,6 +21,7 @@ namespace VivyAI.Editor
 
         static void RunAuditOnce()
         {
+            if (!EditorPrefs.GetBool("Vivy_AutoRunStartupAudits", false)) return;
             if (!SessionState.GetBool("ForensicAuditReadOnly2", false))
             {
                 SessionState.SetBool("ForensicAuditReadOnly2", true);

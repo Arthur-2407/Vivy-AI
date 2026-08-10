@@ -96,6 +96,12 @@ class VoiceCloningEngine:
             
         target_model = model_name if model_name and model_name in pth_files else pth_files[0]
         
+        # Resolve corresponding .index file for the model to ensure accurate voice timbre
+        index_file = ""
+        expected_index = target_model.replace(".pth", ".index")
+        if os.path.exists(os.path.join(weights_dir, expected_index)):
+            index_file = os.path.join(weights_dir, expected_index)
+        
         orig_cwd = os.getcwd()
         try:
             os.chdir(RVC_DIR)
@@ -112,7 +118,7 @@ class VoiceCloningEngine:
                 f0_up_key=pitch,
                 f0_file=None,
                 f0_method=method or self.f0_method,
-                file_index="",
+                file_index=index_file,
                 file_index2="",
                 index_rate=0.75,
                 filter_radius=3,

@@ -425,6 +425,8 @@ def start_mic_listening(output_txt_path=None, mic_index=None):
         silence_frames = 0
         speech_frames = 0
         was_vivy_active = False
+        last_partial_time = 0
+        last_partial_text = "" 
 
         while True:
             # Check for mic mute file or active pipeline status (speaking, thinking, voice generation)
@@ -554,6 +556,25 @@ def start_mic_listening(output_txt_path=None, mic_index=None):
             if recording:
                 audio_buffer.append(data.copy())
                 show_timer()
+                
+                # Rolling Context Partial Transcription (every 1.5 seconds)
+                if time.time() - last_partial_time > 1.5 and len(audio_buffer) > 20:
+                    last_partial_time = time.time()
+                    try:
+                        import numpy as np
+                        import scipy.io.wavfile as wav
+                        raw = (np.concatenate(audio_buffer, axis=0).reshape(-1).astype(np.float32) / 32768.0)
+                        pcm16 = np.clip(raw * 32768, -32768, 32767).astype(np.int16)
+                        tmp_wav = os.path.join(RECORD_DIR, "partial_tmp.wav")
+                        wav.write(tmp_wav, SAMPLE_RATE, pcm16)
+                        
+                        partial_text = _stt_backend.transcribe(tmp_wav)
+                        if partial_text and partial_text != last_partial_text:
+                            last_partial_text = partial_text
+                            text_queue.put({"type": "partial", "text": partial_text})
+                    except Exception as e:
+                        pass
+
 
             if recording and silence_frames > MAX_SILENCE_FRAMES:
                 print(Fore.YELLOW + "\nSilence detected. Processing..." + Style.RESET_ALL)
