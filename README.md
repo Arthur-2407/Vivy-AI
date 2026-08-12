@@ -10,7 +10,11 @@
   <img src="https://img.shields.io/badge/Python-3.10%2B-3776ab?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.10+"/>
   <img src="https://img.shields.io/badge/Platform-Windows-0078d4?style=for-the-badge&logo=windows&logoColor=white" alt="Windows"/>
   <img src="https://img.shields.io/badge/LLM-llama.cpp%20%7C%20Qwen3--8B-22c55e?style=for-the-badge" alt="LLM"/>
+  <img src="https://img.shields.io/badge/Vision-YOLO11%20%7C%20OCR-eab308?style=for-the-badge" alt="Vision"/>
   <img src="https://img.shields.io/badge/Speech-Whisper%20%7C%20TTS%20%7C%20RVC-a855f7?style=for-the-badge" alt="Speech"/>
+  <br>
+  <img src="https://img.shields.io/badge/Cognition-15--Stage%20AGI%20Pipeline-0ea5e9?style=for-the-badge" alt="Cognition"/>
+  <img src="https://img.shields.io/badge/Memory-Vector%20DB%20%7C%20Graph-10b981?style=for-the-badge" alt="Memory"/>
   <img src="https://img.shields.io/badge/Avatar-MateEngine%20%7C%20VRM-ec4899?style=for-the-badge" alt="Avatar"/>
   <img src="https://img.shields.io/badge/License-Vivy%20AI%20License-f97316?style=for-the-badge" alt="License"/>
 </p>
@@ -34,134 +38,155 @@ Vivy is designed from first principles as a **personal AGI substrate**: she lear
 ```mermaid
 flowchart TD
     %% Vivy AI Custom Modern Styling
-    classDef default fill:#1e1e2e,stroke:#313244,stroke-width:2px,color:#cdd6f4,rx:8px,ry:8px
-    classDef input fill:#11111b,stroke:#89b4fa,stroke-width:2px,color:#89b4fa,rx:8px
-    classDef pipe fill:#11111b,stroke:#89dceb,stroke-width:2px,color:#89dceb,stroke-dasharray: 5 5,rx:8px
-    classDef core fill:#11111b,stroke:#a6e3a1,stroke-width:2px,color:#a6e3a1,rx:8px
-    classDef conv fill:#11111b,stroke:#cba6f7,stroke-width:2px,color:#cba6f7,rx:8px
-    classDef neural fill:#11111b,stroke:#f5c2e7,stroke-width:2px,color:#f5c2e7,rx:8px
-    classDef voice fill:#11111b,stroke:#f9e2af,stroke-width:2px,color:#f9e2af,rx:8px
-    classDef verify fill:#11111b,stroke:#f38ba8,stroke-width:2px,color:#f38ba8,rx:8px
-    classDef circ fill:#11111b,stroke:#f2cdcd,stroke-width:2px,color:#f2cdcd,rx:8px
-    classDef output fill:#11111b,stroke:#fab387,stroke-width:2px,color:#fab387,rx:8px
+    classDef default fill:#1e1e2e,stroke:#313244,stroke-width:2px,color:#cdd6f4
+    classDef input fill:#11111b,stroke:#89b4fa,stroke-width:2px,color:#89b4fa
+    classDef pipe fill:#11111b,stroke:#89dceb,stroke-width:2px,color:#89dceb
+    classDef core fill:#11111b,stroke:#a6e3a1,stroke-width:2px,color:#a6e3a1
+    classDef conv fill:#11111b,stroke:#cba6f7,stroke-width:2px,color:#cba6f7
+    classDef neural fill:#11111b,stroke:#f5c2e7,stroke-width:2px,color:#f5c2e7
+    classDef voice fill:#11111b,stroke:#f9e2af,stroke-width:2px,color:#f9e2af
+    classDef verify fill:#11111b,stroke:#f38ba8,stroke-width:2px,color:#f38ba8
+    classDef circ fill:#11111b,stroke:#f2cdcd,stroke-width:2px,color:#f2cdcd
+    classDef output fill:#11111b,stroke:#fab387,stroke-width:2px,color:#fab387
 
     subgraph INPUT["🎤 Input Layer"]
-        MIC["🎙️ mic_input.py\n(Voice + VAD + STT)"]:::input
-        WEB["🌐 web_server.py\n(Flask + WebSocket API)"]:::input
-        SCREEN["🖥️ Screen Capture\n(OCR + VLM)"]:::input
-        CAM["📷 Camera Feed\n(YOLO + Gaze)"]:::input
+        MIC["🎙️ mic_input.py<br>(Voice + VAD + STT)"]:::input
+        WEB["🌐 web_server.py<br>(Flask + WebSocket API)"]:::input
+        SCREEN["🖥️ Screen Capture<br>(OCR + VLM)"]:::input
+        CAM["📷 Camera Feed<br>(YOLO + Gaze)"]:::input
     end
 
-    subgraph PIPE["⚡ Streaming Pipeline (pipeline/)"]
-        MGR["manager.py\n(Context & Queues)"]:::pipe
-        BUS["event_bus.py\n(Async Event Bus)"]:::pipe
+    subgraph PIPE["⚡ Streaming Pipeline (pipeline)"]
+        MGR["manager.py<br>(Context & Queues)"]:::pipe
+        BUS["event_bus.py<br>(Async Event Bus)"]:::pipe
     end
 
-    subgraph LANG["🌐 Language Engine (language/)"]
-        DETECT["detector.py\n(Language Detection)"]
-        TRANS["hybrid_translation_engine.py\n(Multilingual Translation)"]
-        LOCALIZE["prompt_localizer.py\n(Context Localization)"]
-        VOICESEL["voice_selector.py\n(Language→Voice Routing)"]
+    subgraph LANG["🌐 Language Engine (language)"]
+        DETECT["detector.py<br>(Language Detection)"]
+        TRANS["hybrid_translation_engine.py<br>(Multilingual Translation)"]
+        LOCALIZE["prompt_localizer.py<br>(Context Localization)"]
+        VOICESEL["voice_selector.py<br>(Language to Voice Routing)"]
     end
 
-    subgraph CORE["🧠 AGI Cognitive Core (agi/)"]
-        EXEC["executive/\n(Agency & Goals)"]:::core
-        BB["blackboard.py\n(Cognitive Bus)"]:::core
-        WM["world_model.py\n(Dynamic World Model)"]:::core
-        KG["knowledge_graph.py\n(Knowledge Triples)"]:::core
-        META["meta_cognition.py\n(Reason→Critique→Improve)"]:::core
-        PLAN["long_horizon_planner.py\n(Goal Tracking)"]:::core
-        SKILL["skill_system.py\n(XP Skill Progression)"]:::core
+    subgraph CORE["🧠 AGI Cognitive Core (agi)"]
+        EXEC["executive<br>(Agency & Goals)"]:::core
+        BB["blackboard.py<br>(Cognitive Bus)"]:::core
+        WM["world_model.py<br>(Dynamic World Model)"]:::core
+        KG["knowledge_graph.py<br>(Knowledge Triples)"]:::core
+        META["meta_cognition.py<br>(Reason to Critique to Improve)"]:::core
+        PLAN["long_horizon_planner.py<br>(Goal Tracking)"]:::core
+        SKILL["skill_system.py<br>(XP Skill Progression)"]:::core
     end
 
     subgraph CONV["💬 Conversation Engine"]
-        CONVO["conversation.py\n(LLM Orchestration)"]:::conv
-        PLANNER["conversation_planner.py\n(Pre-Turn Strategy)"]:::conv
-        REL["relationship/\n(Relationship Engine)"]:::conv
-        TOPIC["topic_tracker.py\n(Topic Continuity)"]:::conv
+        CONVO["conversation.py<br>(LLM Orchestration)"]:::conv
+        PLANNER["conversation_planner.py<br>(Pre-Turn Strategy)"]:::conv
+        REL["relationship<br>(Relationship Engine)"]:::conv
+        TOPIC["topic_tracker.py<br>(Topic Continuity)"]:::conv
     end
 
-    subgraph PERC["👁️ Perception (perception/)"]
-        FUSION["fusion_engine.py\n(Multi-Stream Fusion)"]
-        PROACT["proactivity_engine.py\n(Proactive Engagement)"]
-        AUDIO["audio_pipeline.py\n(Ambient Audio Analysis)"]
+    subgraph PERC["👁️ Perception (perception)"]
+        FUSION["fusion_engine.py<br>(Multi-Stream Fusion)"]
+        PROACT["proactivity_engine.py<br>(Proactive Engagement)"]
+        AUDIO["audio_pipeline.py<br>(Ambient Audio Analysis)"]
     end
 
-    subgraph NEURAL["🧬 Neural Engine (neural/)"]
-        EXP["experience_store.py\n(Dense Vectors)"]:::neural
-        PRED["prediction_engine.py\n(Forward Model)"]:::neural
+    subgraph NEURAL["🧬 Neural Engine (neural)"]
+        EXP["experience_store.py<br>(Dense Vectors)"]:::neural
+        PRED["prediction_engine.py<br>(Forward Model)"]:::neural
     end
 
-    subgraph EVO["🧬 Evolution (evolution/)"]
-        ENG["evolution_engine.py\n(Self-Improvement)"]:::neural
-        GOV["governance_layer.py\n(Safety Gate)"]:::neural
-        CORR["correction_engine.py\n(Regression Rollback)"]:::neural
-        ADAPT["adaptation_engine.py\n(Cognitive Adaptation)"]:::neural
+    subgraph EVO["🧬 Evolution (evolution)"]
+        ENG["evolution_engine.py<br>(Self-Improvement)"]:::neural
+        GOV["governance_layer.py<br>(Safety Gate)"]:::neural
+        CORR["correction_engine.py<br>(Regression Rollback)"]:::neural
+        ADAPT["adaptation_engine.py<br>(Cognitive Adaptation)"]:::neural
     end
 
-    subgraph CIRC["🌙 Circadian (circadian/)"]
-        CENG["circadian_engine.py\n(Mood + Phase + Tone)"]:::circ
+    subgraph CIRC["🌙 Circadian (circadian)"]
+        CENG["circadian_engine.py<br>(Mood + Phase + Tone)"]:::circ
     end
 
-    subgraph VOICE["🎵 Voice Identity System (voice/)"]
-        VMGR["voice_manager.py\n(Active Voice Identity)"]:::voice
-        VTRAIN["voice_training.py\n(Genuine RVC Training)"]:::voice
-        VVAL["voice_validation.py\n(Objective Acoustic Scoring)"]:::voice
-        VPREV["voice_preview.py\n(Benchmark Comparison)"]:::voice
-        VDB["voice_database.py\n(Voice Identity Store)"]:::voice
-        TTS["voice.py\n(Coqui TTS Synthesis)"]:::voice
-        RVCCLONE["voice_cloning.py\n(RVC Conversion)"]:::voice
+    subgraph VOICE["🎵 Voice Identity System (voice)"]
+        VMGR["voice_manager.py<br>(Active Voice Identity)"]:::voice
+        VTRAIN["voice_training.py<br>(Genuine RVC Training)"]:::voice
+        VVAL["voice_validation.py<br>(Objective Acoustic Scoring)"]:::voice
+        VPREV["voice_preview.py<br>(Benchmark Comparison)"]:::voice
+        VDB["voice_database.py<br>(Voice Identity Store)"]:::voice
+        TTS["voice.py<br>(Coqui TTS Synthesis)"]:::voice
+        RVCCLONE["voice_cloning.py<br>(RVC Conversion)"]:::voice
     end
     
-    subgraph VERIFY["🛡️ Verification (verification/)"]
+    subgraph VERIFY["🛡️ Verification (verification)"]
         CERT["certification_engine.py"]:::verify
         INV["invariant_engine.py"]:::verify
     end
 
     subgraph OUTPUT["🖥️ Output Layer"]
-        AVATAR["avatar_bridge.py\n(MateEngine WebSocket)"]:::output
-        ANIM["animator/\n(Procedural Animation)"]:::output
-        SHARED["shared/\n(File-Based IPC)"]:::output
+        AVATAR["avatar_bridge.py<br>(MateEngine WebSocket)"]:::output
+        ANIM["animator<br>(Procedural Animation)"]:::output
+        SHARED["shared<br>(File-Based IPC)"]:::output
     end
 
     %% Edge Connections
-    MIC & WEB --> MGR
-    SCREEN & CAM --> FUSION
+    MIC --> MGR
+    WEB --> MGR
+    SCREEN --> FUSION
+    CAM --> FUSION
     AUDIO --> FUSION
     
-    MGR <--> BUS
-    BUS <--> CONVO
+    MGR --> BUS
+    BUS --> CONVO
     
-    DETECT --> TRANS --> LOCALIZE --> CONVO
+    DETECT --> TRANS
+    TRANS --> LOCALIZE
+    LOCALIZE --> CONVO
     VOICESEL --> VMGR
 
-    FUSION --> PROACT --> CONVO
+    FUSION --> PROACT
+    PROACT --> CONVO
     
-    CONVO <--> EXEC
-    CONVO <--> BB
-    BB <--> WM & KG & META & PLAN & SKILL
+    CONVO --> EXEC
+    CONVO --> BB
+    
+    BB --> WM
+    BB --> KG
+    BB --> META
+    BB --> PLAN
+    BB --> SKILL
+    
     META --> CONVO
     PLAN --> CONVO
     
-    CONVO --> REL --> TOPIC --> PLANNER --> CONVO
+    CONVO --> REL
+    REL --> TOPIC
+    TOPIC --> PLANNER
+    PLANNER --> CONVO
     
     BB --> PRED
-    PRED --> EXP --> ADAPT
+    PRED --> EXP
+    EXP --> ADAPT
     
-    EVO --> ENG --> GOV --> ADAPT
+    ENG --> GOV
+    GOV --> ADAPT
 
-    CIRC --> CENG --> CONVO
+    CENG --> CONVO
     
-    CONVO --> TTS --> RVCCLONE --> SHARED
+    CONVO --> TTS
+    TTS --> RVCCLONE
+    RVCCLONE --> SHARED
+    
     VMGR --> RVCCLONE
-    VTRAIN --> VVAL --> VPREV
+    VTRAIN --> VVAL
+    VVAL --> VPREV
     VDB --> VMGR
     
-    SHARED --> AVATAR --> ANIM
+    SHARED --> AVATAR
+    AVATAR --> ANIM
     
     %% Monitoring lines
-    CERT -.->|Audits| CORE
-    INV -.->|Checks| PIPE
+    CERT -.->|Audits| BB
+    INV -.->|Checks| MGR
 ```
 
 All subsystems communicate through a **shared file-based IPC layer** (`shared/`) allowing `run_vivy.py` and `web_server.py` to run as separate OS processes while maintaining a consistent state view.
@@ -811,14 +836,14 @@ The certification suite validates:
 
 | Component | Minimum | Recommended |
 |---|---|---|
-| CPU | 8-core x86-64 | 12-core+ i7 13th Gen or better |
-| RAM | 16 GB | 32 GB |
-| GPU VRAM | 6 GB | 8–12 GB (RTX 3080+) |
-| Storage | 20 GB | 40 GB (models + audio + cloning data) |
+| CPU | 8-core x86-64 | 12-core+ i7 13th Gen / Ryzen 9 or better |
+| RAM | 24 GB | 32 GB |
+| GPU VRAM | 8 GB | 12–16 GB (RTX 4070+) |
+| Storage | 30 GB | 50 GB (models + audio + cloning + vector DB) |
 | OS | Windows 10 64-bit | Windows 11 64-bit |
 | Python | 3.10 | 3.11 |
 
-> **Note:** Vivy runs fully on CPU if no compatible GPU is available. GPU acceleration is strongly recommended for LLM inference and RVC voice cloning training/inference.
+> **Note:** Vivy runs fully on CPU if no compatible GPU is available. GPU acceleration is strongly recommended for running the complete cognitive pipeline (LLM inference, YOLO11, and RVC voice cloning) in real-time.
 
 ---
 
