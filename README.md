@@ -33,96 +33,103 @@ Vivy is designed from first principles as a **personal AGI substrate**: she lear
 
 ```mermaid
 flowchart TD
+    %% Vivy AI Custom Modern Styling
+    classDef default fill:#1e1e2e,stroke:#313244,stroke-width:2px,color:#cdd6f4,rx:8px,ry:8px
+    classDef input fill:#11111b,stroke:#89b4fa,stroke-width:2px,color:#89b4fa,rx:8px
+    classDef pipe fill:#11111b,stroke:#89dceb,stroke-width:2px,color:#89dceb,stroke-dasharray: 5 5,rx:8px
+    classDef core fill:#11111b,stroke:#a6e3a1,stroke-width:2px,color:#a6e3a1,rx:8px
+    classDef conv fill:#11111b,stroke:#cba6f7,stroke-width:2px,color:#cba6f7,rx:8px
+    classDef neural fill:#11111b,stroke:#f5c2e7,stroke-width:2px,color:#f5c2e7,rx:8px
+    classDef voice fill:#11111b,stroke:#f9e2af,stroke-width:2px,color:#f9e2af,rx:8px
+    classDef verify fill:#11111b,stroke:#f38ba8,stroke-width:2px,color:#f38ba8,rx:8px
+    classDef output fill:#11111b,stroke:#fab387,stroke-width:2px,color:#fab387,rx:8px
+
     subgraph INPUT["🎤 Input Layer"]
-        MIC["mic_input.py\nVoice + VAD + Multilingual STT"]
-        WEB["web_server.py\nFlask + WebSocket API"]
-        SCREEN["Screen Capture\nOCR + VLM"]
-        CAM["Camera Feed\nYOLO + Gaze"]
+        MIC["🎙️ mic_input.py\n(Voice & STT)"]:::input
+        WEB["🌐 web_server.py\n(WebSocket API)"]:::input
+        SCREEN["🖥️ Screen Capture\n(OCR + VLM)"]:::input
+        CAM["📷 Camera Feed\n(YOLO + Gaze)"]:::input
     end
 
-    subgraph LANG["🌐 Language Engine  (language/)"]
-        DETECT["detector.py\nLanguage Detection"]
-        TRANS["hybrid_translation_engine.py\nMultilingual Translation"]
-        LOCALIZE["prompt_localizer.py\nContext Localization"]
-        VOICESEL["voice_selector.py\nLanguage→Voice Routing"]
+    subgraph PIPE["⚡ Streaming Pipeline (pipeline/)"]
+        MGR["manager.py\n(Context & Queues)"]:::pipe
+        BUS["event_bus.py\n(Async Event Bus)"]:::pipe
     end
 
-    subgraph CORE["🧠 AGI Cognitive Core  (agi/)"]
-        BB["blackboard.py\nCognitive State Bus"]
-        WM["world_model.py\nDynamic World Model"]
-        KG["knowledge_graph.py\nKnowledge Triples"]
-        META["meta_cognition.py\nReason→Critique→Improve Loop"]
-        PLAN["long_horizon_planner.py\nGoal Tracking"]
-        SKILL["skill_system.py\nXP Skill Progression"]
-        ADAPT["model_adaptation_engine.py\nCognitive Adaptation"]
+    subgraph PERC["👁️ Perception (perception/)"]
+        FUSION["fusion_engine.py"]
+        PROACT["proactivity_engine.py"]
+    end
+
+    subgraph LANG["🌐 Language (language/)"]
+        DETECT["detector.py"]
+        TRANS["hybrid_translation.py"]
+    end
+
+    subgraph CORE["🧠 AGI Cognitive Core (agi/)"]
+        EXEC["executive/\n(Agency & Goals)"]:::core
+        BB["blackboard.py\n(Cognitive Bus)"]:::core
+        WM["world_model.py\n(World State)"]:::core
+        META["meta_cognition.py\n(Reasoning Loop)"]:::core
+        PLAN["long_horizon_planner.py"]:::core
     end
 
     subgraph CONV["💬 Conversation Engine"]
-        CONVO["conversation.py\nLLM Orchestration (326 KB)"]
-        PLANNER["conversation_planner.py\nPre-Turn Strategy"]
-        REL["relationship/\nRelationship Engine + Attachment"]
-        TOPIC["topic_tracker.py\nTopic Continuity"]
+        CONVO["conversation.py\n(LLM Orchestration)"]:::conv
+        REL["relationship/\n(Attachment Engine)"]:::conv
     end
 
-    subgraph VOICE["🎵 Voice Identity System  (voice/)"]
-        VMGR["voice_manager.py\nActive Voice Identity"]
-        VTRAIN["voice_training.py\nGenuine RVC Neural Training"]
-        VVAL["voice_validation.py\nObjective Acoustic Scoring"]
-        VPREV["voice_preview.py\nBenchmark Comparison"]
-        VDB["voice_database.py\nVoice Identity Store"]
-        TTS["voice.py\nCoqui TTS Synthesis"]
-        RVCCLONE["voice_cloning.py\nRVC Conversion"]
+    subgraph NEURAL["🧬 Neural & Evolution (neural/ & evolution/)"]
+        EXP["experience_store.py\n(Dense Vectors)"]:::neural
+        PRED["prediction_engine.py\n(Forward Model)"]:::neural
+        ADAPT["adaptation_engine.py\n(Self-Evolution)"]:::neural
     end
 
-    subgraph PERC["👁️ Perception  (perception/)"]
-        FUSION["fusion_engine.py\nMulti-Stream Fusion"]
-        PROACT["proactivity_engine.py\nProactive Engagement"]
-        AUDIO["audio_pipeline.py\nAmbient Audio Analysis"]
+    subgraph VOICE["🎵 Voice System (voice/)"]
+        VMGR["voice_manager.py\n(Identity Routing)"]:::voice
+        VTRAIN["voice_training.py\n(Genuine RVC)"]:::voice
+        TTS["voice.py\n(Coqui TTS)"]:::voice
+        RVCCLONE["voice_cloning.py\n(RVC Conversion)"]:::voice
     end
-
-    subgraph EVO["🧬 Evolution  (evolution/)"]
-        ENG["evolution_engine.py\nSelf-Improvement"]
-        GOV["governance_layer.py\nSafety Gate"]
-        CORR["correction_engine.py\nRegression Rollback"]
-    end
-
-    subgraph CIRC["🌙 Circadian (circadian/)"]
-        CENG["circadian_engine.py\nMood + Phase + Tone"]
+    
+    subgraph VERIFY["🛡️ Verification (verification/)"]
+        CERT["certification_engine.py"]:::verify
+        INV["invariant_engine.py"]:::verify
     end
 
     subgraph OUTPUT["🖥️ Output Layer"]
-        AVATAR["avatar_bridge.py\nMateEngine WebSocket"]
-        ANIM["animator/\nProcedural Animation"]
-        SHARED["shared/\nFile-Based IPC"]
+        AVATAR["MateEngine\n(3D Anime Avatar)"]:::output
+        ANIM["animator/\n(Procedural Gen)"]:::output
     end
 
-    MIC --> DETECT
-    WEB --> CONVO
-    SCREEN --> FUSION
-    CAM --> FUSION
-
-    DETECT --> TRANS --> LOCALIZE --> CONVO
-    VOICESEL --> VMGR
-
-    CONVO --> BB
-    BB --> WM & KG & META & PLAN & SKILL & ADAPT
-    META --> CONVO
-    PLAN --> CONVO
-
-    CONVO --> REL --> TOPIC --> PLANNER --> CONVO
-
-    FUSION --> PROACT --> CONVO
-    AUDIO --> FUSION
-
-    CONVO --> TTS --> RVCCLONE --> SHARED
+    %% Data Flow
+    MIC & WEB --> MGR
+    SCREEN & CAM --> FUSION
+    FUSION --> PROACT
+    
+    MGR <--> BUS
+    BUS <--> CONVO
+    
+    DETECT --> TRANS --> CONVO
+    
+    CONVO <--> EXEC
+    CONVO <--> BB
+    BB <--> WM & META & PLAN
+    
+    CONVO <--> REL
+    
+    BB --> PRED
+    PRED --> EXP --> ADAPT
+    
+    CONVO --> TTS --> RVCCLONE --> AVATAR
     VMGR --> RVCCLONE
-    VTRAIN --> VVAL --> VPREV
-    VDB --> VMGR
-
-    CIRC --> CENG --> CONVO
-    EVO --> ENG --> GOV --> ADAPT
-
-    SHARED --> AVATAR --> ANIM
+    VTRAIN --> VMGR
+    
+    CONVO --> ANIM --> AVATAR
+    
+    %% Monitoring lines
+    CERT -.->|Audits| CORE
+    INV -.->|Checks| PIPE
 ```
 
 All subsystems communicate through a **shared file-based IPC layer** (`shared/`) allowing `run_vivy.py` and `web_server.py` to run as separate OS processes while maintaining a consistent state view.
@@ -153,6 +160,10 @@ Vivy's reasoning is not simply a prompt + LLM call. Every conversation turn is p
 | `self_modification_engine.py` | Safe, governed self-improvement proposals and patches |
 | `code_executor.py` | Safe sandboxed Python/shell code execution for agentic tool calls |
 | `file_manager.py` | Controlled file system read/write/search operations for AGI tool use |
+| `bus/event_bus.py` | Asynchronous event bus for high-throughput cognitive messaging |
+| `executive/agency_controller.py` | Top-level executive control and agency allocation |
+| `executive/goal_motivation_engine.py` | Intrinsic motivation and long-term goal weighting |
+| `executive/self_model.py` | Maintains a coherent structural model of Vivy's own cognitive state |
 
 ---
 
@@ -277,6 +288,33 @@ Vivy's behaviour adapts to a **biologically inspired circadian rhythm**:
 
 ---
 
+### 🧠 Neural & Prediction Engine (`neural/`)
+Vivy's neural layer provides lower-level cognitive primitives for experience embedding and novelty detection:
+- **`experience_encoder.py` / `experience_store.py`**: Encodes and stores episodic experiences into dense vector representations.
+- **`novelty_detector.py`**: Evaluates incoming stimuli for novelty to drive curiosity-based learning.
+- **`prediction_engine.py`**: Forward-predicts state changes based on historical patterns.
+- **`reward_engine.py`**: Calculates intrinsic rewards for reinforcement learning loops.
+
+---
+
+### ⚡ Streaming Pipeline (`pipeline/`)
+A high-throughput asynchronous processing pipeline replacing legacy synchronous blocking calls:
+- **`stt.py` / `chunker.py`**: Real-time speech-to-text chunking and streaming.
+- **`workers.py` / `queues.py`**: Thread-safe worker pools for audio processing, LLM generation, and TTS synthesis.
+- **`manager.py` / `context.py`**: Centralized pipeline context and lifecycle management.
+
+---
+
+### 🛡️ Verification & Certification (`verification/`)
+An enterprise-grade verification suite ensuring pipeline integrity and cognitive stability:
+- **`certification_engine.py`**: Orchestrates full-system correctness and architecture audits.
+- **`invariant_engine.py`**: Checks runtime state against defined structural schemas.
+- **`degraded_mode_runner.py`**: Ensures graceful degradation when non-critical subsystems fail.
+- **`architecture_graph.py`**: Validates the actual import graph against expected architecture schemas.
+- **`instrumentation/`**: Continuous tracing (`trace_collector.py`) and performance profiling (`vivy_instrumentation.py`).
+
+---
+
 ### 🎭 3D Avatar — MateEngine (`Mate-Engine/`)
 Vivy's visual presence is powered by **MateEngine**, a Unity-based real-time VRM avatar runtime:
 - Full VRM 0.x / VRM 1.0 avatar loading and rendering with MToon shader and spring bone physics.
@@ -309,6 +347,8 @@ Vivy/
 ├── vivy_config.json                 # Central configuration — all tunable parameters
 │
 ├── agi/                             # AGI Cognitive Architecture (15 subsystems)
+│   ├── bus/                         # Asynchronous event bus
+│   ├── executive/                   # Executive control, agency, and self-model
 │   ├── cognitive_core.py            # Unified pre/post-turn cognitive orchestration
 │   ├── blackboard.py                # Shared cognitive state bus
 │   ├── world_model.py               # Dynamic world model
@@ -454,6 +494,29 @@ Vivy/
 │   ├── hardware_manager.py          # System idle/sleep state integration
 │   └── config_loader.py             # Circadian configuration loader
 │
+├── neural/                          # Neural & Prediction Engine
+│   ├── experience_encoder.py        # Vector encoding of experiences
+│   ├── experience_store.py          # Fast vector storage and retrieval
+│   ├── novelty_detector.py          # Stimulus novelty evaluation
+│   ├── prediction_engine.py         # State change prediction
+│   └── reward_engine.py             # Intrinsic reward calculation
+│
+├── pipeline/                        # Async Streaming Pipeline
+│   ├── manager.py                   # Central pipeline coordinator
+│   ├── workers.py                   # Thread-safe worker pools
+│   ├── queues.py                    # Multi-stage processing queues
+│   ├── chunker.py                   # Real-time text chunking
+│   └── stt.py                       # Streaming STT integration
+│
+├── verification/                    # System Verification & Certification
+│   ├── verification_engine/         # Certification & invariant checking
+│   ├── instrumentation/             # Continuous tracing and profiling
+│   ├── schemas/                     # JSON validation schemas
+│   └── evidence_writer.py           # Audit trail logging
+│
+├── runtime/                         # Runtime Environment Manager
+│   └── environment_manager.py       # Execution environment state
+│
 ├── emotion/                         # Emotion Classification Engine
 │   ├── emotion_engine.py            # Text-based emotion detection
 │   ├── emotion_engine_ml.py         # ML-backed emotion classification
@@ -473,6 +536,9 @@ Vivy/
 │   ├── cognitive_output.py          # Cognitive pipeline output schema
 │   ├── context_package.py           # Conversation context package
 │   ├── diagnostic_event.py          # Diagnostic event type
+│   ├── pipeline_event.py            # Streaming pipeline events
+│   ├── rvc_request.py               # Voice cloning requests
+│   ├── tts_request.py               # Text-to-speech requests
 │   └── emotion_state.py             # Emotion state schema
 │
 ├── database/                        # Persistent Knowledge Storage
@@ -508,6 +574,13 @@ Vivy/
 ├── memory_ml_engine.py              # ML-backed memory retrieval scoring
 ├── developer_diagnostic_manager.py  # Developer tools and diagnostic state (16 KB)
 ├── diagnostic_mode.py               # Diagnostic mode toggle and reporting
+├── debug_director.py                # Interactive debugging director
+├── runtime_tracer.py                # Pipeline execution tracer
+├── vivy_instrumentation.py          # Runtime performance instrumentation
+├── vivy_verifier.py                 # Standalone pipeline verifier
+├── matrix_builder.py                # Matrix-style architecture reporting
+├── build_matrix_report.py           # Verification matrix report generator
+├── env_audit.json                   # Environment audit output
 ├── vivy_animation_registry.json     # Animation clip registry (71 KB)
 ├── vivy_config.json                 # Central configuration file
 ├── vivy_knowledge_graph.json        # Persistent personal knowledge graph
