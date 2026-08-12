@@ -42,11 +42,12 @@ flowchart TD
     classDef neural fill:#11111b,stroke:#f5c2e7,stroke-width:2px,color:#f5c2e7,rx:8px
     classDef voice fill:#11111b,stroke:#f9e2af,stroke-width:2px,color:#f9e2af,rx:8px
     classDef verify fill:#11111b,stroke:#f38ba8,stroke-width:2px,color:#f38ba8,rx:8px
+    classDef circ fill:#11111b,stroke:#f2cdcd,stroke-width:2px,color:#f2cdcd,rx:8px
     classDef output fill:#11111b,stroke:#fab387,stroke-width:2px,color:#fab387,rx:8px
 
     subgraph INPUT["🎤 Input Layer"]
-        MIC["🎙️ mic_input.py\n(Voice & STT)"]:::input
-        WEB["🌐 web_server.py\n(WebSocket API)"]:::input
+        MIC["🎙️ mic_input.py\n(Voice + VAD + STT)"]:::input
+        WEB["🌐 web_server.py\n(Flask + WebSocket API)"]:::input
         SCREEN["🖥️ Screen Capture\n(OCR + VLM)"]:::input
         CAM["📷 Camera Feed\n(YOLO + Gaze)"]:::input
     end
@@ -56,39 +57,59 @@ flowchart TD
         BUS["event_bus.py\n(Async Event Bus)"]:::pipe
     end
 
-    subgraph PERC["👁️ Perception (perception/)"]
-        FUSION["fusion_engine.py"]
-        PROACT["proactivity_engine.py"]
-    end
-
-    subgraph LANG["🌐 Language (language/)"]
-        DETECT["detector.py"]
-        TRANS["hybrid_translation.py"]
+    subgraph LANG["🌐 Language Engine (language/)"]
+        DETECT["detector.py\n(Language Detection)"]
+        TRANS["hybrid_translation_engine.py\n(Multilingual Translation)"]
+        LOCALIZE["prompt_localizer.py\n(Context Localization)"]
+        VOICESEL["voice_selector.py\n(Language→Voice Routing)"]
     end
 
     subgraph CORE["🧠 AGI Cognitive Core (agi/)"]
         EXEC["executive/\n(Agency & Goals)"]:::core
         BB["blackboard.py\n(Cognitive Bus)"]:::core
-        WM["world_model.py\n(World State)"]:::core
-        META["meta_cognition.py\n(Reasoning Loop)"]:::core
-        PLAN["long_horizon_planner.py"]:::core
+        WM["world_model.py\n(Dynamic World Model)"]:::core
+        KG["knowledge_graph.py\n(Knowledge Triples)"]:::core
+        META["meta_cognition.py\n(Reason→Critique→Improve)"]:::core
+        PLAN["long_horizon_planner.py\n(Goal Tracking)"]:::core
+        SKILL["skill_system.py\n(XP Skill Progression)"]:::core
     end
 
     subgraph CONV["💬 Conversation Engine"]
         CONVO["conversation.py\n(LLM Orchestration)"]:::conv
-        REL["relationship/\n(Attachment Engine)"]:::conv
+        PLANNER["conversation_planner.py\n(Pre-Turn Strategy)"]:::conv
+        REL["relationship/\n(Relationship Engine)"]:::conv
+        TOPIC["topic_tracker.py\n(Topic Continuity)"]:::conv
     end
 
-    subgraph NEURAL["🧬 Neural & Evolution (neural/ & evolution/)"]
+    subgraph PERC["👁️ Perception (perception/)"]
+        FUSION["fusion_engine.py\n(Multi-Stream Fusion)"]
+        PROACT["proactivity_engine.py\n(Proactive Engagement)"]
+        AUDIO["audio_pipeline.py\n(Ambient Audio Analysis)"]
+    end
+
+    subgraph NEURAL["🧬 Neural Engine (neural/)"]
         EXP["experience_store.py\n(Dense Vectors)"]:::neural
         PRED["prediction_engine.py\n(Forward Model)"]:::neural
-        ADAPT["adaptation_engine.py\n(Self-Evolution)"]:::neural
     end
 
-    subgraph VOICE["🎵 Voice System (voice/)"]
-        VMGR["voice_manager.py\n(Identity Routing)"]:::voice
-        VTRAIN["voice_training.py\n(Genuine RVC)"]:::voice
-        TTS["voice.py\n(Coqui TTS)"]:::voice
+    subgraph EVO["🧬 Evolution (evolution/)"]
+        ENG["evolution_engine.py\n(Self-Improvement)"]:::neural
+        GOV["governance_layer.py\n(Safety Gate)"]:::neural
+        CORR["correction_engine.py\n(Regression Rollback)"]:::neural
+        ADAPT["adaptation_engine.py\n(Cognitive Adaptation)"]:::neural
+    end
+
+    subgraph CIRC["🌙 Circadian (circadian/)"]
+        CENG["circadian_engine.py\n(Mood + Phase + Tone)"]:::circ
+    end
+
+    subgraph VOICE["🎵 Voice Identity System (voice/)"]
+        VMGR["voice_manager.py\n(Active Voice Identity)"]:::voice
+        VTRAIN["voice_training.py\n(Genuine RVC Training)"]:::voice
+        VVAL["voice_validation.py\n(Objective Acoustic Scoring)"]:::voice
+        VPREV["voice_preview.py\n(Benchmark Comparison)"]:::voice
+        VDB["voice_database.py\n(Voice Identity Store)"]:::voice
+        TTS["voice.py\n(Coqui TTS Synthesis)"]:::voice
         RVCCLONE["voice_cloning.py\n(RVC Conversion)"]:::voice
     end
     
@@ -98,34 +119,45 @@ flowchart TD
     end
 
     subgraph OUTPUT["🖥️ Output Layer"]
-        AVATAR["MateEngine\n(3D Anime Avatar)"]:::output
-        ANIM["animator/\n(Procedural Gen)"]:::output
+        AVATAR["avatar_bridge.py\n(MateEngine WebSocket)"]:::output
+        ANIM["animator/\n(Procedural Animation)"]:::output
+        SHARED["shared/\n(File-Based IPC)"]:::output
     end
 
-    %% Data Flow
+    %% Edge Connections
     MIC & WEB --> MGR
     SCREEN & CAM --> FUSION
-    FUSION --> PROACT
+    AUDIO --> FUSION
     
     MGR <--> BUS
     BUS <--> CONVO
     
-    DETECT --> TRANS --> CONVO
+    DETECT --> TRANS --> LOCALIZE --> CONVO
+    VOICESEL --> VMGR
+
+    FUSION --> PROACT --> CONVO
     
     CONVO <--> EXEC
     CONVO <--> BB
-    BB <--> WM & META & PLAN
+    BB <--> WM & KG & META & PLAN & SKILL
+    META --> CONVO
+    PLAN --> CONVO
     
-    CONVO <--> REL
+    CONVO --> REL --> TOPIC --> PLANNER --> CONVO
     
     BB --> PRED
     PRED --> EXP --> ADAPT
     
-    CONVO --> TTS --> RVCCLONE --> AVATAR
-    VMGR --> RVCCLONE
-    VTRAIN --> VMGR
+    EVO --> ENG --> GOV --> ADAPT
+
+    CIRC --> CENG --> CONVO
     
-    CONVO --> ANIM --> AVATAR
+    CONVO --> TTS --> RVCCLONE --> SHARED
+    VMGR --> RVCCLONE
+    VTRAIN --> VVAL --> VPREV
+    VDB --> VMGR
+    
+    SHARED --> AVATAR --> ANIM
     
     %% Monitoring lines
     CERT -.->|Audits| CORE
