@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/LLM-llama.cpp%20%7C%20Qwen3--8B-22c55e?style=for-the-badge" alt="LLM"/>
   <img src="https://img.shields.io/badge/Vision-YOLO11%20%7C%20OCR-eab308?style=for-the-badge" alt="Vision"/>
   <img src="https://img.shields.io/badge/Speech-Whisper%20%7C%20TTS%20%7C%20RVC-a855f7?style=for-the-badge" alt="Speech"/>
-  <br>
+  \n
   <img src="https://img.shields.io/badge/Cognition-15--Stage%20AGI%20Pipeline-0ea5e9?style=for-the-badge" alt="Cognition"/>
   <img src="https://img.shields.io/badge/Memory-Vector%20DB%20%7C%20Graph-10b981?style=for-the-badge" alt="Memory"/>
   <img src="https://img.shields.io/badge/Avatar-MateEngine%20%7C%20VRM-ec4899?style=for-the-badge" alt="Avatar"/>
@@ -36,96 +36,89 @@ Vivy is designed from first principles as a **personal AGI substrate**: she lear
 ## Architecture
 
 ```mermaid
-flowchart TD
-    %% Vivy AI Custom Modern Styling
-    classDef default fill:#1e1e2e,stroke:#313244,stroke-width:2px,color:#cdd6f4
-    classDef input fill:#11111b,stroke:#89b4fa,stroke-width:2px,color:#89b4fa
-    classDef pipe fill:#11111b,stroke:#89dceb,stroke-width:2px,color:#89dceb
-    classDef core fill:#11111b,stroke:#a6e3a1,stroke-width:2px,color:#a6e3a1
-    classDef conv fill:#11111b,stroke:#cba6f7,stroke-width:2px,color:#cba6f7
-    classDef neural fill:#11111b,stroke:#f5c2e7,stroke-width:2px,color:#f5c2e7
-    classDef voice fill:#11111b,stroke:#f9e2af,stroke-width:2px,color:#f9e2af
-    classDef verify fill:#11111b,stroke:#f38ba8,stroke-width:2px,color:#f38ba8
-    classDef circ fill:#11111b,stroke:#f2cdcd,stroke-width:2px,color:#f2cdcd
-    classDef output fill:#11111b,stroke:#fab387,stroke-width:2px,color:#fab387
-
-    subgraph INPUT["🎤 Input Layer"]
-        MIC["🎙️ mic_input.py<br>(Voice + VAD + STT)"]:::input
-        WEB["🌐 web_server.py<br>(Flask + WebSocket API)"]:::input
-        SCREEN["🖥️ Screen Capture<br>(OCR + VLM)"]:::input
-        CAM["📷 Camera Feed<br>(YOLO + Gaze)"]:::input
+graph TD
+    subgraph INPUT ["🎤 Input Layer"]
+        MIC["🎙️ mic_input.py\n(Voice + VAD + STT)"]:::input
+        WEB["🌐 web_server.py\n(Flask + WebSocket API)"]:::input
+        SCREEN["🖥️ Screen Capture\n(OCR + VLM)"]:::input
+        CAM["📷 Camera Feed\n(YOLO + Gaze)"]:::input
     end
 
-    subgraph PIPE["⚡ Streaming Pipeline (pipeline)"]
-        MGR["manager.py<br>(Context & Queues)"]:::pipe
-        BUS["event_bus.py<br>(Async Event Bus)"]:::pipe
+    subgraph PIPE ["⚡ Streaming Pipeline (pipeline)"]
+        MGR["manager.py\n(Context and Queues)"]:::pipe
+        BUS["event_bus.py\n(Async Event Bus)"]:::pipe
     end
 
-    subgraph LANG["🌐 Language Engine (language)"]
-        DETECT["detector.py<br>(Language Detection)"]
-        TRANS["hybrid_translation_engine.py<br>(Multilingual Translation)"]
-        LOCALIZE["prompt_localizer.py<br>(Context Localization)"]
-        VOICESEL["voice_selector.py<br>(Language to Voice Routing)"]
+    subgraph LANG ["🌐 Language Engine (language)"]
+        DETECT["detector.py\n(Language Detection)"]
+        TRANS["hybrid_translation_engine.py\n(Multilingual Translation)"]
+        LOCALIZE["prompt_localizer.py\n(Context Localization)"]
+        VOICESEL["voice_selector.py\n(Language to Voice Routing)"]
     end
 
-    subgraph CORE["🧠 AGI Cognitive Core (agi)"]
-        EXEC["executive<br>(Agency & Goals)"]:::core
-        BB["blackboard.py<br>(Cognitive Bus)"]:::core
-        WM["world_model.py<br>(Dynamic World Model)"]:::core
-        KG["knowledge_graph.py<br>(Knowledge Triples)"]:::core
-        META["meta_cognition.py<br>(Reason to Critique to Improve)"]:::core
-        PLAN["long_horizon_planner.py<br>(Goal Tracking)"]:::core
-        SKILL["skill_system.py<br>(XP Skill Progression)"]:::core
+    subgraph CORE ["🧠 AGI Cognitive Core (agi)"]
+        EXEC["executive\n(Agency and Goals)"]:::core
+        BB["blackboard.py\n(Cognitive Bus)"]:::core
+        WM["world_model.py\n(Dynamic World Model)"]:::core
+        KG["knowledge_graph.py\n(Knowledge Triples)"]:::core
+        META["meta_cognition.py\n(Reason to Critique to Improve)"]:::core
+        PLAN["long_horizon_planner.py\n(Goal Tracking)"]:::core
+        SKILL["skill_system.py\n(XP Skill Progression)"]:::core
     end
 
-    subgraph CONV["💬 Conversation Engine"]
-        CONVO["conversation.py<br>(LLM Orchestration)"]:::conv
-        PLANNER["conversation_planner.py<br>(Pre-Turn Strategy)"]:::conv
-        REL["relationship<br>(Relationship Engine)"]:::conv
-        TOPIC["topic_tracker.py<br>(Topic Continuity)"]:::conv
+    subgraph CONV ["💬 Conversation Engine"]
+        CONVO["conversation.py\n(LLM Orchestration)"]:::conv
+        PLANNER["conversation_planner.py\n(Pre-Turn Strategy)"]:::conv
+        REL["relationship\n(Relationship Engine)"]:::conv
+        TOPIC["topic_tracker.py\n(Topic Continuity)"]:::conv
     end
 
-    subgraph PERC["👁️ Perception (perception)"]
-        FUSION["fusion_engine.py<br>(Multi-Stream Fusion)"]
-        PROACT["proactivity_engine.py<br>(Proactive Engagement)"]
-        AUDIO["audio_pipeline.py<br>(Ambient Audio Analysis)"]
+    subgraph ACT ["⚡ Action System (action)"]
+        SMART["smart_manager.py\n(Intent Orchestration)"]:::actionNode
+        APLAN["action_planner.py\n(Plan and Execute)"]:::actionNode
     end
 
-    subgraph NEURAL["🧬 Neural Engine (neural)"]
-        EXP["experience_store.py<br>(Dense Vectors)"]:::neural
-        PRED["prediction_engine.py<br>(Forward Model)"]:::neural
+    subgraph PERC ["👁️ Perception (perception)"]
+        FUSION["fusion_engine.py\n(Multi-Stream Fusion)"]
+        PROACT["proactivity_engine.py\n(Proactive Engagement)"]
+        AUDIO["audio_pipeline.py\n(Ambient Audio Analysis)"]
     end
 
-    subgraph EVO["🧬 Evolution (evolution)"]
-        ENG["evolution_engine.py<br>(Self-Improvement)"]:::neural
-        GOV["governance_layer.py<br>(Safety Gate)"]:::neural
-        CORR["correction_engine.py<br>(Regression Rollback)"]:::neural
-        ADAPT["adaptation_engine.py<br>(Cognitive Adaptation)"]:::neural
+    subgraph NEURAL ["🧬 Neural Engine (neural)"]
+        EXP["experience_store.py\n(Dense Vectors)"]:::neural
+        PRED["prediction_engine.py\n(Forward Model)"]:::neural
     end
 
-    subgraph CIRC["🌙 Circadian (circadian)"]
-        CENG["circadian_engine.py<br>(Mood + Phase + Tone)"]:::circ
+    subgraph EVO ["🧬 Evolution (evolution)"]
+        ENG["evolution_engine.py\n(Self-Improvement)"]:::neural
+        GOV["governance_layer.py\n(Safety Gate)"]:::neural
+        CORR["correction_engine.py\n(Regression Rollback)"]:::neural
+        ADAPT["adaptation_engine.py\n(Cognitive Adaptation)"]:::neural
     end
 
-    subgraph VOICE["🎵 Voice Identity System (voice)"]
-        VMGR["voice_manager.py<br>(Active Voice Identity)"]:::voice
-        VTRAIN["voice_training.py<br>(Genuine RVC Training)"]:::voice
-        VVAL["voice_validation.py<br>(Objective Acoustic Scoring)"]:::voice
-        VPREV["voice_preview.py<br>(Benchmark Comparison)"]:::voice
-        VDB["voice_database.py<br>(Voice Identity Store)"]:::voice
-        TTS["voice.py<br>(Coqui TTS Synthesis)"]:::voice
-        RVCCLONE["voice_cloning.py<br>(RVC Conversion)"]:::voice
+    subgraph CIRC ["🌙 Circadian (circadian)"]
+        CENG["circadian_engine.py\n(Mood + Phase + Tone)"]:::circ
+    end
+
+    subgraph VOICE ["🎵 Voice Identity System (voice)"]
+        VMGR["voice_manager.py\n(Active Voice Identity)"]:::voice
+        VTRAIN["voice_training.py\n(Genuine RVC Training)"]:::voice
+        VVAL["voice_validation.py\n(Objective Acoustic Scoring)"]:::voice
+        VPREV["voice_preview.py\n(Benchmark Comparison)"]:::voice
+        VDB["voice_database.py\n(Voice Identity Store)"]:::voice
+        TTS["voice.py\n(Coqui TTS Synthesis)"]:::voice
+        RVCCLONE["voice_cloning.py\n(RVC Conversion)"]:::voice
     end
     
-    subgraph VERIFY["🛡️ Verification (verification)"]
+    subgraph VERIFY ["🛡️ Verification (verification)"]
         CERT["certification_engine.py"]:::verify
         INV["invariant_engine.py"]:::verify
     end
 
-    subgraph OUTPUT["🖥️ Output Layer"]
-        AVATAR["avatar_bridge.py<br>(MateEngine WebSocket)"]:::output
-        ANIM["animator<br>(Procedural Animation)"]:::output
-        SHARED["shared<br>(File-Based IPC)"]:::output
+    subgraph OUTPUT ["🖥️ Output Layer"]
+        AVATAR["avatar_bridge.py\n(MateEngine WebSocket)"]:::output
+        ANIM["animator\n(Procedural Animation)"]:::output
+        SHARED["shared\n(File-Based IPC)"]:::output
     end
 
     %% Edge Connections
@@ -163,6 +156,10 @@ flowchart TD
     TOPIC --> PLANNER
     PLANNER --> CONVO
     
+    CONVO --> SMART
+    SMART --> APLAN
+    APLAN --> BB
+    
     BB --> PRED
     PRED --> EXP
     EXP --> ADAPT
@@ -184,6 +181,18 @@ flowchart TD
     SHARED --> AVATAR
     AVATAR --> ANIM
     
+
+    classDef default fill:#1e1e2e,stroke:#313244,stroke-width:2px,color:#cdd6f4;
+    classDef input fill:#11111b,stroke:#89b4fa,stroke-width:2px,color:#89b4fa;
+    classDef pipe fill:#11111b,stroke:#89dceb,stroke-width:2px,color:#89dceb;
+    classDef core fill:#11111b,stroke:#a6e3a1,stroke-width:2px,color:#a6e3a1;
+    classDef conv fill:#11111b,stroke:#cba6f7,stroke-width:2px,color:#cba6f7;
+    classDef neural fill:#11111b,stroke:#f5c2e7,stroke-width:2px,color:#f5c2e7;
+    classDef voice fill:#11111b,stroke:#f9e2af,stroke-width:2px,color:#f9e2af;
+    classDef verify fill:#11111b,stroke:#f38ba8,stroke-width:2px,color:#f38ba8;
+    classDef circ fill:#11111b,stroke:#f2cdcd,stroke-width:2px,color:#f2cdcd;
+    classDef output fill:#11111b,stroke:#fab387,stroke-width:2px,color:#fab387;
+    classDef actionNode fill:#11111b,stroke:#eed49f,stroke-width:2px,color:#eed49f;
     %% Monitoring lines
     CERT -.->|Audits| BB
     INV -.->|Checks| MGR
@@ -221,6 +230,22 @@ Vivy's reasoning is not simply a prompt + LLM call. Every conversation turn is p
 | `executive/agency_controller.py` | Top-level executive control and agency allocation |
 | `executive/goal_motivation_engine.py` | Intrinsic motivation and long-term goal weighting |
 | `executive/self_model.py` | Maintains a coherent structural model of Vivy's own cognitive state |
+
+---
+
+### ⚡ Action System & Intent Execution (`action/`)
+Vivy can translate natural language intents into concrete local and online actions through a robust **Action Pipeline**:
+
+- **Smart Manager** (`smart_manager.py`): Central orchestrator for intent detection, planning, execution, and verification. Includes a semantic fallback for complex intents and contextual follow-up resolution. Deeply integrates with the AGI Blackboard, Memory, and Evolution systems.
+- **Action Planner & Executors** (`action_planner.py`, `executors/`): Dynamically builds and executes multi-step plans across several domains:
+  - **App Automation**: Opens, closes, and focuses applications natively (`app_executor.py`).
+  - **Media Resolution**: Finds and plays local or online media, pauses and adjusts volume (`media_executor.py`).
+  - **File Operations**: Locates, searches for, and opens files or folders (`file_executor.py`).
+  - **Browser Automation**: Navigates to URLs and searches the web natively (`browser_executor.py`).
+  - **Shopping Integration**: Real-time online shopping searches, price filtering, and recommendations (`shopping_executor.py`).
+- **UI Automation** (`ui_automation/`): Automates UI interactions using browser adapters and vision-based fallback adapters.
+- **Risk Policy Engine** (`risk_policy.py`): Enforces a LOW/MEDIUM/HIGH risk gate, requiring explicit user confirmation before executing critical operations (e.g., shopping checkouts or closing apps).
+- **Memory & Evolution Integration**: Evaluates action outcomes via `action_memory_scorer.py`, saving significant experiences to Vivy's long-term memory and using failed actions to drive self-evolution.
 
 ---
 
@@ -424,6 +449,16 @@ Vivy/
 │   ├── self_modification_engine.py  # Governed self-improvement
 │   ├── code_executor.py             # Safe sandboxed code execution for AGI tool calls
 │   └── file_manager.py              # Controlled filesystem operations for AGI tool use
+│
+├── action/                          # Action System & Intent Execution
+│   ├── smart_manager.py             # Central action orchestrator
+│   ├── action_planner.py            # Multi-step action planning
+│   ├── intent_model.py              # Action intent definitions
+│   ├── capability_registry.py       # Available capability directory
+│   ├── risk_policy.py               # Action risk evaluation gate
+│   ├── action_memory_scorer.py      # Action experience memory evaluation
+│   ├── executors/                   # Domain-specific action executors
+│   └── ui_automation/               # Vision and browser UI automation
 │
 ├── voice/                           # Voice Identity Management System
 │   ├── voice_manager.py             # Active voice identity hot-swap controller
@@ -762,6 +797,10 @@ The web server exposes **60+ REST API endpoints**. Key endpoints:
 | `/api/status` | GET | Current pipeline status |
 | `/api/health` | GET | Full system health report |
 | `/api/cognitive/state` | GET | AGI cognitive subsystem state |
+| `/api/action_state` | GET | Current active Action Session state |
+| `/api/action_history` | GET | Recent Action EventBus lifecycle events |
+| `/api/action_confirm` | POST | Confirm a pending HIGH_RISK action execution |
+| `/api/action_cancel` | POST | Cancel a currently pending action |
 | `/api/internet/search` | POST | Execute an internet search |
 | `/api/internet/status` | GET | Network and Tor status |
 | `/api/perception/status` | GET | Full perception pipeline state |
@@ -832,30 +871,55 @@ The certification suite validates:
 
 ---
 
-## System Requirements
+## 💻 System Requirements
 
-| Component | Minimum | Recommended |
-|---|---|---|
-| CPU | 8-core x86-64 | 12-core+ i7 13th Gen / Ryzen 9 or better |
-| RAM | 24 GB | 32 GB |
-| GPU VRAM | 8 GB | 12–16 GB (RTX 4070+) |
-| Storage | 30 GB | 50 GB (models + audio + cloning + vector DB) |
-| OS | Windows 10 64-bit | Windows 11 64-bit |
-| Python | 3.10 | 3.11 |
+> [!IMPORTANT]
+> Vivy runs multiple deep neural networks concurrently (LLM, Vision, Voice Cloning, STT, TTS) entirely on your local hardware. A dedicated CUDA GPU is strongly recommended for the best real-time experience.
 
-> **Note:** Vivy runs fully on CPU if no compatible GPU is available. GPU acceleration is strongly recommended for running the complete cognitive pipeline (LLM inference, YOLO11, and RVC voice cloning) in real-time.
+### 🥉 Minimum Specifications
+*For basic interaction (using CPU-heavy fallback; expect slower response times).*
+
+- 🪟 **OS:** Windows 10 (64-bit)
+- 🧠 **Processor:** Intel Core i7-9700K / AMD Ryzen 7 3700X
+- 💾 **Memory:** 24 GB RAM
+- 🎮 **Graphics:** NVIDIA GeForce RTX 2070 / AMD Radeon RX 5700 XT (8GB VRAM)
+- 🐍 **Python:** Version 3.10+
+- 💿 **Storage:** 30 GB available space
+
+### 🥇 Recommended Specifications
+*For real-time cognitive reasoning, live vision processing, and instant voice cloning.*
+
+- 🪟 **OS:** Windows 10 / Windows 11 (64-bit)
+- 🧠 **Processor:** Intel Core i7-13700K / AMD Ryzen 9 5900X
+- 💾 **Memory:** 32 GB RAM (or higher)
+- 🎮 **Graphics:** NVIDIA GeForce RTX 4070 / AMD Radeon RX 7800 XT (12GB+ VRAM)
+- 🐍 **Python:** Version 3.11+
+- 💿 **Storage:** 50 GB available space (NVMe SSD highly recommended)
+
+> [!NOTE]
+> **Hardware Scaling:** Vivy features a dynamic `hardware_scheduler.py` that automatically throttles perception workloads and disables CUDA tensor caching if your system is running low on resources, preventing OS lockups.
 
 ---
 
-## Privacy
+## 🔒 Privacy First
 
-Vivy is designed with privacy as a non-negotiable first principle:
+> [!IMPORTANT]
+> Vivy is designed from the ground up with privacy as a non-negotiable first principle. Your data belongs to you.
 
-- **100% local inference** — The LLM, Whisper STT, TTS, RVC, and vision models all run on your machine. No data is sent to external servers.
-- **Anonymous internet routing** — All outbound web requests are routed through the Tor SOCKS5 network stack (or a Virtual Onion Sandbox when Tor is unavailable).
-- **L2–L4 identity hopping** — The Address Bouncer automatically regenerates MAC-layer and network-layer identities every 45 seconds during active internet sessions.
-- **Zero telemetry exfiltration** — All telemetry data is stored locally in `logs/`.
-- **Voice data sovereignty** — Cloned voice models and training datasets never leave your local filesystem.
+🛡️ **100% Local Inference**  
+The LLM, Whisper STT, TTS, RVC, and vision models all run natively on your machine. Zero data is sent to external cloud servers.
+
+🧅 **Anonymous Internet Routing**  
+All outbound web requests are aggressively routed through the Tor SOCKS5 network stack (or a Virtual Onion Sandbox when Tor is unavailable).
+
+🕵️ **L2–L4 Identity Hopping**  
+The Address Bouncer automatically regenerates your MAC-layer and network-layer identities every 45 seconds during active internet sessions.
+
+📵 **Zero Telemetry Exfiltration**  
+All telemetry, crash logs, and pipeline events are stored purely locally within your `logs/` directory. Nothing is ever phoned home.
+
+🎙️ **Voice Data Sovereignty**  
+Your cloned voice models and audio training datasets never leave your local filesystem.
 
 ---
 

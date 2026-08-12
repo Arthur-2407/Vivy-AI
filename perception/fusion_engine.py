@@ -415,6 +415,20 @@ class FusionEngine:
             metadata=data.get("metadata", {}),
         )
         self._memory.add(event)
+        
+        # Phase 2 Integration: Belief Engine for highly important visual/social events
+        if event["importance"] >= 0.7 and event["confidence"] >= 0.8:
+            if event["source"] in ("face_perception", "gaze_perception"):
+                try:
+                    from agi.belief_engine import get_belief_engine
+                    get_belief_engine().assert_belief(
+                        f"Current User State: {event['semantic']}",
+                        confidence=event["confidence"],
+                        evidence=f"Live perception from {event['source']}",
+                        category="user_state"
+                    )
+                except Exception as _be_err:
+                    pass
 
     # ── Observation Narrative (Gap 6 — Silent Observation Mode) ─────────────
 

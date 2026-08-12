@@ -617,6 +617,16 @@ class VivyPipelineValidator:
         return score == 100.0
 
 if __name__ == "__main__":
+    from runtime.environment_manager import get_runtime_manager
+    mgr = get_runtime_manager()
+    expected_python = mgr.get_python_executable("main", fallback_to_sys=True)
+    
+    # If not running in the main environment, automatically relaunch
+    if os.path.abspath(sys.executable) != os.path.abspath(expected_python):
+        print(f"[Auto-Repair] Relaunching validation suite in the 'main' environment: {expected_python}")
+        res = subprocess.run([expected_python] + sys.argv, env=os.environ)
+        sys.exit(res.returncode)
+
     validator = VivyPipelineValidator()
     success = validator.run_full_validation()
     sys.exit(0 if success else 1)

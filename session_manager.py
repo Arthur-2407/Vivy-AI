@@ -72,6 +72,22 @@ class UserSession:
         """Clear visible chat history."""
         self.display_history.clear()
 
+    def get_action_session(self):
+        """
+        Return the current ActionSession dict from temporary_context.
+        Returns None if no active action session exists.
+        Spec reference: §30 (Multi-turn action state via existing session infrastructure)
+        """
+        return self.temporary_context.get("action_session")
+
+    def set_action_session(self, action_session_dict: dict):
+        """
+        Store ActionSession state into temporary_context.
+        No new database or file — uses existing session infrastructure.
+        Spec reference: §30
+        """
+        self.temporary_context["action_session"] = action_session_dict
+
     def to_dict(self) -> dict:
         return {
             "session_id": self.session_id,

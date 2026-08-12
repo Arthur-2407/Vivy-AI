@@ -202,6 +202,129 @@ class GeneralFileManager:
             except Exception as e:
                 return {"success": False, "error": str(e)}
 
+    def resolve_user_directory(self, semantic_name: str) -> Optional[str]:
+        """
+        Resolve a semantic OS user directory name to an actual absolute path.
+
+        Handles common names like 'Downloads', 'Music', 'Documents', 'Desktop',
+        'Pictures', 'Videos'. Uses pathlib.Path.home() and USERPROFILE env var —
+        never hardcodes a username or drive letter.
+
+        Spec reference: §20 (File/Folder Action System), Rule 3 (No hardcoding)
+
+        Returns the resolved path string, or None if not found.
+        """
+        from pathlib import Path
+
+        name_l = semantic_name.strip().lower()
+
+        # Canonical map from semantic names (and common aliases) to subfolder name
+        _SEMANTIC_MAP = {
+            "downloads": "Downloads",
+            "download": "Downloads",
+            "music": "Music",
+            "songs": "Music",
+            "audio": "Music",
+            "videos": "Videos",
+            "video": "Videos",
+            "movies": "Videos",
+            "documents": "Documents",
+            "docs": "Documents",
+            "desktop": "Desktop",
+            "pictures": "Pictures",
+            "images": "Pictures",
+            "photos": "Pictures",
+            "home": "",          # Home dir itself
+            "user": "",
+        }
+
+        home = Path.home()
+
+        # Direct semantic lookup
+        if name_l in _SEMANTIC_MAP:
+            subfolder = _SEMANTIC_MAP[name_l]
+            resolved = home / subfolder if subfolder else home
+            if resolved.is_dir():
+                return str(resolved)
+            # Try USERPROFILE as fallback
+            up = os.environ.get("USERPROFILE", "")
+            if up:
+                fallback = os.path.join(up, subfolder) if subfolder else up
+                if os.path.isdir(fallback):
+                    return fallback
+
+        # Try as a direct relative subdirectory of home
+        candidate = home / semantic_name
+        if candidate.is_dir():
+            return str(candidate)
+
+        # Try absolute path
+        if os.path.isabs(semantic_name) and os.path.isdir(semantic_name):
+            return semantic_name
+
+        return None
+
+    def find_recent_files(
+        self,
+        sub_path: str = "",
+        file_pattern: str = "*",
+        max_results: int = 5,
+        file_type: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Find the most recently modified files matching a pattern in the given directory.
+        Uses existing _validate_path for safety. No hardcoded paths.
+
+        Spec reference: §20 — "Show me screenshots from today", "Open the latest image"
+        """
+        import fnmatch as _fnm
+
+        # Allow user OS dirs too (not just workspace)
+        if sub_path and os.path.isabs(sub_path):
+            root = sub_path
+        else:
+            resolved = self.resolve_user_directory(sub_path) if sub_path else None
+            root = resolved or self._validate_path(sub_path or "")
+
+        if not os.path.isdir(root):
+            return {"success": False, "error": f"Directory not found: {root}", "files": []}
+
+        ext_filter: Optional[str] = None
+        if file_type:
+            ext_filter = ("." + file_type.lstrip(".")).lower()
+
+        collected = []
+        try:
+            for dirpath, _, filenames in os.walk(root):
+                for fname in filenames:
+                    if not _fnm.fnmatch(fname, file_pattern):
+                        continue
+                    if ext_filter and not fname.lower().endswith(ext_filter):
+                        continue
+                    full = os.path.join(dirpath, fname)
+                    try:
+                        mtime = os.path.getmtime(full)
+                        size = os.path.getsize(full)
+                        collected.append({
+                            "name": fname,
+                            "path": full,
+                            "modified_timestamp": mtime,
+                            "size_bytes": size,
+                        })
+                    except OSError:
+                        continue
+        except Exception as err:
+            return {"success": False, "error": str(err), "files": []}
+
+        collected.sort(key=lambda x: x["modified_timestamp"], reverse=True)
+        return {
+            "success": True,
+            "root": root,
+            "files": collected[:max_results],
+            "total_found": len(collected),
+        }
+
+
 _global_file_manager = None
 def get_file_manager() -> GeneralFileManager:
     global _global_file_manager

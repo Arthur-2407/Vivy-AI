@@ -1,1 +1,186 @@
-[]
+[
+  {
+    "registryId": "HappyBreathing",
+    "confidence": 80,
+    "evidence": "Substring Match",
+    "reasonRejected": "Fuzzy match requires human verification",
+    "suggestedAction": "Manual mapping required",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/FACE_LAYER/PET_HAPPY.anim",
+      "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim"
+    ]
+  },
+  {
+    "registryId": "SleepingBreathing",
+    "confidence": 80,
+    "evidence": "Substring Match",
+    "reasonRejected": "Fuzzy match requires human verification",
+    "suggestedAction": "Manual mapping required",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/Sleeping.anim",
+      "Assets/MATE ENGINE - Animations/PET_SLEEPING/PET_SLEEPING.anim"
+    ]
+  },
+  {
+    "registryId": "WinkLeft",
+    "confidence": 70,
+    "evidence": "Fuzzy Levenshtein Distance (Diff: 2)",
+    "reasonRejected": "Fuzzy match requires human verification",
+    "suggestedAction": "Manual mapping required",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/KPop.anim",
+      "Assets/MATE ENGINE - Animations/PET_LOCOMOTION/PET_WALK_LEFT.anim"
+    ]
+  },
+  {
+    "registryId": "WinkRight",
+    "confidence": 70,
+    "evidence": "Fuzzy Levenshtein Distance (Diff: 2)",
+    "reasonRejected": "Fuzzy match requires human verification",
+    "suggestedAction": "Manual mapping required",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/PET_LOCOMOTION/PET_WALK_RIGHT.anim"
+    ]
+  },
+  {
+    "registryId": "Singing",
+    "confidence": 70,
+    "evidence": "Fuzzy Levenshtein Distance (Diff: 2)",
+    "reasonRejected": "Fuzzy match requires human verification",
+    "suggestedAction": "Manual mapping required",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+    ]
+  },
+  {
+    "registryId": "Tap",
+    "confidence": 88,
+    "evidence": "Token Substring Match",
+    "reasonRejected": "Fuzzy match requires human verification",
+    "suggestedAction": "Manual mapping required",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/PET_SITTING/BETA_PET_WINDOW_LAY.anim",
+      "Assets/MATE ENGINE - Animations/PET_SITTING/BETA_PET_WINDOW_LAY_2.anim",
+      "Assets/MATE ENGINE - Animations/PET_SITTING/BETA_PET_WINDOW_LAY_3.anim",
+      "Assets/MATE ENGINE - Animations/PET_SITTING/BETA_PET_WINDOW_LAY_4.anim",
+      "Assets/MATE ENGINE - Animations/PET_SITTING/BETA_PET_WINDOW_LAY_5.anim",
+      "Assets/MATE ENGINE - Animations/PET_SITTING/BETA_PET_WINDOW_LAY_6.anim",
+      "Assets/MATE ENGINE - Animations/PET_SITTING/BETA_PET_WINDOW_LAY_7.anim"
+    ]
+  },
+  {
+    "registryId": "HappyBounce",
+    "confidence": 80,
+    "evidence": "Substring Match",
+    "reasonRejected": "Fuzzy match requires human verification",
+    "suggestedAction": "Manual mapping required",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/FACE_LAYER/PET_HAPPY.anim",
+      "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim"
+    ]
+  },
+  {
+    "registryId": "HappyRun",
+    "confidence": 80,
+    "evidence": "Substring Match",
+    "reasonRejected": "Fuzzy match requires human verification",
+    "suggestedAction": "Manual mapping required",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/FACE_LAYER/PET_HAPPY.anim",
+      "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim"
+    ]
+  },
+  {
+    "registryId": "HappyJump",
+    "confidence": 80,
+    "evidence": "Substring Match",
+    "reasonRejected": "Fuzzy match requires human verification",
+    "suggestedAction": "Manual mapping required",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/FACE_LAYER/PET_HAPPY.anim",
+      "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim"
+    ]
+  },
+  {
+    "registryId": "SleepSitting",
+    "confidence": 80,
+    "evidence": "Substring Match",
+    "reasonRejected": "Fuzzy match requires human verification",
+    "suggestedAction": "Manual mapping required",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim"
+    ]
+  },
+  {
+    "registryId": "CuteDance",
+    "confidence": 0,
+    "evidence": "Multiple exact deterministic candidates yielded the exact same score. Unable to automatically select a winner without manual review.",
+    "reasonRejected": "Semantic Ambiguity: Multiple exact candidates",
+    "suggestedAction": "Manually choose the correct candidate",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+      "Assets/MATE ENGINE - Custom Dance Player/Prefab/CUSTOM_DANCE.anim",
+      "Assets/MATE ENGINE - Custom Dance Player/Prefab/DANCE_END.anim",
+      "Assets/MATE ENGINE - Mod SDK/DanceModExample/DanceModExampleAnimation.anim"
+    ]
+  },
+  {
+    "registryId": "VictoryDance",
+    "confidence": 0,
+    "evidence": "Multiple exact deterministic candidates yielded the exact same score. Unable to automatically select a winner without manual review.",
+    "reasonRejected": "Semantic Ambiguity: Multiple exact candidates",
+    "suggestedAction": "Manually choose the correct candidate",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
+      "Assets/MATE ENGINE - Custom Dance Player/Prefab/CUSTOM_DANCE.anim",
+      "Assets/MATE ENGINE - Custom Dance Player/Prefab/DANCE_END.anim",
+      "Assets/MATE ENGINE - Mod SDK/DanceModExample/DanceModExampleAnimation.anim"
+    ]
+  },
+  {
+    "registryId": "TalkingConv",
+    "confidence": 80,
+    "evidence": "Substring Match",
+    "reasonRejected": "Fuzzy match requires human verification",
+    "suggestedAction": "Manual mapping required",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/Talking.anim",
+      "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim"
+    ]
+  },
+  {
+    "registryId": "LaughWhileTalking",
+    "confidence": 80,
+    "evidence": "Substring Match",
+    "reasonRejected": "Fuzzy match requires human verification",
+    "suggestedAction": "Manual mapping required",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/AI_Expanded_Assets/Talking.anim",
+      "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim"
+    ]
+  },
+  {
+    "registryId": "Pull",
+    "confidence": 0,
+    "evidence": "Multiple exact deterministic candidates yielded the exact same score. Unable to automatically select a winner without manual review.",
+    "reasonRejected": "Semantic Ambiguity: Multiple exact candidates",
+    "suggestedAction": "Manually choose the correct candidate",
+    "candidatePaths": [
+      "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_DRAG.anim",
+      "Assets/UMotionExamples/Exported Animations/IKPullups.anim"
+    ]
+  },
+  {
+    "registryId": "Hot",
+    "confidence": 88,
+    "evidence": "Token Substring Match",
+    "reasonRejected": "Fuzzy match requires human verification",
+    "suggestedAction": "Manual mapping required",
+    "candidatePaths": [
+      "Assets/[CooGee Works]/HeartParticle_MA_Gimmick/_Animation-Controller/HeartComet_L_shot_OFF 1.anim",
+      "Assets/[CooGee Works]/HeartParticle_MA_Gimmick/_Animation-Controller/HeartComet_L_shot_ON 1.anim",
+      "Assets/[CooGee Works]/HeartParticle_MA_Gimmick/_Animation-Controller/HeartComet_R_shot_OFF 1.anim",
+      "Assets/[CooGee Works]/HeartParticle_MA_Gimmick/_Animation-Controller/HeartComet_R_shot_ON 1.anim"
+    ]
+  }
+]

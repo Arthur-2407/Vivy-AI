@@ -472,6 +472,28 @@ class TelemetryManager:
             metrics={"plugins_active": True}
         )
 
+        # 9.5 Action System Subsystem (Voice Assistant / Intent-Based Command Execution)
+        try:
+            from action import get_action_system
+            as_health = get_action_system().get_health()
+            as_enabled = as_health.get("enabled", False)
+            as_caps = as_health.get("registered_capabilities", 0)
+            subsystems["Action System"] = _build_sub_obj(
+                "GREEN" if as_enabled else "YELLOW",
+                "READY" if as_enabled else "STANDBY",
+                f"Intent-based action system ({as_caps} capabilities registered)",
+                "SmartManager, CapabilityRegistry, and all executors operational",
+                metrics=as_health
+            )
+        except Exception as _as_err:
+            print(f"[telemetry_manager.py] Action system health check note: {_as_err}")
+            subsystems["Action System"] = _build_sub_obj(
+                "YELLOW", "STANDBY",
+                "Action system not yet initialised",
+                "SmartManager pending first activation",
+                metrics={}
+            )
+
         # 10. LLM Subsystem
         try:
             from config.config_manager import get_config_manager

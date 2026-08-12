@@ -231,5 +231,47 @@
       "ru": {"tone": "warm_expressive", "formality": "casual", "writing_style": "rich", "use_contractions": false},
       "ko": {"tone": "polite_warm", "formality": "informal_polite", "writing_style": "concise", "use_contractions": false}
     }
+  },
+
+  "action_system": {
+    "_comment": "Voice Assistant Action System — Intent-Based Command Execution Configuration",
+    "enabled": true,
+    "local_first": true,
+    "risk_confirmation_required": ["HIGH_RISK"],
+    "max_retries": 3,
+    "action_timeout_seconds": 30,
+    "observation_wait_seconds": 2.0,
+    "clarification_confidence_threshold": 0.55,
+
+    "media_search_roots": [],
+    "media_extensions": [".mp3", ".flac", ".wav", ".ogg", ".m4a", ".aac", ".wma",
+                         ".mp4", ".mkv", ".avi", ".mov", ".wmv", ".webm"],
+    "preferred_media_player": "",
+
+    "browser_discovery_enabled": true,
+    "preferred_browser": "",
+    "browser_candidates": ["chrome", "firefox", "msedge", "brave", "opera"],
+
+    "shopping_providers": [
+      {"name": "flipkart",   "url": "https://www.flipkart.com/search?q={query}",            "region": "IN",     "enabled": true},
+      {"name": "amazon_in",  "url": "https://www.amazon.in/s?k={query}",                   "region": "IN",     "enabled": true},
+      {"name": "meesho",     "url": "https://www.meesho.com/search?q={query}",              "region": "IN",     "enabled": true},
+      {"name": "snapdeal",   "url": "https://www.snapdeal.com/search?keyword={query}",      "region": "IN",     "enabled": true},
+      {"name": "myntra",     "url": "https://www.myntra.com/{query}",                       "region": "IN",     "enabled": true},
+      {"name": "amazon",     "url": "https://www.amazon.com/s?k={query}",                   "region": "global", "enabled": true},
+      {"name": "ebay",       "url": "https://www.ebay.com/sch/i.html?_nkw={query}",         "region": "global", "enabled": true}
+    ],
+    "shopping_provider_rotation": "random",
+
+    "app_discovery_cache_ttl_seconds": 300,
+    "known_apps": {},
+
+    "telemetry_events": true,
+
+    "action_risk_classes": {
+      "LOW_RISK":    ["browsing", "searching", "opening", "reading", "filtering", "find", "list"],
+      "MEDIUM_RISK": ["downloading", "modifying_files", "changing_settings", "sending_messages"],
+      "HIGH_RISK":   ["deleting", "purchasing", "financial_transactions", "account_changes", "irreversible"]
+    }
   }
 }

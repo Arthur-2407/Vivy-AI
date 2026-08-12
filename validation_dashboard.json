@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-08-12 16:27:09",
+  "timestamp": "2026-08-12 23:37:52",
   "overall_health_score_pct": 100.0,
   "readiness_state": "PRODUCTION READY (CERTIFIED)",
   "stage_results": {
     "Stage 1": {
       "status": "PASS",
-      "files": 633,
+      "files": 660,
       "syntax_errors": 0
     },
     "Stage 2": {
@@ -26,22 +26,22 @@
     },
     "Stage 6": {
       "status": "PASS",
-      "latency_s": 1.1253223419189453
+      "latency_s": 2.4609997272491455
     },
     "Stage 7": {
       "status": "PASS",
       "mode": "standard",
       "cycles": 50,
-      "duration_s": 0.032129764556884766
+      "duration_s": 0.019208669662475586
     },
     "Stage 8": {
       "status": "PASS"
     },
     "Stage 9": {
       "status": "PASS",
-      "cpu_percent": 18.2,
-      "ram_percent": 52.7,
-      "ram_used_gb": 12.46
+      "cpu_percent": 34.5,
+      "ram_percent": 85.6,
+      "ram_used_gb": 20.23
     },
     "Stage 10": {
       "status": "PASS",
@@ -69,10 +69,10 @@
   },
   "auto_repair_actions": [],
   "performance_metrics": {
-    "individual_module_test_latency_s": 24.655455589294434,
-    "pipeline_integration_latency_s": 1.1253223419189453,
-    "cpu_percent": 18.2,
-    "ram_percent": 52.7
+    "individual_module_test_latency_s": 22.620126724243164,
+    "pipeline_integration_latency_s": 2.4609997272491455,
+    "cpu_percent": 34.5,
+    "ram_percent": 85.6
   },
   "errors": [],
   "warnings": []

@@ -73,6 +73,17 @@ class GeneralCognitiveCore:
                 self.kg.assimilate_from_memory(mem.get("long_term_facts", {}))
 
                 # 2. Publish initial sensory frames to the Cognitive Blackboard
+                # Phase 2 Integration: If upstream drops perception_state, fetch it dynamically
+                if not perception_state:
+                    try:
+                        from perception.fusion_engine import get_global_engine
+                        from perception.context_injector import get_perception_diagnostic_block
+                        narrative = get_global_engine().get_observation_narrative()
+                        snapshot = get_perception_diagnostic_block()
+                        perception_state = {"narrative": narrative, "snapshot": snapshot}
+                    except Exception:
+                        perception_state = {}
+                        
                 self.bb.publish_state("user_query", user_text, source_engine="CognitiveCore")
                 self.bb.publish_state("active_perception", perception_state or {}, source_engine="PerceptionManager")
 

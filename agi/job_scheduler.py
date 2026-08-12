@@ -115,6 +115,15 @@ class JobScheduler:
             target_goal_id=goal_id
         )
 
+    def register_evolution_cycle(self) -> str:
+        """Phase 3 Integration: Register nightly self-evolution cycle."""
+        return self.schedule_recurring(
+            title="Nightly Self-Evolution Cycle",
+            prompt_or_payload={"action": "run_evolution"},
+            interval_seconds=12.0 * 3600.0,
+            job_type="evolution_cycle"
+        )
+
     def evaluate_due_jobs(self, current_time: Optional[float] = None) -> List[Dict[str, Any]]:
         """
         Evaluates all scheduled jobs and returns due triggers for cognitive processing.
@@ -157,6 +166,19 @@ class JobScheduler:
                             g_data = lhp.get_goal(job["target_goal_id"])
                             if g_data and g_data.get("status") == "completed":
                                 job["status"] = "completed"
+                                
+                        elif job["job_type"] == "evolution_cycle":
+                            # Phase 4 Integration: Link to true circadian rhythm
+                            from evolution.evolution_engine import get_evolution_engine
+                            try:
+                                from circadian_intelligence import get_circadian_intelligence
+                                ci = get_circadian_intelligence()
+                                current_phase = ci.get_current_phase()
+                            except Exception:
+                                current_phase = "Night"
+                            
+                            get_evolution_engine().run_evolution_cycle(circadian_phase=current_phase)
+                            
                     except Exception as _bb_err:
                         print(f"[JobScheduler] Silenced blackboard event notification warning: {_bb_err}")
 

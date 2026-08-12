@@ -69,6 +69,77 @@ class TopicRecommendationEngine:
         else:
             return ["weather", "gaming", "music"]
 
+    def recommend_products(self, candidates: list, constraints: dict) -> list:
+        """
+        Rank product candidates based on OBSERVED facts (price, rating) from the screen.
+        NEVER fabricates product details. Only reorders — does not invent new candidates.
+
+        Spec reference: §12 (Shopping Recommendation), §38 (No false claims)
+
+        Args:
+            candidates: List of candidate dicts with keys: label, price, rating, _index, ...
+            constraints: Extracted constraint dict from ConstraintExtractor
+
+        Returns:
+            Sorted list of candidate dicts (in-place stable ranking).
+        """
+        if not candidates:
+            return []
+
+        quality_pref = constraints.get("quality_pref", "")
+        max_price    = constraints.get("max_price")
+        min_price    = constraints.get("min_price")
+
+        def _score(c: dict) -> float:
+            score = 0.0
+
+            # Price scoring
+            price_str = str(c.get("price", ""))
+            price_val = None
+            if price_str:
+                import re
+                m = re.search(r"[\d,]+(?:\.\d+)?", price_str.replace(",", ""))
+                if m:
+                    try:
+                        price_val = float(m.group(0).replace(",", ""))
+                    except Exception:
+                        pass
+
+            if price_val is not None:
+                if max_price and price_val <= max_price:
+                    # Prefer items closer to (but not over) the budget ceiling
+                    score += 10.0 * (price_val / max_price) if max_price > 0 else 5.0
+                elif max_price and price_val > max_price:
+                    score -= 20.0  # Over-budget penalty
+
+                if quality_pref == "economy" and price_val is not None:
+                    # Lower price = better for economy preference
+                    score += max(0, 10.0 - price_val / 1000.0)
+                elif quality_pref == "premium":
+                    # Higher price = premium signal
+                    score += price_val / 1000.0
+
+            # Rating scoring — higher rating = better
+            rating_str = str(c.get("rating", ""))
+            if rating_str:
+                import re
+                m = re.search(r"([1-5](?:\.\d)?)", rating_str)
+                if m:
+                    try:
+                        rating = float(m.group(1))
+                        score += rating * 3.0  # Rating has significant weight
+                    except Exception:
+                        pass
+
+            # Brand preference bonus
+            brand = constraints.get("brand_pref", "")
+            if brand and brand.lower() in str(c.get("label", "")).lower():
+                score += 5.0
+
+            return score
+
+        return sorted(candidates, key=_score, reverse=True)
+
 _global_recommendation_engine = None
 
 def get_recommendation_engine() -> TopicRecommendationEngine:

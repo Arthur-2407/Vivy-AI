@@ -3533,7 +3533,76 @@ def procedural_stop():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Action System API Endpoints (Voice Assistant / Intent-Based Command Execution)
+# Added additively — zero existing routes modified.
+# Spec reference: §34 (Dashboard Integration), §27 (Smart Manager)
+# ─────────────────────────────────────────────────────────────────────────────
+
+@app.route("/api/action_state", methods=["GET"])
+def api_action_state():
+    """Return the current ActionSession state for the active session."""
+    try:
+        from session_manager import get_session_manager
+        session = get_session_manager().get_active_session()
+        raw = session.get_action_session()
+        return jsonify({"success": True, "action_session": raw or {}})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/action_history", methods=["GET"])
+def api_action_history():
+    """Return recent action lifecycle events from EventBus history."""
+    try:
+        from agi.bus.event_bus import get_event_bus
+        bus = get_event_bus()
+        # Filter action-related events
+        events = [
+            ev for ev in bus.history
+            if isinstance(ev.get("topic", ""), str) and ev["topic"].startswith("action.")
+        ]
+        return jsonify({"success": True, "events": events[-50:]})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/action_confirm", methods=["POST"])
+def api_action_confirm():
+    """User confirms a pending HIGH_RISK action."""
+    try:
+        from action import get_action_system
+        from session_manager import get_session_manager
+        session = get_session_manager().get_active_session()
+        raw_session = session.get_action_session()
+        if not raw_session or not raw_session.get("pending_confirmation"):
+            return jsonify({"success": False, "error": "No pending confirmation"}), 400
+        result = get_action_system().handle("yes, confirm", context={})
+        return jsonify({"success": True, "result": result.to_dict()})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/action_cancel", methods=["POST"])
+def api_action_cancel():
+    """User cancels a pending action."""
+    try:
+        from session_manager import get_session_manager
+        from action.action_session import ActionSession
+        session = get_session_manager().get_active_session()
+        raw = session.get_action_session()
+        if raw:
+            action_session = ActionSession.from_dict(raw)
+            action_session.clear_pending_confirmation()
+            session.set_action_session(action_session.to_dict())
+        return jsonify({"success": True, "message": "Action cancelled."})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
 atexit.register(cleanup_web_resources)
+
 
 if __name__ == "__main__":
     # Start background monitor thread

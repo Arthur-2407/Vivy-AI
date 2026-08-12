@@ -123,6 +123,17 @@ class ProactivityEngine:
 
         while self._running:
             try:
+                # Phase 4 Integration: Do not trigger proactive speech during Sleep/PreDawn
+                try:
+                    from circadian_intelligence import get_circadian_intelligence
+                    ci = get_circadian_intelligence()
+                    current_phase = ci.get_current_phase()
+                    if current_phase in ["Sleep", "PreDawn", "LateNight"]:
+                        time.sleep(check_interval)
+                        continue
+                except Exception:
+                    pass
+
                 # Safety: don't inject if pipeline is busy
                 if self._pipeline_is_busy():
                     time.sleep(check_interval)

@@ -166,6 +166,20 @@ class CognitiveOrchestrator:
             except Exception as _r_err:
                 print(f"[cognitive_orchestrator] Relationship Intelligence evaluation warning: {_r_err}")
 
+            # Stage 9.6 (NEW): Action System Intent Detection
+            # Lightweight read-only intent detection — no execution, no LLM call for
+            # unambiguous intents. Injects detected intent into plan for downstream use.
+            # Spec reference: §27 (SmartManager integration), Rule 2 (non-breaking)
+            action_intent = None
+            try:
+                from action import get_action_system
+                action_intent = get_action_system().detect_intent_only(normalized_text, mem)
+                if action_intent:
+                    plan["action_intent"] = action_intent.to_dict()
+                    mem["active_action_intent"] = action_intent.to_dict()
+            except Exception as _ae:
+                print(f"[cognitive_orchestrator] Action intent detection note: {_ae}")
+
             return {
                 "plan": plan,
                 "topic_context": topic_context,
@@ -175,7 +189,8 @@ class CognitiveOrchestrator:
                 "loneliness_state": lon_info,
                 "circadian_state": circ_info,
                 "continuity_state": continuity_info,
-                "relationship_intelligence": rel_intelligence
+                "relationship_intelligence": rel_intelligence,
+                "action_intent": action_intent.to_dict() if action_intent else None,
             }
 
     def orchestrate_post_response(self, user_text: str, reply_text: str, plan: dict, mem: dict,

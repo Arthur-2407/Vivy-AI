@@ -26,6 +26,7 @@ class AutonomousToolRouter:
 
     def __init__(self):
         self.available_tools = [
+            "action_system",
             "code_execution",
             "file_management",
             "job_scheduling",
@@ -48,6 +49,23 @@ class AutonomousToolRouter:
         with self._lock:
             q_lower = query.strip().lower()
             plan = context_plan or {}
+
+            # 0. Action System Check (Voice Assistant / Intent-Based Command Execution)
+            # SmartManager.try_route() returns {"handled": False} for non-action queries,
+            # so all existing routing branches below are completely unaffected.
+            # Spec reference: §27, integration with tool_router
+            try:
+                from action import get_action_system
+                action_result = get_action_system().try_route(query, plan)
+                if action_result.get("handled"):
+                    return {
+                        "tool_selected": "action_system",
+                        "success":        action_result.get("success", False),
+                        "result":         action_result,
+                        "message":        action_result.get("message", ""),
+                    }
+            except Exception as _as_err:
+                print(f"[ToolRouter] Action system routing note: {_as_err}")
 
             # 1. Code Execution Check
             if any(k in q_lower for k in ["run code", "execute python", "evaluate script", "calculate", "python code", "terminal command"]):
@@ -88,8 +106,25 @@ class AutonomousToolRouter:
                 except Exception as js_err:
                     return {"tool_selected": "job_scheduling", "success": False, "error": str(js_err)}
 
-            # 4. Self-Modification / Evolution Check
-            elif any(k in q_lower for k in ["evolve architecture", "self-modify", "remediate bug", "promote update"]):
+            # 4. Web Search Check (Phase 3 Integration)
+            elif any(k in q_lower for k in ["search the web", "search internet", "look up", "research", "search duckduckgo", "google"]):
+                try:
+                    from internet.duckduckgo_provider import DuckDuckGoProvider
+                    ddg = DuckDuckGoProvider()
+                    search_query = query
+                    for prefix in ["search the web for", "search internet for", "look up", "search duckduckgo for", "research", "google"]:
+                        if prefix in q_lower:
+                            idx = q_lower.find(prefix) + len(prefix)
+                            search_query = query[idx:].strip()
+                            break
+                    res = ddg.search(search_query)
+                    # Cap results to avoid blowing out prompt budget
+                    capped_res = res[:3] if isinstance(res, list) else res
+                    return {"tool_selected": "web_search", "result": capped_res, "success": True, "message": f"Web search results for: {search_query}"}
+                except Exception as ws_err:
+                    return {"tool_selected": "web_search", "success": False, "error": str(ws_err)}
+
+            # 5. Self-Modification / Evolution Check
                 try:
                     from agi.self_modification_engine import get_self_modification_engine
                     sme = get_self_modification_engine()

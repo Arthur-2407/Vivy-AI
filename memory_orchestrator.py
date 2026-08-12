@@ -214,6 +214,20 @@ class ModularMemoryOrchestrator:
             if state in user_lower or any(w in user_lower for w in state.split()):
                 scored_memories.append((60.0, f"Active State: feeling {state}"))
 
+        # ── TIER 3.5: Live Perception Context (Phase 2 Integration) ──
+        try:
+            from perception.fusion_engine import get_global_engine
+            engine = get_global_engine()
+            recent_events = engine.get_recent_events(max_age_seconds=120)
+            if recent_events:
+                for ev in recent_events:
+                    if ev.get("importance", 0.0) >= 0.6:
+                        sem = ev.get("semantic", "")
+                        if any(w in user_lower for w in ["see", "look", "screen", "what", "show", "watch", "hear", "sound"]) or any(w in user_lower for w in sem.lower().split()):
+                            scored_memories.append((75.0 + ev.get("importance", 0.0)*10, f"Recent Perception [{ev.get('source')}]: {sem}"))
+        except Exception as _pe_err:
+            pass
+
         # ── TIER 4: Long-Term Episodic Memory (Growth Diary) ─────────
         growth_diary = mem.get("growth_diary", [])
         for idx, milestone in enumerate(growth_diary[-8:]):
