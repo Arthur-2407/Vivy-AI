@@ -14,6 +14,7 @@ import logging
 from typing import Optional
 
 from .voice_manager import get_voice_manager
+from runtime.environment_manager import get_runtime_manager
 
 logger = logging.getLogger(__name__)
 
@@ -46,8 +47,7 @@ def execute_voice_cloning_conversion(
     # If root voice_cloning.py is available, execute it cleanly in subprocess or local context
     if os.path.exists(legacy_script):
         try:
-            rvc_python = os.path.join(base_dir, "venv_rvc", "Scripts", "python.exe")
-            exec_py = rvc_python if os.path.exists(rvc_python) else sys.executable
+            exec_py = get_runtime_manager().get_python_executable("rvc")
             cmd = [
                 exec_py,
                 legacy_script,

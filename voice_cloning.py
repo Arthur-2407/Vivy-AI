@@ -90,6 +90,9 @@ class VoiceCloningEngine:
             and os.path.getsize(os.path.join(weights_dir, f)) > 1024
         ]
         
+        # [CRITICAL FIX] Sort by modification time descending to ensure the most recently trained model is selected by default
+        pth_files.sort(key=lambda x: os.path.getmtime(os.path.join(weights_dir, x)), reverse=True)
+        
         if not pth_files:
             shutil.copy2(input_path, output_path)
             return {"status": "success", "message": "No model found. Copied raw TTS."}

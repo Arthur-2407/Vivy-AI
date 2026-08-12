@@ -95,8 +95,9 @@ class DocumentExtractor:
                 reader = PyPDF2.PdfReader(f)
                 text_list = [p.extract_text() for p in reader.pages if p.extract_text()]
                 return "\n".join(text_list)
-        except Exception:
-            pass
+        except Exception as _e:
+            import logging
+            logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
         try:
             import pypdf
@@ -104,8 +105,9 @@ class DocumentExtractor:
                 reader = pypdf.PdfReader(f)
                 text_list = [p.extract_text() for p in reader.pages if p.extract_text()]
                 return "\n".join(text_list)
-        except Exception:
-            pass
+        except Exception as _e:
+            import logging
+            logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
         # Fallback regex raw string extractor for basic uncompressed PDF streams
         with open(file_path, "rb") as f:
@@ -120,8 +122,9 @@ class DocumentExtractor:
             import docx
             doc = docx.Document(file_path)
             return "\n".join([p.text for p in doc.paragraphs if p.text])
-        except Exception:
-            pass
+        except Exception as _e:
+            import logging
+            logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
         # Fallback ZIP XML extractor (.docx is a zip file containing word/document.xml)
         try:
@@ -135,8 +138,9 @@ class DocumentExtractor:
                 if elem.tag.endswith('}t') and elem.text:
                     texts.append(elem.text)
             return " ".join(texts)
-        except Exception:
-            pass
+        except Exception as _e:
+            import logging
+            logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
         with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
             return f.read()

@@ -96,8 +96,9 @@ class KnowledgeConsolidator:
                     "timestamp": time.time(),
                     "memory_model": "HYBRID_REALTIME_IMMEDIATE + DEFERRED_BACKGROUND"
                 }, source_engine="KnowledgeConsolidator")
-            except Exception:
-                pass
+            except Exception as _e:
+                import logging
+                logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
             return consolidated_count
 
     def _load_personal_graph(self):

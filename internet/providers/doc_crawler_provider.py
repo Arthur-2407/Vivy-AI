@@ -73,8 +73,9 @@ class OfficialDocsProvider(SearchProvider):
                     )
                     results.append(res)
                     self.rag.index_document(f"doc_{hash(search_url+str(i))}", res.title, p, source=search_url, doc_type="official_documentation", reliability=0.98)
-        except Exception:
-            pass
+        except Exception as _e:
+            import logging
+            logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
         # Fallback authoritative synthesis for offline continuity
         if not results:

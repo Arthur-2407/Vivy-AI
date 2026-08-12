@@ -20,6 +20,7 @@ from typing import Dict, Any, Optional, List
 from .voice_validation import VoiceQualityAnalyzer
 from .voice_preview import get_voice_preview_engine
 from .voice_manager import get_voice_manager
+from runtime.environment_manager import get_runtime_manager
 
 class VoiceTrainingManager:
     """Coordinates iterative custom voice training jobs with VRAM protection and real-time UI synchronization."""
@@ -466,7 +467,7 @@ class VoiceTrainingManager:
         else:
             self._execute_incremental_retraining(job)
 
-    def _get_optimal_cpu_workers(self) -> str:
+    def _get_optimal_cpu_workers(self, is_f0=False) -> str:
         import multiprocessing
         import psutil
         total_cores = multiprocessing.cpu_count()
@@ -474,6 +475,8 @@ class VoiceTrainingManager:
         available_ratio = 1.0 - (cpu_load / 100.0)
         optimal = int(total_cores * available_ratio)
         max_workers = total_cores if total_cores <= 4 else total_cores - 1
+        if is_f0:
+            max_workers = min(max_workers, 4)
         return str(max(1, min(optimal, max_workers)))
 
     def _execute_fresh_training(self, job: Dict[str, Any]) -> None:
@@ -493,8 +496,7 @@ class VoiceTrainingManager:
         
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         rvc_dir = os.path.join(base_dir, "rvc_cpu")
-        rvc_venv_python = os.path.join(base_dir, "venv_rvc", "Scripts", "python.exe")
-        python_exe = rvc_venv_python if os.path.exists(rvc_venv_python) else sys.executable
+        python_exe = get_runtime_manager().get_python_executable("rvc")
         
         self._ensure_pretrained_weights_exist(base_dir)
 
@@ -549,18 +551,34 @@ class VoiceTrainingManager:
         self._run_subprocess_stream(jid, [python_exe, "infer/modules/train/preprocess.py", raw_dir, "40000", opt_cores, exp_dir, "False", "3.7"], cwd=rvc_dir, stage_label="Initial Pre-processing")
 
         # Stage 2: F0 Extraction
-        opt_cores = self._get_optimal_cpu_workers()
+        opt_cores = self._get_optimal_cpu_workers(is_f0=True)
         self._update_stage(jid, "training", "Initial F0 Extraction", 32, f"Extracting pitch contours (F0) from fresh segments using {opt_cores} CPU workers...")
         self._run_subprocess_stream(jid, [python_exe, "infer/modules/train/extract/extract_f0_print.py", exp_dir, opt_cores, "rmvpe"], cwd=rvc_dir, stage_label="Initial F0 Extraction")
 
         # Stage 3: Feature Extraction (HuBERT)
         opt_cores = self._get_optimal_cpu_workers()
-        self._update_stage(jid, "training", "Initial Feature Extraction", 52, f"Generating HuBERT embeddings for new dataset using {opt_cores} CPU workers...")
         
         # [CRITICAL FIX] Process 100% of dataset (1 part, index 0) and multithread natively
         env_dict = os.environ.copy()
         env_dict["OMP_NUM_THREADS"] = str(opt_cores)
-        self._run_subprocess_stream(jid, [python_exe, "infer/modules/train/extract_feature_print.py", "cpu", "1", "0", exp_dir, "v2", "False"], cwd=rvc_dir, stage_label="Initial Feature Extraction", env=env_dict)
+        
+        has_cuda = False
+        try:
+            import pynvml
+            pynvml.nvmlInit()
+            has_cuda = pynvml.nvmlDeviceGetCount() > 0
+            pynvml.nvmlShutdown()
+        except:
+            pass
+            
+        if has_cuda:
+            self._update_stage(jid, "training", "Initial Feature Extraction", 52, f"Generating HuBERT embeddings using GPU acceleration...")
+            feature_cmd = [python_exe, "infer/modules/train/extract_feature_print.py", "cuda:0", "1", "0", "0", exp_dir, "v2", "False"]
+        else:
+            self._update_stage(jid, "training", "Initial Feature Extraction", 52, f"Generating HuBERT embeddings for new dataset using {opt_cores} CPU workers...")
+            feature_cmd = [python_exe, "infer/modules/train/extract_feature_print.py", "cpu", "1", "0", exp_dir, "v2", "False"]
+            
+        self._run_subprocess_stream(jid, feature_cmd, cwd=rvc_dir, stage_label="Initial Feature Extraction", env=env_dict)
 
         # Stage 4: Neural Network Training
         self._update_stage(jid, "training", "Fresh Neural Training", 70, f"Starting GPU-accelerated Neural Training ({target_epochs} epochs)...")
@@ -581,8 +599,7 @@ class VoiceTrainingManager:
 
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         rvc_dir = os.path.join(base_dir, "rvc_cpu")
-        rvc_venv_python = os.path.join(base_dir, "venv_rvc", "Scripts", "python.exe")
-        python_exe = rvc_venv_python if os.path.exists(rvc_venv_python) else sys.executable
+        python_exe = get_runtime_manager().get_python_executable("rvc")
         
         self._ensure_pretrained_weights_exist(base_dir)
 
@@ -611,17 +628,33 @@ class VoiceTrainingManager:
             self._update_stage(jid, "training", "Incremental Pre-processing", 18, f"Slicing {round(duration_sec/60, 1)} min of appended audio using {opt_cores} CPU workers...")
             self._run_subprocess_stream(jid, [python_exe, "infer/modules/train/preprocess.py", raw_dir, "40000", opt_cores, exp_dir, "False", "3.7"], cwd=rvc_dir, stage_label="Incremental Pre-processing")
 
-            opt_cores = self._get_optimal_cpu_workers()
+            opt_cores = self._get_optimal_cpu_workers(is_f0=True)
             self._update_stage(jid, "training", "Incremental F0 Extraction", 38, f"Extracting F0 from appended segments using {opt_cores} CPU workers...")
             self._run_subprocess_stream(jid, [python_exe, "infer/modules/train/extract/extract_f0_print.py", exp_dir, opt_cores, "rmvpe"], cwd=rvc_dir, stage_label="Incremental F0 Extraction")
 
             opt_cores = self._get_optimal_cpu_workers()
-            self._update_stage(jid, "training", "Incremental Feature Extraction", 58, f"Generating HuBERT embeddings for appended segments using {opt_cores} CPU workers...")
             
             # [CRITICAL FIX] Process 100% of dataset (1 part, index 0) and multithread natively
             env_dict = os.environ.copy()
             env_dict["OMP_NUM_THREADS"] = str(opt_cores)
-            self._run_subprocess_stream(jid, [python_exe, "infer/modules/train/extract_feature_print.py", "cpu", "1", "0", exp_dir, "v2", "False"], cwd=rvc_dir, stage_label="Incremental Feature Extraction", env=env_dict)
+            
+            has_cuda = False
+            try:
+                import pynvml
+                pynvml.nvmlInit()
+                has_cuda = pynvml.nvmlDeviceGetCount() > 0
+                pynvml.nvmlShutdown()
+            except:
+                pass
+                
+            if has_cuda:
+                self._update_stage(jid, "training", "Incremental Feature Extraction", 58, f"Generating HuBERT embeddings for appended segments using GPU acceleration...")
+                feature_cmd = [python_exe, "infer/modules/train/extract_feature_print.py", "cuda:0", "1", "0", "0", exp_dir, "v2", "False"]
+            else:
+                self._update_stage(jid, "training", "Incremental Feature Extraction", 58, f"Generating HuBERT embeddings for appended segments using {opt_cores} CPU workers...")
+                feature_cmd = [python_exe, "infer/modules/train/extract_feature_print.py", "cpu", "1", "0", exp_dir, "v2", "False"]
+                
+            self._run_subprocess_stream(jid, feature_cmd, cwd=rvc_dir, stage_label="Incremental Feature Extraction", env=env_dict)
         else:
             self._update_stage(jid, "training", "Preparing Dataset", 5, "Reusing existing dataset artifacts...")
             self._update_stage(jid, "training", "Incremental Pre-processing", 18, "Skipping pre-processing (dataset unmodified)...")
@@ -667,8 +700,32 @@ class VoiceTrainingManager:
             f.write("\n".join(opt))
         
         batch_size = "4"
+        try:
+            import pynvml
+            pynvml.nvmlInit()
+            handle = pynvml.nvmlDeviceGetHandleByIndex(0)
+            mem_info = pynvml.nvmlDeviceGetMemoryInfo(handle)
+            total_vram_gb = mem_info.total / (1024**3)
+            if total_vram_gb >= 24:
+                batch_size = "16"
+            elif total_vram_gb >= 16:
+                batch_size = "12"
+            elif total_vram_gb >= 10:
+                batch_size = "8"
+            elif total_vram_gb >= 8:
+                batch_size = "6"
+            else:
+                batch_size = "4"
+            pynvml.nvmlShutdown()
+        except:
+            batch_size = "4"
+            
         cache_gpu = "0"
         save_freq = str(max(10, target_epochs // 5))
+        
+        # [CRITICAL FIX] Create weights output dir BEFORE training so savee doesn't crash
+        weights_out_dir = os.path.join(rvc_dir, "assets", "weights")
+        os.makedirs(weights_out_dir, exist_ok=True)
         
         pg_path = "assets/pretrained_v2/f0G40k.pth"
         pd_path = "assets/pretrained_v2/f0D40k.pth"
@@ -698,8 +755,6 @@ class VoiceTrainingManager:
             except Exception as e:
                 print(f"[VoiceTraining] Index building warning: {e}")
         
-        weights_out_dir = os.path.join(rvc_dir, "assets", "weights")
-        os.makedirs(weights_out_dir, exist_ok=True)
         model_filename = f"{vid}_{vname.lower().replace(' ', '_')}.pth"
         final_model_path = os.path.join(weights_out_dir, model_filename)
         
@@ -707,11 +762,21 @@ class VoiceTrainingManager:
         if os.path.exists(trained_pth):
             shutil.copy2(trained_pth, final_model_path)
         else:
-            log_pths = glob.glob(os.path.join(exp_dir, "*.pth"))
-            if log_pths:
-                shutil.copy2(log_pths[-1], final_model_path)
-            else:
-                raise RuntimeError("Training failed: .pth file was not generated.")
+            print("[VoiceTraining] Target weights file not found. Attempting extraction from latest G checkpoint...")
+            import sys
+            if rvc_dir not in sys.path:
+                sys.path.insert(0, rvc_dir)
+            try:
+                from infer.lib.train.process_ckpt import extract_small_model
+                g_pths = glob.glob(os.path.join(exp_dir, "G_*.pth"))
+                if g_pths:
+                    latest_g = sorted(g_pths, key=os.path.getmtime)[-1]
+                    res = extract_small_model(latest_g, model_filename.replace(".pth", ""), "40k", "1", "Extracted model fallback", "v2")
+                    print(f"[VoiceTraining] Extracted small model from {latest_g}: {res}")
+                else:
+                    raise RuntimeError("Training failed: No generator checkpoints found to extract.")
+            except Exception as e:
+                raise RuntimeError(f"Training failed: Failed to extract from checkpoint. {e}")
                 
         index_src = os.path.join(exp_dir, f"added_IVF_*.index")
         indexes = glob.glob(index_src)

@@ -39,9 +39,8 @@ class SelfModificationEngine:
             return cls._instance
 
     def _locate_python(self) -> str:
-        venv_python = os.path.join(BASE_DIR, "venv", "Scripts", "python.exe")
-        if os.path.exists(venv_python):
-            return venv_python
+        """Returns the current interpreter. SelfModificationEngine always runs in MAIN environment,
+        so sys.executable is the correct and explicit choice for same-environment subprocess spawns."""
         return sys.executable
 
     def propose_and_evaluate_modification(self, target_relative_path: str, proposed_content_or_diff: str, test_command: Optional[List[str]] = None, auto_promote: bool = True) -> Dict[str, Any]:

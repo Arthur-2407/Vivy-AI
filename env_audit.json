@@ -1,0 +1,21 @@
+{
+    "D:\\Vivy\\venv\\Scripts\\python.exe": {
+        "version": "3.10.11 (tags/v3.10.11:7d4cc5a, Apr  5 2023, 00:38:17) [MSC v.1929 64 bit (AMD64)]",
+        "prefix": "D:\\Vivy\\venv",
+        "packages": 0,
+        "torch_version": "2.13.0+cpu",
+        "cuda_available": false,
+        "cuda_devices": 0
+    },
+    "D:\\Vivy\\venv_avatar\\Scripts\\python.exe": {
+        "version": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+        "prefix": "D:\\Vivy\\venv_avatar",
+        "packages": 0,
+        "torch_version": null,
+        "cuda_available": false,
+        "cuda_devices": 0
+    },
+    "D:\\Vivy\\venv_rvc\\Scripts\\python.exe": {
+        "error": "<string>:6: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html\n{\"version\": \"3.10.11 (tags/v3.10.11:7d4cc5a, Apr  5 2023, 00:38:17) [MSC v.1929 64 bit (AMD64)]\", \"prefix\": \"D:\\\\Vivy\\\\venv_rvc\", \"packages\": 86, \"torch_version\": \"2.1.2+cu118\", \"cuda_available\": true, \"cuda_devices\": 1}"
+    }
+}

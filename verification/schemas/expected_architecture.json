@@ -1,0 +1,41 @@
+{
+    "normal": {
+        "L1": { "L2": "REQUIRED", "L10": "REQUIRED" },
+        "L2": { "L3": "REQUIRED", "L4": "REQUIRED", "L5": "FALLBACK", "L10": "REQUIRED" },
+        "L3": { "L5": "REQUIRED", "L8": "OPTIONAL", "L10": "REQUIRED" },
+        "L4": { "L5": "REQUIRED", "L10": "REQUIRED" },
+        "L5": { "L6": "REQUIRED", "L8": "OPTIONAL", "L9": "OPTIONAL", "L10": "REQUIRED" },
+        "L6": { "L10": "REQUIRED" },
+        "L7": { "L10": "INACTIVE_BY_SCENARIO" },
+        "L8": { "L10": "REQUIRED", "L11": "OPTIONAL" },
+        "L9": { "L10": "REQUIRED", "L11": "OPTIONAL" },
+        "L10": { "L2": "OPTIONAL", "L3": "OPTIONAL", "L4": "OPTIONAL", "L5": "OPTIONAL", "L6": "OPTIONAL", "L11": "OPTIONAL" },
+        "L11": { "L10": "OPTIONAL" }
+    },
+    "no_network": {
+        "L1": { "L2": "REQUIRED", "L10": "REQUIRED" },
+        "L2": { "L3": "REQUIRED", "L4": "REQUIRED", "L5": "FALLBACK", "L10": "REQUIRED" },
+        "L3": { "L5": "REQUIRED", "L10": "REQUIRED" },
+        "L4": { "L5": "REQUIRED", "L10": "REQUIRED" },
+        "L5": { "L6": "REQUIRED", "L10": "REQUIRED" },
+        "L6": { "L10": "REQUIRED" },
+        "L7": { "L10": "REQUIRED" },
+        "L8": { "L10": "REQUIRED", "L11": "OPTIONAL" },
+        "L9": { "L10": "REQUIRED", "L11": "OPTIONAL" },
+        "L10": { "L2": "OPTIONAL", "L4": "OPTIONAL", "L5": "OPTIONAL", "L6": "OPTIONAL", "L11": "OPTIONAL" },
+        "L11": { "L10": "OPTIONAL" }
+    },
+    "no_camera": {
+        "L1": { "L2": "REQUIRED", "L10": "REQUIRED" },
+        "L2": { "L3": "REQUIRED", "L4": "REQUIRED", "L5": "FALLBACK", "L10": "REQUIRED" },
+        "L3": { "L5": "REQUIRED", "L10": "REQUIRED" },
+        "L4": { "L5": "REQUIRED", "L10": "REQUIRED" },
+        "L5": { "L6": "REQUIRED", "L10": "REQUIRED" },
+        "L6": { "L10": "REQUIRED" },
+        "L7": { "L10": "INACTIVE_BY_SCENARIO" },
+        "L8": { "L10": "REQUIRED", "L11": "OPTIONAL" },
+        "L9": { "L10": "REQUIRED", "L11": "OPTIONAL" },
+        "L10": { "L2": "OPTIONAL", "L4": "OPTIONAL", "L5": "OPTIONAL", "L6": "OPTIONAL", "L11": "OPTIONAL" },
+        "L11": { "L10": "OPTIONAL" }
+    }
+}

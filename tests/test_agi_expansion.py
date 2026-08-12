@@ -130,7 +130,7 @@ class TestAGIExpansionEngines(unittest.TestCase):
         res = mod_engine.propose_and_evaluate_modification(
             target_relative_path=dummy_file,
             proposed_content_or_diff="Corrupt Upgrade Version",
-            test_command=["python", "-c", "import sys; sys.exit(1)"]
+            test_command=[sys.executable, "-c", "import sys; sys.exit(1)"]
         )
         self.assertTrue(res["rollback_executed"], "Atomic rollback was not executed upon test failure!")
         with open(abs_dummy, "r", encoding="utf-8") as rf:

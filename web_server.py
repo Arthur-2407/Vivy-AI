@@ -4,6 +4,7 @@ os.environ["VIVY_PROCESS_ROLE"] = "web_server"
 import sys
 import time
 import shutil
+from runtime.environment_manager import get_runtime_manager
 import threading
 import json
 import uuid
@@ -3394,7 +3395,8 @@ def authoring_generate_animation():
             
             # [V6.0 AUTOMATION HOOK] Automatically execute the Diagnostic Acceptance framework
             import subprocess
-            subprocess.Popen(["python", "diagnostic_mode.py", anim_data["id"], v_path])
+            python_exe = get_runtime_manager().get_python_executable("main")
+            subprocess.Popen([python_exe, "diagnostic_mode.py", anim_data["id"], v_path])
             
         except Exception as e:
             _authoring_tasks[tid]["status"] = "error"

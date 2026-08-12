@@ -1,0 +1,314 @@
+[
+  {
+    "experience_id": "5400f8ca-a254-4a17-86e5-5bc31d74d2ae",
+    "timestamp": 1786529507.431077,
+    "user_state": {},
+    "emotion_state": {
+      "mood": "relaxed"
+    },
+    "perception_state": {
+      "camera_active": true,
+      "_grounding_context": "[Perception State \u2014 NOT STARTED]\n  Screen sharing: \u2717 OFF (no frames received this session)\n  Audio: \u2717 none\n\n[User Presence & Gaze Perception State]\n  Camera status: \u2717 INACTIVE (User camera is turned OFF)\n  Face detection: \u2717 No face detected\n  User visibility: \u2717 User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
+      "_diagnostic_answer": "PERCEPTION_FACT: Screen sharing is not active. No frames have been received this session. The user has not shared their screen yet."
+    },
+    "goal": "socializing / casual chat",
+    "action": "I appreciate you sharing that with me. I'm listening.",
+    "tool_usage": [],
+    "response_strategy": "short",
+    "prediction": {},
+    "outcome": {
+      "success": true
+    },
+    "reward": 0.8849999999999999,
+    "confidence": 0.9,
+    "novelty": 0.5,
+    "learning_value": 0.11062499999999999,
+    "source": "conversation"
+  },
+  {
+    "experience_id": "c3228e09-d666-4f8e-b62d-ab7f2c07cf3c",
+    "timestamp": 1786529539.7318878,
+    "user_state": {},
+    "emotion_state": {
+      "mood": "relaxed"
+    },
+    "perception_state": {
+      "camera_active": true,
+      "_grounding_context": "[Perception State \u2014 NOT STARTED]\n  Screen sharing: \u2717 OFF (no frames received this session)\n  Audio: \u2717 none\n\n[User Presence & Gaze Perception State]\n  Camera status: \u2717 INACTIVE (User camera is turned OFF)\n  Face detection: \u2717 No face detected\n  User visibility: \u2717 User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
+      "_diagnostic_answer": "PERCEPTION_FACT: Screen sharing is not active. No frames have been received this session. The user has not shared their screen yet."
+    },
+    "goal": "information retrieval / web search",
+    "action": "I can't access real-time news, but I know what's trending! Want me to share some fun facts or help with something else? \ud83d\ude0a \ud83d\ude42",
+    "tool_usage": [],
+    "response_strategy": "short",
+    "prediction": {},
+    "outcome": {
+      "success": true
+    },
+    "reward": 0.8849999999999999,
+    "confidence": 0.9,
+    "novelty": 0.5,
+    "learning_value": 0.11062499999999999,
+    "source": "conversation"
+  },
+  {
+    "experience_id": "cb89176d-4b7e-4a43-9f3d-dd93991b2d70",
+    "timestamp": 1786529570.8706756,
+    "user_state": {},
+    "emotion_state": {
+      "mood": "relaxed"
+    },
+    "perception_state": {
+      "camera_active": false,
+      "_grounding_context": "[Perception State \u2014 NOT STARTED]\n  Screen sharing: \u2717 OFF (no frames received this session)\n  Audio: \u2717 none\n\n[User Presence & Gaze Perception State]\n  Camera status: \u2717 INACTIVE (User camera is turned OFF)\n  Face detection: \u2717 No face detected\n  User visibility: \u2717 User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
+      "_diagnostic_answer": "PERCEPTION_FACT: Screen sharing is not active. No frames have been received this session. The user has not shared their screen yet."
+    },
+    "goal": "socializing / casual chat",
+    "action": "I can't see your",
+    "tool_usage": [],
+    "response_strategy": "short",
+    "prediction": {},
+    "outcome": {
+      "success": true
+    },
+    "reward": 0.8849999999999999,
+    "confidence": 0.9,
+    "novelty": 0.5,
+    "learning_value": 0.11062499999999999,
+    "source": "conversation"
+  },
+  {
+    "experience_id": "ac14cfee-43c4-4425-85ca-24a34725edd0",
+    "timestamp": 1786529695.2495692,
+    "user_state": {},
+    "emotion_state": {
+      "mood": "relaxed"
+    },
+    "perception_state": {
+      "camera_active": true,
+      "_grounding_context": "[Perception State \u2014 NOT STARTED]\n  Screen sharing: \u2717 OFF (no frames received this session)\n  Audio: \u2717 none\n\n[User Presence & Gaze Perception State]\n  Camera status: \u2717 INACTIVE (User camera is turned OFF)\n  Face detection: \u2717 No face detected\n  User visibility: \u2717 User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
+      "_diagnostic_answer": "PERCEPTION_FACT: Screen sharing is not active. No frames have been received this session. The user has not shared their screen yet."
+    },
+    "goal": "socializing / casual chat",
+    "action": "I'm enjoying our conversation.",
+    "tool_usage": [],
+    "response_strategy": "short",
+    "prediction": {},
+    "outcome": {
+      "success": true
+    },
+    "reward": 0.8849999999999999,
+    "confidence": 0.9,
+    "novelty": 0.5,
+    "learning_value": 0.11062499999999999,
+    "source": "conversation"
+  },
+  {
+    "experience_id": "e1dd2b93-9579-45d8-9fb1-7944b2f82e50",
+    "timestamp": 1786529724.1117635,
+    "user_state": {},
+    "emotion_state": {
+      "mood": "relaxed"
+    },
+    "perception_state": {
+      "camera_active": true,
+      "_grounding_context": "[Perception State \u2014 NOT STARTED]\n  Screen sharing: \u2717 OFF (no frames received this session)\n  Audio: \u2717 none\n\n[User Presence & Gaze Perception State]\n  Camera status: \u2717 INACTIVE (User camera is turned OFF)\n  Face detection: \u2717 No face detected\n  User visibility: \u2717 User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
+      "_diagnostic_answer": "PERCEPTION_FACT: Screen sharing is not active. No frames have been received this session. The user has not shared their screen yet."
+    },
+    "goal": "information retrieval / web search",
+    "action": "That caught my attention. Tell me a bit more.",
+    "tool_usage": [],
+    "response_strategy": "tiny",
+    "prediction": {},
+    "outcome": {
+      "success": true
+    },
+    "reward": 0.8849999999999999,
+    "confidence": 0.9,
+    "novelty": 0.5,
+    "learning_value": 0.11062499999999999,
+    "source": "conversation"
+  },
+  {
+    "experience_id": "26a4b7f0-bc27-41b1-a06c-f67cd98efad0",
+    "timestamp": 1786529753.4867737,
+    "user_state": {},
+    "emotion_state": {
+      "mood": "relaxed"
+    },
+    "perception_state": {
+      "camera_active": false,
+      "_grounding_context": "[Perception State \u2014 NOT STARTED]\n  Screen sharing: \u2717 OFF (no frames received this session)\n  Audio: \u2717 none\n\n[User Presence & Gaze Perception State]\n  Camera status: \u2717 INACTIVE (User camera is turned OFF)\n  Face detection: \u2717 No face detected\n  User visibility: \u2717 User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
+      "_diagnostic_answer": "PERCEPTION_FACT: Screen sharing is not active. No frames have been received this session. The user has not shared their screen yet."
+    },
+    "goal": "socializing / casual chat",
+    "action": "I can\u2019t see your screen or camera right now\u2014did you turn them off by accident? If you share your screen or turn on your camera, I\u2019ll be right here to help you figure it out. Want me to check something else while we wait? \ud83d\ude0c",
+    "tool_usage": [],
+    "response_strategy": "medium",
+    "prediction": {},
+    "outcome": {
+      "success": true
+    },
+    "reward": 0.8849999999999999,
+    "confidence": 0.9,
+    "novelty": 0.5,
+    "learning_value": 0.11062499999999999,
+    "source": "conversation"
+  },
+  {
+    "experience_id": "d42f1734-6890-40c9-9ed2-595973d3f937",
+    "timestamp": 1786529826.5800498,
+    "user_state": {},
+    "emotion_state": {
+      "mood": "relaxed"
+    },
+    "perception_state": {
+      "camera_active": true,
+      "_grounding_context": "[Perception State \u2014 NOT STARTED]\n  Screen sharing: \u2717 OFF (no frames received this session)\n  Audio: \u2717 none\n\n[User Presence & Gaze Perception State]\n  Camera status: \u2717 INACTIVE (User camera is turned OFF)\n  Face detection: \u2717 No face detected\n  User visibility: \u2717 User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
+      "_diagnostic_answer": "PERCEPTION_FACT: Screen sharing is not active. No frames have been received this session. The user has not shared their screen yet."
+    },
+    "goal": "socializing / casual chat",
+    "action": "That caught my attention. Tell me a bit more.",
+    "tool_usage": [],
+    "response_strategy": "short",
+    "prediction": {},
+    "outcome": {
+      "success": true
+    },
+    "reward": 0.8849999999999999,
+    "confidence": 0.9,
+    "novelty": 0.5,
+    "learning_value": 0.11062499999999999,
+    "source": "conversation"
+  },
+  {
+    "experience_id": "edd2017f-ac66-4745-8fb1-b8d84b1340ca",
+    "timestamp": 1786529855.066286,
+    "user_state": {},
+    "emotion_state": {
+      "mood": "relaxed"
+    },
+    "perception_state": {
+      "camera_active": true,
+      "_grounding_context": "[Perception State \u2014 NOT STARTED]\n  Screen sharing: \u2717 OFF (no frames received this session)\n  Audio: \u2717 none\n\n[User Presence & Gaze Perception State]\n  Camera status: \u2717 INACTIVE (User camera is turned OFF)\n  Face detection: \u2717 No face detected\n  User visibility: \u2717 User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
+      "_diagnostic_answer": "PERCEPTION_FACT: Screen sharing is not active. No frames have been received this session. The user has not shared their screen yet."
+    },
+    "goal": "information retrieval / web search",
+    "action": "I can\u2019t browse the web in real time, but I can share what I know from my knowledge up to 202 How do you feel about that?",
+    "tool_usage": [],
+    "response_strategy": "short",
+    "prediction": {},
+    "outcome": {
+      "success": true
+    },
+    "reward": 0.8849999999999999,
+    "confidence": 0.9,
+    "novelty": 0.5,
+    "learning_value": 0.11062499999999999,
+    "source": "conversation"
+  },
+  {
+    "experience_id": "5d208f45-e5a4-4461-883c-8de1d21924ff",
+    "timestamp": 1786529883.0252197,
+    "user_state": {},
+    "emotion_state": {
+      "mood": "relaxed"
+    },
+    "perception_state": {
+      "camera_active": false,
+      "_grounding_context": "[Perception State \u2014 NOT STARTED]\n  Screen sharing: \u2717 OFF (no frames received this session)\n  Audio: \u2717 none\n\n[User Presence & Gaze Perception State]\n  Camera status: \u2717 INACTIVE (User camera is turned OFF)\n  Face detection: \u2717 No face detected\n  User visibility: \u2717 User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
+      "_diagnostic_answer": "PERCEPTION_FACT: Screen sharing is not active. No frames have been received this session. The user has not shared their screen yet."
+    },
+    "goal": "socializing / casual chat",
+    "action": "I can't see your screen or face right now. Would you like to share your screen or turn How do you feel about that?",
+    "tool_usage": [],
+    "response_strategy": "short",
+    "prediction": {},
+    "outcome": {
+      "success": true
+    },
+    "reward": 0.8849999999999999,
+    "confidence": 0.9,
+    "novelty": 0.5,
+    "learning_value": 0.11062499999999999,
+    "source": "conversation"
+  },
+  {
+    "experience_id": "9f65417e-0bf9-4139-bf08-34cc061edc25",
+    "timestamp": 1786530449.6781356,
+    "user_state": {},
+    "emotion_state": {
+      "mood": "relaxed"
+    },
+    "perception_state": {
+      "camera_active": true,
+      "_grounding_context": "[Perception State \u2014 NOT STARTED]\n  Screen sharing: \u2717 OFF (no frames received this session)\n  Audio: \u2717 none\n\n[User Presence & Gaze Perception State]\n  Camera status: \u2717 INACTIVE (User camera is turned OFF)\n  Face detection: \u2717 No face detected\n  User visibility: \u2717 User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
+      "_diagnostic_answer": "PERCEPTION_FACT: Screen sharing is not active. No frames have been received this session. The user has not shared their screen yet."
+    },
+    "goal": "socializing / casual chat",
+    "action": "I'm right here with you.",
+    "tool_usage": [],
+    "response_strategy": "short",
+    "prediction": {},
+    "outcome": {
+      "success": true
+    },
+    "reward": 0.8849999999999999,
+    "confidence": 0.9,
+    "novelty": 0.5,
+    "learning_value": 0.11062499999999999,
+    "source": "conversation"
+  },
+  {
+    "experience_id": "0c112887-fd0e-488f-a431-c3fc7db04692",
+    "timestamp": 1786530475.2017148,
+    "user_state": {},
+    "emotion_state": {
+      "mood": "relaxed"
+    },
+    "perception_state": {
+      "camera_active": true,
+      "_grounding_context": "[Perception State \u2014 NOT STARTED]\n  Screen sharing: \u2717 OFF (no frames received this session)\n  Audio: \u2717 none\n\n[User Presence & Gaze Perception State]\n  Camera status: \u2717 INACTIVE (User camera is turned OFF)\n  Face detection: \u2717 No face detected\n  User visibility: \u2717 User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
+      "_diagnostic_answer": "PERCEPTION_FACT: Screen sharing is not active. No frames have been received this session. The user has not shared their screen yet."
+    },
+    "goal": "information retrieval / web search",
+    "action": "I'm enjoying our conversation.",
+    "tool_usage": [],
+    "response_strategy": "tiny",
+    "prediction": {},
+    "outcome": {
+      "success": true
+    },
+    "reward": 0.8849999999999999,
+    "confidence": 0.9,
+    "novelty": 0.5,
+    "learning_value": 0.11062499999999999,
+    "source": "conversation"
+  },
+  {
+    "experience_id": "5dd6ea4a-d659-4781-a781-603b651262fd",
+    "timestamp": 1786530501.3582072,
+    "user_state": {},
+    "emotion_state": {
+      "mood": "relaxed"
+    },
+    "perception_state": {
+      "camera_active": false,
+      "_grounding_context": "[Perception State \u2014 NOT STARTED]\n  Screen sharing: \u2717 OFF (no frames received this session)\n  Audio: \u2717 none\n\n[User Presence & Gaze Perception State]\n  Camera status: \u2717 INACTIVE (User camera is turned OFF)\n  Face detection: \u2717 No face detected\n  User visibility: \u2717 User not visible\n  Presence state: Camera OFF\n  Perception hardware mode: Avatar OFF Mode (CPU)",
+      "_diagnostic_answer": "PERCEPTION_FACT: Screen sharing is not active. No frames have been received this session. The user has not shared their screen yet."
+    },
+    "goal": "socializing / casual chat",
+    "action": "I can't see your screen or face right now\u2014maybe your camera or screen sharing is off? If you're feeling",
+    "tool_usage": [],
+    "response_strategy": "short",
+    "prediction": {},
+    "outcome": {
+      "success": true
+    },
+    "reward": 0.8849999999999999,
+    "confidence": 0.9,
+    "novelty": 0.5,
+    "learning_value": 0.11062499999999999,
+    "source": "conversation"
+  }
+]

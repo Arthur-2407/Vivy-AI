@@ -103,8 +103,8 @@ class LearningEngine:
                 try:
                     import models.learning.api as l_api
                     l_api.log_experience(user_input=user_text, ai_response=reply_text, context={"topic": topic}, emotion="joy", reward=1.0)
-                except Exception:
-                    pass
+                except Exception as _e:
+                    print(f"[LearningEngine] ML learning API log failed: {_e}")
 
             # Inspect skills for performance bottlenecks
             try:
@@ -114,14 +114,14 @@ class LearningEngine:
                         bot_task = f"Practice and refine capability: {sk_name}"
                         if not any(s["task"] == bot_task for s in self.study_schedule):
                             self.study_schedule.append({"task": bot_task, "scheduled_for": now + 1800, "priority": "urgent"})
-            except Exception:
-                pass
+            except Exception as _e:
+                print(f"[LearningEngine] Skill system inspection failed: {_e}")
 
             self.save_to_disk()
             try:
                 get_cognitive_blackboard().publish_state("active_learning_schedule", self.study_schedule, source_engine="LearningEngine")
-            except Exception:
-                pass
+            except Exception as _e:
+                print(f"[LearningEngine] Blackboard publish failed: {_e}")
 
     def get_curiosity_prompt_hint(self) -> str:
         """Returns autonomous study items to inform proactive conversation topics."""

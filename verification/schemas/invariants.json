@@ -1,0 +1,11 @@
+{
+    "INV-001": "Every accepted user turn must receive a trace_id.",
+    "INV-002": "A cognition event may not be marked valid unless required perception/state inputs exist.",
+    "INV-003": "A visual-capability claim requires verified visual input evidence.",
+    "INV-004": "A fallback activation must be explicitly recorded.",
+    "INV-005": "Required modules cannot silently disappear from a trace.",
+    "INV-006": "Every event must have a valid parent/root relationship.",
+    "INV-007": "Hardware execution status must be distinguishable from hardware availability.",
+    "INV-008": "A completed turn must have a terminal outcome.",
+    "INV-009": "Certification evidence must originate from an actual production execution path and must not be synthesized by the verification suite."
+}

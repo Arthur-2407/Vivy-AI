@@ -38,9 +38,9 @@ try:
         from mediapipe.tasks.python.vision import object_detector as mp_object_detector
         _MEDIAPIPE_AVAILABLE = True
     except Exception as _err:
-        print(f"[object_detector.py] Silenced exception: {_err}")
+        logger.debug(f"[ObjectDetector] MediaPipe not available: {_err}")
 except Exception as _err:
-    print(f"[object_detector.py] Silenced exception: {_err}")
+        logger.debug(f"[ObjectDetector] MediaPipe import error: {_err}")
 
 _OPENCV_AVAILABLE = False
 try:
@@ -48,7 +48,7 @@ try:
     if hasattr(cv2, "cvtColor") and hasattr(cv2, "imdecode"):
         _OPENCV_AVAILABLE = True
 except Exception as _err:
-    print(f"[object_detector.py] Silenced exception: {_err}")
+    logger.debug(f"[ObjectDetector] OpenCV not available: {_err}")
 
 try:
     from PIL import Image

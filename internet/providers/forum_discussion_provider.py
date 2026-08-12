@@ -68,8 +68,9 @@ class ForumDiscussionProvider(SearchProvider):
                     res = SearchResult(title=f"[{target_label}] {t}", snippet=snip, url=url, source="forum_discussion", confidence=0.88)
                     results.append(res)
                     self.rag.index_document(f"forum_{hash(url)}", res.title, snip, source=url, doc_type="technical_forum", reliability=0.88)
-        except Exception:
-            pass
+        except Exception as _e:
+            import logging
+            logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
         if not results:
             fallback = SearchResult(

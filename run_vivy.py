@@ -3,6 +3,9 @@ import vivy_env
 os.environ["VIVY_PROCESS_ROLE"] = "runner"
 import sys
 import time
+from runtime.environment_manager import get_runtime_manager
+_env_mgr = get_runtime_manager()
+_env_mgr.print_startup_diagnostics(validate=False)  # Set validate=True for deep interpreter probes
 
 # Start Pipeline Workers
 import threading
@@ -455,6 +458,15 @@ except Exception as _net_err:
     print(f"[run_vivy] Internet Intelligence Layer initialization warning: {_net_err}")
     _tracer.trace("MANAGER", "internet", "ERROR", details={"error": str(_net_err)})
 
+print("- Loading Neural Learning Fabric & Executive Agency...")
+try:
+    from neural.neural_orchestrator import get_neural_orchestrator
+    from agi.executive.agency_controller import get_agency_controller
+    _neural_orchestrator = get_neural_orchestrator()
+    _agency_controller = get_agency_controller()
+    print("[run_vivy] Level 8-10 Executive loops initialized and hooked to EventBus.")
+except Exception as e:
+    print(f"[run_vivy] Executive layers unavailable: {e}")
 
 # Optional: Avatar Bridge (connects to Unity MateEngine runtime via WebSocket)
 # Handled via subprocess in venv_avatar to isolate environment dependencies.
@@ -628,7 +640,7 @@ if __name__ == "__main__":
     print("Starting Vivy AI Web Server on http://127.0.0.1:8080 ...")
     web_server_script = os.path.join(BASE_DIR, "web_server.py")
     web_process = subprocess.Popen(
-        [sys.executable, web_server_script],
+        [_env_mgr.get_python_executable('main'), web_server_script],
         stdout=log_file,
         stderr=log_file
     )
@@ -638,9 +650,10 @@ if __name__ == "__main__":
     # Start the Avatar Bridge WebSocket server automatically in a background subprocess under venv_avatar
     avatar_disable_flag = os.path.join(SHARED_DIR, "avatar_disable.txt")
     if not os.path.exists(avatar_disable_flag):
-        avatar_python = os.path.join(BASE_DIR, "venv_avatar", "Scripts", "python.exe")
         avatar_script = os.path.join(BASE_DIR, "avatar_bridge.py")
-        if os.path.exists(avatar_python):
+        avatar_env = _env_mgr.get_environment("avatar")
+        if avatar_env and avatar_env.is_available:
+            avatar_python = avatar_env.python_executable
             _tracer.trace("PROCESS", "avatar_bridge", "START", details={"url": "ws://127.0.0.1:8765"})
             print("Starting Avatar Bridge WebSocket server on ws://127.0.0.1:8765 ...")
             try:
@@ -809,7 +822,7 @@ if __name__ == "__main__":
     console_print(f"\n  Vivy: {first}", _ANSI_PINK)
 
     # Run voice cloning configurations definitions
-    rvc_python = os.path.join(BASE_DIR, "venv_rvc", "Scripts", "python.exe")
+    rvc_python = _env_mgr.get_python_executable("rvc")
     voice_cloning_script = os.path.join(BASE_DIR, "voice_cloning.py")
     
     # Start persistent RVC RPC server
@@ -862,7 +875,7 @@ while _run_main_loop:
                 try:
                     web_server_script = os.path.join(BASE_DIR, "web_server.py")
                     web_process = subprocess.Popen(
-                        [sys.executable, web_server_script],
+                        [_env_mgr.get_python_executable('main'), web_server_script],
                         stdout=log_file,
                         stderr=log_file
                     )
@@ -881,9 +894,10 @@ while _run_main_loop:
                 pass
                 avatar_disable_flag = os.path.join(SHARED_DIR, "avatar_disable.txt")
                 if not os.path.exists(avatar_disable_flag):
-                    avatar_python = os.path.join(BASE_DIR, "venv_avatar", "Scripts", "python.exe")
                     avatar_script = os.path.join(BASE_DIR, "avatar_bridge.py")
-                    if os.path.exists(avatar_python):
+                    avatar_env = _env_mgr.get_environment("avatar")
+                    if avatar_env and avatar_env.is_available:
+                        avatar_python = avatar_env.python_executable
                         print(f"[run_vivy] Warning: Avatar bridge process (PID {avatar_process.pid}) exited with code {avatar_process.returncode}. Auto-restarting...")
                         try:
                             avatar_process = subprocess.Popen(

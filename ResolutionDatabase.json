@@ -432,19 +432,19 @@
     "verified": true
   },
   "HappyBreathing": {
-    "clipGuid": "PET_HAPPY_BREATHE",
+    "clipGuid": "438b211698b2492bbe7421aebd64b2a9",
     "clipName": "PET_HAPPY",
     "assetPath": "Assets/MATE ENGINE - Animations/FACE_LAYER/PET_HAPPY.anim",
-    "confidence": 92,
-    "resolutionMethod": "ManualVerified",
+    "confidence": 100,
+    "resolutionMethod": "ManualHumanVerification",
     "verified": true
   },
   "SleepingBreathing": {
-    "clipGuid": "PET_SLEEPING_BREATHE",
+    "clipGuid": "76349172102c4b62a0a5ae45d3abf7f1",
     "clipName": "PET_SLEEPING",
     "assetPath": "Assets/MATE ENGINE - Animations/PET_SLEEPING/PET_SLEEPING.anim",
-    "confidence": 95,
-    "resolutionMethod": "ManualVerified",
+    "confidence": 100,
+    "resolutionMethod": "ManualHumanVerification",
     "verified": true
   },
   "Point": {
@@ -456,59 +456,59 @@
     "verified": true
   },
   "HappyBounce": {
-    "clipGuid": "PET_HAPPY_BOUNCE",
+    "clipGuid": "210fbd2df16c40a0a6bb9afef2cb4748",
     "clipName": "PET_HAPPY",
     "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_HAPPY.anim",
-    "confidence": 92,
-    "resolutionMethod": "ManualVerified",
+    "confidence": 100,
+    "resolutionMethod": "ManualHumanVerification",
     "verified": true
   },
   "SleepSitting": {
-    "clipGuid": "HUS_SITTING_SLEEP",
+    "clipGuid": "0ed366fe158f4c4aa02d2e275f18bddb",
     "clipName": "HUS_SITTING",
     "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_SITTING.anim",
-    "confidence": 90,
-    "resolutionMethod": "ManualVerified",
+    "confidence": 100,
+    "resolutionMethod": "ManualHumanVerification",
     "verified": true
   },
   "CuteDance": {
-    "clipGuid": "CUSTOM_DANCE_01",
+    "clipGuid": "e16424c8264847698dbbd36b327c98f5",
     "clipName": "CUSTOM_DANCE",
     "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
-    "confidence": 95,
-    "resolutionMethod": "ManualVerified",
+    "confidence": 100,
+    "resolutionMethod": "ManualHumanVerification",
     "verified": true
   },
   "VictoryDance": {
-    "clipGuid": "CUSTOM_DANCE_02",
+    "clipGuid": "246d8d7be89840529663792fc8005f1f",
     "clipName": "CUSTOM_DANCE",
     "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/CUSTOM_DANCE.anim",
-    "confidence": 95,
-    "resolutionMethod": "ManualVerified",
+    "confidence": 100,
+    "resolutionMethod": "ManualHumanVerification",
     "verified": true
   },
   "TalkingConv": {
-    "clipGuid": "PET_TALKING_CONV",
+    "clipGuid": "2bf95275215746c7969da0d307ef884d",
     "clipName": "PET_TALKING",
     "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
-    "confidence": 95,
-    "resolutionMethod": "ManualVerified",
+    "confidence": 100,
+    "resolutionMethod": "ManualHumanVerification",
     "verified": true
   },
   "LaughWhileTalking": {
-    "clipGuid": "PET_LAUGHING_TALK",
-    "clipName": "PET_LAUGHING",
-    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_LAUGHING.anim",
-    "confidence": 92,
-    "resolutionMethod": "ManualVerified",
+    "clipGuid": "5fae3d462fb646a392d14076475e972d",
+    "clipName": "PET_TALKING",
+    "assetPath": "Assets/MATE ENGINE - Animations/UPDATE_2/PET_TALKING.anim",
+    "confidence": 100,
+    "resolutionMethod": "ManualHumanVerification",
     "verified": true
   },
   "Pull": {
-    "clipGuid": "PET_DRAGGING_01",
-    "clipName": "PET_DRAGGING",
-    "assetPath": "Assets/MATE ENGINE - Animations/PET_MISC/PET_DRAGGING.anim",
-    "confidence": 95,
-    "resolutionMethod": "ManualVerified",
+    "clipGuid": "3796101d7064486a820a0005607ce5dc",
+    "clipName": "HUS_DRAG",
+    "assetPath": "Assets/MATE ENGINE - Animations/PET_IDLE/ME_02/HUSBANDO/HUS_DRAG.anim",
+    "confidence": 100,
+    "resolutionMethod": "ManualHumanVerification",
     "verified": true
   },
   "AutoAnim_a384b80e": {

@@ -539,8 +539,8 @@ class HybridTranslationEngine:
                 )
                 if warm and w_conf >= confidence * 0.9:
                     translated = warm
-            except Exception:
-                pass  # Non-fatal — keep original translation
+            except Exception as _e:
+                logger.warning(f"[HybridTranslationEngine] Personality pass failed: {_e}")
 
         if translated:
             self._cache_set(cache_key, translated)

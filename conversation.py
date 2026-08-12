@@ -5381,6 +5381,8 @@ def classify_perception_modality(user_text: str) -> tuple:
 
 def generate_reply_internal(user, history, mem, screen_context="", perception_context="", perception_state=None, stream=False, response_context=None):
     t_start = time.time()
+    reply = ""
+    micro_reaction = ""
     
     # Wait for fresh frame if screen sharing is active and this is a perception query
     try:
@@ -5418,6 +5420,13 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
     wants_vision, wants_audio = classify_perception_modality(user)
 
     # Recompute grounding context and diagnostic answer using wants_vision and wants_audio for the current query
+    if wants_vision and not perception_state.get("camera_active", False):
+        try:
+            from agi.bus.event_bus import get_event_bus
+            get_event_bus().publish("FALLBACK_ACTIVATED", {"reason": "Camera inactive but vision required", "reply": ""})
+        except Exception:
+            pass
+        
     try:
         from perception.perception_manager import get_reader
         reader = get_reader()
@@ -5482,12 +5491,13 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
         history.append("Vivy: " + reply)
         mem["last_reply"] = reply
         save(mem)
-    if stream:
-        def early_gen():
-            yield {'type': 'token', 'text': reply}
-            yield {'type': 'final_state', 'history': history, 'reply': reply}
-        return early_gen()
-    return reply, history
+        if stream:
+            def early_gen():
+                yield {'type': 'token', 'text': reply}
+                yield {'type': 'final_state', 'history': history, 'reply': reply}
+            return early_gen()
+        return reply, history
+        
     mem["last_user_time"] = t_start
 
     # ══════════════════════════════════════════════════════════════════════════
@@ -5704,6 +5714,7 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
 
     # PART 9 — Run the unified Conversation Director (Cognitive Controller)
     director_state = conversation_director(user, history, mem, categories)
+    print(f"DEBUG DIRECTOR STATE: {director_state}")
     should_search = director_state["should_search"]
     search_query = director_state["search_query"]
     # Track director mode for next-turn emotional continuity
@@ -5834,6 +5845,7 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
     search_context = ""
     if should_search:
         print(f"Autonomous Search triggered: query='{search_query}' (user said: '{user}')")
+        print(f"DEBUG: get_knowledge_router is {get_knowledge_router}")
         if get_knowledge_router is not None:
             kr = get_knowledge_router()
             search_context = kr.route_knowledge_query(search_query, search_duckduckgo)
@@ -5841,7 +5853,7 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
                 search_context = kr.route_knowledge_query(user, search_duckduckgo)
         else:
             search_context = search_duckduckgo(search_query)
-            if not search_context and search_query != user:
+        if not search_context and search_query != user:
                 search_context = search_duckduckgo(user)
 
     if not search_context and perception_state:
@@ -5858,6 +5870,24 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
 
     # Read current emotion state from classifier output
     current_emotion = _read_emotion()
+
+    # PART 8b — Neural Learning Prediction (Level 8)
+    try:
+        from neural.prediction_engine import get_prediction_engine
+        import uuid
+        context_id = mem.get("active_trace_id", str(uuid.uuid4()))
+        pe = get_prediction_engine()
+        # We predict perfect outcomes for the chosen strategy
+        expected = {
+            "task_success": 1.0,
+            "user_feedback": 1.0,
+            "efficiency": 0.8
+        }
+        pe.predict(context_id, expected)
+        # Store context_id for the outcome publisher
+        mem["current_turn_id"] = context_id
+    except Exception as e:
+        print(f"[Neural Fabric] Prediction error: {e}")
 
     # PART 3 — Orchestrate LLM with Validation and Regeneration
     reply = ""
@@ -6061,6 +6091,11 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
         else:
             print("Both attempts failed RIE checks or contained developer log reasoning. Returning relational companion fallback.")
             reply = _pick_fallback(director_state, categories, user_query=user, perception_state=perception_state, wants_vision=wants_vision, wants_audio=wants_audio, mem=mem)
+            try:
+                from agi.bus.event_bus import get_event_bus
+                get_event_bus().publish("FALLBACK_ACTIVATED", {"reason": "RIE validation failed or perception missing", "reply": reply})
+            except Exception as e:
+                pass
 
     # AGI Meta-Cognition Reflexive Response Verification (Reason -> Critique -> Improve -> Verify)
     try:
@@ -6184,6 +6219,47 @@ def generate_reply_internal(user, history, mem, screen_context="", perception_co
             )
         except Exception as _replay_err:
             print(f"[ExperienceReplay] Logging warning: {_replay_err}")
+
+    # ── Unified Cognitive Event Bus ──
+    try:
+        from agi.bus.event_bus import get_event_bus
+        bus = get_event_bus()
+        bus.publish("PERCEPTION_UPDATE", {"user_addressed_ai": True, "perception_state": perception_state})
+        bus.publish("COGNITION_OUTCOME", {
+            "id": mem.get("current_turn_id", str(t_start)),
+            "user_input": user,
+            "reply": reply if 'reply' in locals() else "",
+            "topic": mem.get("current_topic"),
+            "mood": mem.get("mood", "neutral"),
+            "task_success": 1.0 if 'reply' in locals() and reply else 0.0,
+            "efficiency": 0.8
+        })
+        
+        # USER_FEEDBACK will trigger the reward engine and novelty detector
+        bus.publish("USER_FEEDBACK", {
+            "score": 1.0 if len(user) > 10 else 0.5,
+            "task_success": 1.0 if 'reply' in locals() and reply else 0.0,
+            "emotional_outcome": 0.5, # Placeholder for real emotional analysis
+            "factual_accuracy": 0.8,
+            "efficiency": 0.8,
+            "relationship_consistency": 0.9,
+            "novelty": 0.5,
+            "surprise": 0.5,
+            "importance": 0.5,
+            "recurrence": 1.0,
+            "user_state": {},
+            "emotion_state": {"mood": mem.get("mood", "neutral")},
+            "perception_state": perception_state,
+            "goal": mem.get("conversation_goal", ""),
+            "action": reply if 'reply' in locals() else "",
+            "tool_usage": [],
+            "response_strategy": mem.get("strategy_plan", {}).get("strategy", ""),
+            "prediction": {},
+            "outcome": {"success": True},
+            "confidence": 0.9
+        })
+    except Exception as e:
+        print(f"[EventBus] Publish error: {e}")
 
     save(mem)
     if stream:

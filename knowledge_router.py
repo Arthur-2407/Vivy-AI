@@ -135,11 +135,26 @@ class KnowledgeRouter:
                     context_blocks.append(res)
                 else:
                     print(f"[KnowledgeRouter] Web search returned empty result for '{query}'. Utilizing local RAG pool.")
+                    try:
+                        from agi.bus.event_bus import get_event_bus
+                        get_event_bus().publish("FALLBACK_ACTIVATED", {"reason": "Network search failed", "reply": ""})
+                    except Exception as e:
+                        print("KNOWLEDGE ROUTER PUBLISH ERROR 1:", e)
             except Exception as e:
                 print(f"[KnowledgeRouter] Web search failed ({e}). Falling back to local RAG knowledge base.")
+                try:
+                    from agi.bus.event_bus import get_event_bus
+                    get_event_bus().publish("FALLBACK_ACTIVATED", {"reason": "Network search failed", "reply": ""})
+                except Exception as e:
+                    print("KNOWLEDGE ROUTER PUBLISH ERROR 2:", e)
                 
         else:
             print(f"[KnowledgeRouter] Running in OFFLINE mode for query '{query}'. Routing to local RAG and neural parameters.")
+            try:
+                from agi.bus.event_bus import get_event_bus
+                get_event_bus().publish("FALLBACK_ACTIVATED", {"reason": "Network search failed", "reply": ""})
+            except Exception as e:
+                print("KNOWLEDGE ROUTER PUBLISH ERROR 3:", e)
             if not context_blocks:
                 context_blocks.append("[System Note: Offline mode active. Utilizing local RAG database and neural model parameters.]")
 

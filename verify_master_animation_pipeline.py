@@ -7,6 +7,7 @@ Adheres strictly to the MASTER ANIMATION & PIPELINE VERIFICATION HYPERPROMPT.
 """
 
 import os
+from runtime.environment_manager import get_runtime_manager
 import sys
 import ast
 import json
@@ -488,8 +489,7 @@ class MasterAnimationVerifier:
     def phase_14_regression_testing(self) -> bool:
         self.log_phase(14, "Regression Testing")
         
-        venv_py = os.path.join(BASE_DIR, "venv", "Scripts", "python.exe")
-        python_bin = venv_py if os.path.exists(venv_py) else sys.executable
+        python_bin = get_runtime_manager().get_python_executable("main")
         
         cmd = [python_bin, "-m", "unittest", "d:\\Vivy\\tests\\test_master_animation_pipeline.py"]
         print(f"Executing: {' '.join(cmd)}")

@@ -55,8 +55,9 @@ class RSSMonitorProvider(SearchProvider):
             with urllib.request.urlopen(req, timeout=self.timeout) as resp:
                 xml = resp.read().decode("utf-8", errors="replace")
                 results = self._parse_rss_xml(xml, label, max_results)
-        except Exception:
-            pass
+        except Exception as _e:
+            import logging
+            logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
         if not results:
             fallback = SearchResult(

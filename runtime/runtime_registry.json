@@ -1,0 +1,38 @@
+{
+    "_comment": "Vivy Runtime Registry — Declares environment identity, ownership, and expected capabilities. The Runtime Manager resolves actual executables from 'relative_path' at startup and validates them against 'expected'. If validation fails, Vivy reports a discrepancy and uses a safe fallback rather than silently breaking.",
+    "environments": {
+        "main": {
+            "relative_path": "venv/Scripts/python.exe",
+            "owner": ["orchestration", "web", "cognition", "stt", "tts", "memory", "database"],
+            "description": "Main Vivy runtime environment for API, Orchestration, CPU ML, Memory, TTS, STT.",
+            "expected": {
+                "python_major": 3,
+                "python_minor": 10,
+                "cuda_required": false,
+                "torch_required": false
+            }
+        },
+        "rvc": {
+            "relative_path": "venv_rvc/Scripts/python.exe",
+            "owner": ["rvc_inference", "rvc_training", "voice_conversion"],
+            "description": "Specialized CUDA PyTorch environment for RVC voice conversion inference and neural training.",
+            "expected": {
+                "python_major": 3,
+                "python_minor": 10,
+                "cuda_required": true,
+                "torch_required": true
+            }
+        },
+        "avatar": {
+            "relative_path": "venv_avatar/Scripts/python.exe",
+            "owner": ["avatar_bridge", "unity_websocket"],
+            "description": "Lightweight Python 3.12 environment for the MateEngine Unity WebSocket bridge. NOTE: Investigation shows this environment may be architecturally redundant (avatar_bridge.py has no Python 3.12-specific code and MAIN already has a newer websockets version). Retained for stability; do not delete without explicit review.",
+            "expected": {
+                "python_major": 3,
+                "python_minor": 12,
+                "cuda_required": false,
+                "torch_required": false
+            }
+        }
+    }
+}

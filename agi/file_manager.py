@@ -104,8 +104,8 @@ class GeneralFileManager:
                     backup_path = target + ".bak"
                     try:
                         shutil.copy2(target, backup_path)
-                    except Exception:
-                        pass
+                    except Exception as _e:
+                        print(f"[FileManager] Failed to create backup {backup_path}: {_e}")
                 mode = "a" if append else "w"
                 with open(target, mode, encoding="utf-8") as f:
                     f.write(content)

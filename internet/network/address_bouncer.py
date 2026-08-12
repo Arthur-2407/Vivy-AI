@@ -170,8 +170,9 @@ class AddressBouncer:
             for cb in self.subscribers:
                 try:
                     cb(self.current_identity)
-                except Exception:
-                    pass
+                except Exception as _e:
+                    import logging
+                    logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
             return self.current_identity
 

@@ -148,8 +148,9 @@ class NetworkManager:
         if hasattr(self, 'intel') and self.intel:
             try:
                 self.intel.record_probe_sample(latency, is_tcp_connected)
-            except Exception:
-                pass
+            except Exception as _e:
+                import logging
+                logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
         if not is_tcp_connected:
             self.failure_count += 1
@@ -213,23 +214,27 @@ class NetworkManager:
         if hasattr(self, 'intel') and self.intel:
             try:
                 res["intelligence"] = self.intel.get_intelligence_summary()
-            except Exception:
-                pass
+            except Exception as _e:
+                import logging
+                logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
         if hasattr(self, 'bouncer') and self.bouncer:
             try:
                 res["security_bouncing"] = self.bouncer.get_status_summary()
-            except Exception:
-                pass
+            except Exception as _e:
+                import logging
+                logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
         if hasattr(self, 'tor') and self.tor:
             try:
                 res["tor_network"] = self.tor.get_status_dict()
-            except Exception:
-                pass
+            except Exception as _e:
+                import logging
+                logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
         if hasattr(self, 'router') and self.router:
             try:
                 res["network_mode"] = self.router.get_current_mode().value
-            except Exception:
-                pass
+            except Exception as _e:
+                import logging
+                logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
         return res
 
 def get_network_manager(config: Optional[Dict[str, Any]] = None) -> NetworkManager:

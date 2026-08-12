@@ -45,10 +45,8 @@ class CodeExecutor:
             return cls._instance
 
     def _locate_python(self) -> str:
-        """Locates active virtual environment Python or fallback system executable."""
-        venv_python = os.path.join(BASE_DIR, "venv", "Scripts", "python.exe")
-        if os.path.exists(venv_python):
-            return venv_python
+        """Returns the current interpreter. CodeExecutor always runs in MAIN environment,
+        so sys.executable is the correct and explicit choice for same-environment subprocess spawns."""
         return sys.executable
 
     def execute_python(self, code_text: str, timeout: Optional[float] = None, env_vars: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
@@ -169,7 +167,7 @@ class CodeExecutor:
             self.execution_history.pop(0)
         return res
 
-    def get_last_result() -> Optional[Dict[str, Any]]:
+    def get_last_result(self) -> Optional[Dict[str, Any]]:
         return self.execution_history[-1] if self.execution_history else None
 
     def cleanup_sandbox(self) -> int:

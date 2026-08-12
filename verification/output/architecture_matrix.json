@@ -1,0 +1,1108 @@
+{
+  "normal": {
+    "spans": [
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "7b201cf9-4e7a-4cc7-9d1e-d725fb6524f2",
+        "parent_id": null,
+        "name": "memory_L3_L5",
+        "thread_id": 9512,
+        "timestamp_start": 1786530438.7913907,
+        "timestamp_end": 1786530438.7913907,
+        "payload": {
+          "source": "L3",
+          "dest": "L5"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "368a2022-f7bb-4409-973a-0212f067542b",
+        "parent_id": null,
+        "name": "memory_L3_L10",
+        "thread_id": 9512,
+        "timestamp_start": 1786530438.7913907,
+        "timestamp_end": 1786530438.7913907,
+        "payload": {
+          "source": "L3",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "8ed96038-9d0b-4ba6-b003-7338ff0fedd5",
+        "parent_id": null,
+        "name": "classify_perception_modality_L2_L3",
+        "thread_id": 9512,
+        "timestamp_start": 1786530438.7988951,
+        "timestamp_end": 1786530438.7988951,
+        "payload": {
+          "source": "L2",
+          "dest": "L3"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "ace890f6-cdd2-4e6a-b73c-d8db3bbd4203",
+        "parent_id": null,
+        "name": "classify_perception_modality",
+        "thread_id": 9512,
+        "timestamp_start": 1786530438.7988951,
+        "timestamp_end": 1786530438.7988951,
+        "payload": {
+          "source": "L2",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "bec978f0-102c-4683-a87d-f6a075ef74f0",
+        "parent_id": null,
+        "name": "hardware_L1_L2",
+        "thread_id": 9512,
+        "timestamp_start": 1786530438.832631,
+        "timestamp_end": 1786530438.832631,
+        "payload": {
+          "source": "L1",
+          "dest": "L2"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "ea076e7e-616a-46a6-8fb4-543286d92e0a",
+        "parent_id": null,
+        "name": "hardware_L1_L10",
+        "thread_id": 9512,
+        "timestamp_start": 1786530438.832631,
+        "timestamp_end": 1786530438.832631,
+        "payload": {
+          "source": "L1",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "12050c4a-0c51-4067-b887-5f1a2649dff4",
+        "parent_id": null,
+        "name": "Llama.__init__",
+        "thread_id": 9512,
+        "timestamp_start": 1786530438.832631,
+        "timestamp_end": 1786530438.832631,
+        "payload": {},
+        "hardware": {
+          "device_available": true,
+          "configured_device": "cpu",
+          "provider": "llama_cpp_native",
+          "observed_output_device": "cpu",
+          "execution_evidence": "confirmed"
+        }
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "3419bb3c-ce82-418e-9fb8-2ade54f19941",
+        "parent_id": null,
+        "name": "emotional_reaction_layer_L2_L4",
+        "thread_id": 9512,
+        "timestamp_start": 1786530441.3663886,
+        "timestamp_end": 1786530441.3663886,
+        "payload": {
+          "source": "L2",
+          "dest": "L4"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "8d560e5c-5963-4690-83cc-947aee625ed9",
+        "parent_id": null,
+        "name": "emotional_reaction_layer_L4_L10",
+        "thread_id": 9512,
+        "timestamp_start": 1786530441.3663886,
+        "timestamp_end": 1786530441.3663886,
+        "payload": {
+          "source": "L4",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "168d1fb1-6da2-4b0c-8f82-9603a21cb021",
+        "parent_id": null,
+        "name": "score_response_rie_L5_L6",
+        "thread_id": 9512,
+        "timestamp_start": 1786530445.874269,
+        "timestamp_end": 1786530445.874269,
+        "payload": {
+          "source": "L5",
+          "dest": "L6"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "950c2c2e-a48d-4490-a202-a44976fa2757",
+        "parent_id": null,
+        "name": "score_response_rie_L6_L10",
+        "thread_id": 9512,
+        "timestamp_start": 1786530445.874269,
+        "timestamp_end": 1786530445.874269,
+        "payload": {
+          "source": "L6",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "44a41928-278d-42b1-b67f-846f28df3163",
+        "parent_id": null,
+        "name": "score_response_rie_L5_L6",
+        "thread_id": 9512,
+        "timestamp_start": 1786530448.929899,
+        "timestamp_end": 1786530448.929899,
+        "payload": {
+          "source": "L5",
+          "dest": "L6"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "6d083b9a-e3d8-494e-8611-d41e657f582c",
+        "parent_id": null,
+        "name": "score_response_rie_L6_L10",
+        "thread_id": 9512,
+        "timestamp_start": 1786530448.929899,
+        "timestamp_end": 1786530448.929899,
+        "payload": {
+          "source": "L6",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "7f0f08d4-7c8e-4ade-b2e1-9d215fbbc3a1",
+        "parent_id": null,
+        "name": "EventBus.FALLBACK_ACTIVATED",
+        "thread_id": 9512,
+        "timestamp_start": 1786530448.930918,
+        "timestamp_end": 1786530448.930918,
+        "payload": {
+          "status": "fallback_activation",
+          "error": "RIE validation failed or perception missing"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "365f735d-4757-4ba6-ba51-61e458ddb8d9",
+        "parent_id": null,
+        "name": "self_reflection_L4_L5",
+        "thread_id": 9512,
+        "timestamp_start": 1786530449.372345,
+        "timestamp_end": 1786530449.372345,
+        "payload": {
+          "source": "L4",
+          "dest": "L5"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "203d7181-3353-4de0-ac8d-5514851600a5",
+        "parent_id": null,
+        "name": "self_reflection_L5_L10",
+        "thread_id": 9512,
+        "timestamp_start": 1786530449.372345,
+        "timestamp_end": 1786530449.372345,
+        "payload": {
+          "source": "L5",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "f991747d-10f5-4e78-a207-74b071a036bf",
+        "parent_id": null,
+        "name": "executive_L9_L10",
+        "thread_id": 9512,
+        "timestamp_start": 1786530449.6781356,
+        "timestamp_end": 1786530449.6781356,
+        "payload": {
+          "source": "L9",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "b4d88b87-bbcc-4298-8675-3d79ce835e9b",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 9512,
+        "timestamp_start": 1786530449.6781356,
+        "timestamp_end": 1786530449.6781356,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "e1fba097-af4e-412c-89ac-7c20909976e6",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 9512,
+        "timestamp_start": 1786530449.6781356,
+        "timestamp_end": 1786530449.6781356,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "d22ff748-a2f2-4f60-85dc-7882bca41bcc",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 9512,
+        "timestamp_start": 1786530449.6781356,
+        "timestamp_end": 1786530449.6781356,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "e9178994-2a96-4e74-a220-75a674c58040",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 9512,
+        "timestamp_start": 1786530449.6781356,
+        "timestamp_end": 1786530449.6781356,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "453a1625-8218-4c15-b635-f11e64f704f1",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 9512,
+        "timestamp_start": 1786530449.6781356,
+        "timestamp_end": 1786530449.6781356,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NORMAL",
+        "span_id": "4ad447a0-7e11-419b-ad27-239f9fae0011",
+        "parent_id": null,
+        "name": "neural_fabric_L8_L10",
+        "thread_id": 9512,
+        "timestamp_start": 1786530449.6781356,
+        "timestamp_end": 1786530449.6781356,
+        "payload": {
+          "source": "L8",
+          "dest": "L10"
+        },
+        "hardware": null
+      }
+    ],
+    "graph": {
+      "nodes_hit": [
+        "L5",
+        "L2",
+        "L10",
+        "L1",
+        "L3",
+        "L4",
+        "L6",
+        "L9",
+        "L8",
+        "L11"
+      ],
+      "missing_edges": [],
+      "unexpected_edges": [],
+      "forbidden_edges": [],
+      "expected_total": 14,
+      "observed_total": 15
+    },
+    "invariants": {
+      "INV-001": "PASS",
+      "INV-004": "PASS",
+      "INV-009": "PASS",
+      "INV-002": "PASS",
+      "INV-003": "PASS",
+      "INV-005": "PASS",
+      "INV-006": "PASS",
+      "INV-007": "PASS",
+      "INV-008": "PASS"
+    }
+  },
+  "no_network": {
+    "spans": [
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "019cfd7b-d368-4a6e-aa03-7edaf422a894",
+        "parent_id": null,
+        "name": "memory_L3_L5",
+        "thread_id": 22416,
+        "timestamp_start": 1786530467.851973,
+        "timestamp_end": 1786530467.851973,
+        "payload": {
+          "source": "L3",
+          "dest": "L5"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "5b4574e9-dbbd-464e-b6e4-6ea254ae0ed2",
+        "parent_id": null,
+        "name": "memory_L3_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530467.851973,
+        "timestamp_end": 1786530467.851973,
+        "payload": {
+          "source": "L3",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "dac9410d-3fe9-4d0b-8963-d9de0c048374",
+        "parent_id": null,
+        "name": "classify_perception_modality_L2_L3",
+        "thread_id": 22416,
+        "timestamp_start": 1786530467.860676,
+        "timestamp_end": 1786530467.860676,
+        "payload": {
+          "source": "L2",
+          "dest": "L3"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "f2d05810-6890-499a-aa7c-894ca3bd4f34",
+        "parent_id": null,
+        "name": "classify_perception_modality",
+        "thread_id": 22416,
+        "timestamp_start": 1786530467.860676,
+        "timestamp_end": 1786530467.860676,
+        "payload": {
+          "source": "L2",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "a9d5754a-3ddc-49c6-8013-a1faf7896f15",
+        "parent_id": null,
+        "name": "hardware_L1_L2",
+        "thread_id": 22416,
+        "timestamp_start": 1786530467.8940291,
+        "timestamp_end": 1786530467.8940291,
+        "payload": {
+          "source": "L1",
+          "dest": "L2"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "3dc07249-7139-41c3-8622-989cf92fb1af",
+        "parent_id": null,
+        "name": "hardware_L1_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530467.8940291,
+        "timestamp_end": 1786530467.8940291,
+        "payload": {
+          "source": "L1",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "08897183-c10a-4156-a97e-857744433f42",
+        "parent_id": null,
+        "name": "Llama.__init__",
+        "thread_id": 22416,
+        "timestamp_start": 1786530467.8940291,
+        "timestamp_end": 1786530467.8940291,
+        "payload": {},
+        "hardware": {
+          "device_available": true,
+          "configured_device": "cpu",
+          "provider": "llama_cpp_native",
+          "observed_output_device": "cpu",
+          "execution_evidence": "confirmed"
+        }
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "6e2f0dfc-0526-4c06-86d4-ad791072f74d",
+        "parent_id": null,
+        "name": "emotional_reaction_layer_L2_L4",
+        "thread_id": 22416,
+        "timestamp_start": 1786530470.265736,
+        "timestamp_end": 1786530470.265736,
+        "payload": {
+          "source": "L2",
+          "dest": "L4"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "dd950c1f-9342-4aba-a2eb-7a0340253fe4",
+        "parent_id": null,
+        "name": "emotional_reaction_layer_L4_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530470.265736,
+        "timestamp_end": 1786530470.265736,
+        "payload": {
+          "source": "L4",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "056545f0-527b-4582-8e92-c1a57896eb19",
+        "parent_id": null,
+        "name": "network_L7_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530470.6176383,
+        "timestamp_end": 1786530470.6176383,
+        "payload": {
+          "source": "L7",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "f167fc51-b303-4436-88c7-1cf128c457b1",
+        "parent_id": null,
+        "name": "EventBus.FALLBACK_ACTIVATED",
+        "thread_id": 22416,
+        "timestamp_start": 1786530470.6186311,
+        "timestamp_end": 1786530470.6186311,
+        "payload": {
+          "status": "fallback_activation",
+          "error": "Network search failed"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "fd0d3d8f-bac9-433a-ab2d-9c2cc273a262",
+        "parent_id": null,
+        "name": "network_L7_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530470.6404462,
+        "timestamp_end": 1786530470.6404462,
+        "payload": {
+          "source": "L7",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "796f6d6c-fd96-4d0d-8847-e518a85910c3",
+        "parent_id": null,
+        "name": "EventBus.FALLBACK_ACTIVATED",
+        "thread_id": 22416,
+        "timestamp_start": 1786530470.6414466,
+        "timestamp_end": 1786530470.6414466,
+        "payload": {
+          "status": "fallback_activation",
+          "error": "Network search failed"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "eb23046e-2159-4ffd-8909-a360506d28e4",
+        "parent_id": null,
+        "name": "score_response_rie_L5_L6",
+        "thread_id": 22416,
+        "timestamp_start": 1786530473.2311692,
+        "timestamp_end": 1786530473.2311692,
+        "payload": {
+          "source": "L5",
+          "dest": "L6"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "1c8e25be-dd2b-40e9-a31e-31e37b532d35",
+        "parent_id": null,
+        "name": "score_response_rie_L6_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530473.2311692,
+        "timestamp_end": 1786530473.2311692,
+        "payload": {
+          "source": "L6",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "b6679de6-e673-48c7-b090-19dcf967a117",
+        "parent_id": null,
+        "name": "score_response_rie_L5_L6",
+        "thread_id": 22416,
+        "timestamp_start": 1786530474.475981,
+        "timestamp_end": 1786530474.475981,
+        "payload": {
+          "source": "L5",
+          "dest": "L6"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "3d367651-9bb3-41cb-9be2-e54086579ac5",
+        "parent_id": null,
+        "name": "score_response_rie_L6_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530474.475981,
+        "timestamp_end": 1786530474.475981,
+        "payload": {
+          "source": "L6",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "2d9532c2-08c8-4468-af49-f22cd6dac1c2",
+        "parent_id": null,
+        "name": "EventBus.FALLBACK_ACTIVATED",
+        "thread_id": 22416,
+        "timestamp_start": 1786530474.477969,
+        "timestamp_end": 1786530474.477969,
+        "payload": {
+          "status": "fallback_activation",
+          "error": "RIE validation failed or perception missing"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "df984e57-46d1-479c-9c2f-da6f80d80886",
+        "parent_id": null,
+        "name": "self_reflection_L4_L5",
+        "thread_id": 22416,
+        "timestamp_start": 1786530474.9175086,
+        "timestamp_end": 1786530474.9175086,
+        "payload": {
+          "source": "L4",
+          "dest": "L5"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "908daf12-4ce2-4f04-92c5-217c0da85034",
+        "parent_id": null,
+        "name": "self_reflection_L5_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530474.9175086,
+        "timestamp_end": 1786530474.9175086,
+        "payload": {
+          "source": "L5",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "1dd7c8c6-6c83-4778-b6cc-ee2d378256cf",
+        "parent_id": null,
+        "name": "executive_L9_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530475.200387,
+        "timestamp_end": 1786530475.200387,
+        "payload": {
+          "source": "L9",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "f560870e-b2c9-486b-8040-9f30f5de15ca",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530475.200387,
+        "timestamp_end": 1786530475.200387,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "c10c0748-aa12-4fc2-89c3-9e53dae1530c",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530475.200387,
+        "timestamp_end": 1786530475.200387,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "0bd64af9-9fb7-4709-9c22-31326faf62af",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530475.200387,
+        "timestamp_end": 1786530475.200387,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "4679a1e6-02b2-43b8-b6bc-683faee92d14",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530475.200387,
+        "timestamp_end": 1786530475.200387,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "bf9bf236-bdaf-41fb-90dc-b0d0660b92a0",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530475.200387,
+        "timestamp_end": 1786530475.200387,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_NETWORK",
+        "span_id": "d0747ff2-969c-4d2e-bac1-2be7abdd9769",
+        "parent_id": null,
+        "name": "neural_fabric_L8_L10",
+        "thread_id": 22416,
+        "timestamp_start": 1786530475.200387,
+        "timestamp_end": 1786530475.200387,
+        "payload": {
+          "source": "L8",
+          "dest": "L10"
+        },
+        "hardware": null
+      }
+    ],
+    "graph": {
+      "nodes_hit": [
+        "L2",
+        "L7",
+        "L10",
+        "L5",
+        "L9",
+        "L11",
+        "L1",
+        "L8",
+        "L6",
+        "L4",
+        "L3"
+      ],
+      "missing_edges": [],
+      "unexpected_edges": [],
+      "forbidden_edges": [],
+      "expected_total": 15,
+      "observed_total": 16
+    },
+    "invariants": {
+      "INV-001": "PASS",
+      "INV-004": "PASS",
+      "INV-009": "PASS",
+      "INV-002": "PASS",
+      "INV-003": "PASS",
+      "INV-005": "PASS",
+      "INV-006": "PASS",
+      "INV-007": "PASS",
+      "INV-008": "PASS"
+    }
+  },
+  "no_camera": {
+    "spans": [
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "a2581e72-7a7d-453e-820d-266b6ebbe115",
+        "parent_id": null,
+        "name": "memory_L3_L5",
+        "thread_id": 3680,
+        "timestamp_start": 1786530493.5309794,
+        "timestamp_end": 1786530493.5309794,
+        "payload": {
+          "source": "L3",
+          "dest": "L5"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "c0c138f1-b232-4925-ac70-432d898af34f",
+        "parent_id": null,
+        "name": "memory_L3_L10",
+        "thread_id": 3680,
+        "timestamp_start": 1786530493.5309794,
+        "timestamp_end": 1786530493.5309794,
+        "payload": {
+          "source": "L3",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "426f5ca6-4817-434d-88b2-0983fe23f0b3",
+        "parent_id": null,
+        "name": "classify_perception_modality_L2_L3",
+        "thread_id": 3680,
+        "timestamp_start": 1786530493.5405471,
+        "timestamp_end": 1786530493.5405471,
+        "payload": {
+          "source": "L2",
+          "dest": "L3"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "a7fd9169-e6b7-44d7-b12a-cbf04e4634ac",
+        "parent_id": null,
+        "name": "classify_perception_modality",
+        "thread_id": 3680,
+        "timestamp_start": 1786530493.5405471,
+        "timestamp_end": 1786530493.5405471,
+        "payload": {
+          "source": "L2",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "d50a7366-31ef-48d3-844b-dc6d8ea8a44d",
+        "parent_id": null,
+        "name": "EventBus.FALLBACK_ACTIVATED",
+        "thread_id": 3680,
+        "timestamp_start": 1786530493.5405471,
+        "timestamp_end": 1786530493.5405471,
+        "payload": {
+          "status": "fallback_activation",
+          "error": "Camera inactive but vision required"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "ec484bae-71bd-4ce5-9962-5655109934a0",
+        "parent_id": null,
+        "name": "hardware_L1_L2",
+        "thread_id": 3680,
+        "timestamp_start": 1786530493.5740855,
+        "timestamp_end": 1786530493.5740855,
+        "payload": {
+          "source": "L1",
+          "dest": "L2"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "1c4c8210-58da-4d92-a93a-89ace044690d",
+        "parent_id": null,
+        "name": "hardware_L1_L10",
+        "thread_id": 3680,
+        "timestamp_start": 1786530493.5750895,
+        "timestamp_end": 1786530493.5750895,
+        "payload": {
+          "source": "L1",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "8ccb331f-0479-425f-967b-9b6d276a6f94",
+        "parent_id": null,
+        "name": "Llama.__init__",
+        "thread_id": 3680,
+        "timestamp_start": 1786530493.5750895,
+        "timestamp_end": 1786530493.5750895,
+        "payload": {},
+        "hardware": {
+          "device_available": true,
+          "configured_device": "cpu",
+          "provider": "llama_cpp_native",
+          "observed_output_device": "cpu",
+          "execution_evidence": "confirmed"
+        }
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "b021fc34-84c2-4cac-946e-81af61271476",
+        "parent_id": null,
+        "name": "emotional_reaction_layer_L2_L4",
+        "thread_id": 3680,
+        "timestamp_start": 1786530496.0753305,
+        "timestamp_end": 1786530496.0753305,
+        "payload": {
+          "source": "L2",
+          "dest": "L4"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "5b6dea95-75c7-47cb-8ef9-c7a964a33b4f",
+        "parent_id": null,
+        "name": "emotional_reaction_layer_L4_L10",
+        "thread_id": 3680,
+        "timestamp_start": 1786530496.0753305,
+        "timestamp_end": 1786530496.0753305,
+        "payload": {
+          "source": "L4",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "77761f46-d5cf-4a24-8821-c75f2190386a",
+        "parent_id": null,
+        "name": "score_response_rie_L5_L6",
+        "thread_id": 3680,
+        "timestamp_start": 1786530500.6095395,
+        "timestamp_end": 1786530500.6095395,
+        "payload": {
+          "source": "L5",
+          "dest": "L6"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "c9ac5c62-267e-449c-a229-ee54d99d63d0",
+        "parent_id": null,
+        "name": "score_response_rie_L6_L10",
+        "thread_id": 3680,
+        "timestamp_start": 1786530500.6095395,
+        "timestamp_end": 1786530500.6095395,
+        "payload": {
+          "source": "L6",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "fa636df8-62c2-4da7-80b3-7a852aa5c40c",
+        "parent_id": null,
+        "name": "self_reflection_L4_L5",
+        "thread_id": 3680,
+        "timestamp_start": 1786530501.0604167,
+        "timestamp_end": 1786530501.0604167,
+        "payload": {
+          "source": "L4",
+          "dest": "L5"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "00e1ef4b-dede-4daa-b544-53baa116f90b",
+        "parent_id": null,
+        "name": "self_reflection_L5_L10",
+        "thread_id": 3680,
+        "timestamp_start": 1786530501.0604167,
+        "timestamp_end": 1786530501.0604167,
+        "payload": {
+          "source": "L5",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "3db531bd-a484-4ec3-a9b4-2a0916f36314",
+        "parent_id": null,
+        "name": "executive_L9_L10",
+        "thread_id": 3680,
+        "timestamp_start": 1786530501.35719,
+        "timestamp_end": 1786530501.35719,
+        "payload": {
+          "source": "L9",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "c3691fe8-dfd2-455c-938e-f42fe238a822",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 3680,
+        "timestamp_start": 1786530501.35719,
+        "timestamp_end": 1786530501.35719,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "ba3421f0-00f0-41bb-acf6-fd7d044f5f94",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 3680,
+        "timestamp_start": 1786530501.35719,
+        "timestamp_end": 1786530501.35719,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "9aa8ba26-dea6-4b04-a6e8-aaabb4e8be8c",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 3680,
+        "timestamp_start": 1786530501.3582072,
+        "timestamp_end": 1786530501.3582072,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "3ead18b2-a18f-4a14-8c0f-145ca956d860",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 3680,
+        "timestamp_start": 1786530501.3582072,
+        "timestamp_end": 1786530501.3582072,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "6c4d885c-a41e-4356-a091-14f3e74d556f",
+        "parent_id": null,
+        "name": "identity_L11_L10",
+        "thread_id": 3680,
+        "timestamp_start": 1786530501.3582072,
+        "timestamp_end": 1786530501.3582072,
+        "payload": {
+          "source": "L11",
+          "dest": "L10"
+        },
+        "hardware": null
+      },
+      {
+        "trace_id": "TRACE-NO_CAMERA",
+        "span_id": "75369613-daad-4212-8fe8-af29dd7c0b5b",
+        "parent_id": null,
+        "name": "neural_fabric_L8_L10",
+        "thread_id": 3680,
+        "timestamp_start": 1786530501.3582072,
+        "timestamp_end": 1786530501.3582072,
+        "payload": {
+          "source": "L8",
+          "dest": "L10"
+        },
+        "hardware": null
+      }
+    ],
+    "graph": {
+      "nodes_hit": [
+        "L8",
+        "L4",
+        "L5",
+        "L1",
+        "L11",
+        "L10",
+        "L9",
+        "L6",
+        "L3",
+        "L2"
+      ],
+      "missing_edges": [],
+      "unexpected_edges": [],
+      "forbidden_edges": [],
+      "expected_total": 14,
+      "observed_total": 15
+    },
+    "invariants": {
+      "INV-001": "PASS",
+      "INV-004": "PASS",
+      "INV-009": "PASS",
+      "INV-002": "PASS",
+      "INV-003": "PASS",
+      "INV-005": "PASS",
+      "INV-006": "PASS",
+      "INV-007": "PASS",
+      "INV-008": "PASS"
+    }
+  }
+}

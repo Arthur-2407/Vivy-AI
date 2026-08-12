@@ -49,8 +49,9 @@ class WikipediaProvider(SearchProvider):
                     res = SearchResult(title=f"[Wikipedia] {title}", snippet=extract, url=page_url, source="wikipedia_api", confidence=0.95)
                     results.append(res)
                     self.rag.index_document(f"wiki_{hash(page_url)}", res.title, extract, source=page_url, doc_type="encyclopedia", reliability=0.95)
-        except Exception:
-            pass
+        except Exception as _e:
+            import logging
+            logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
         if not results:
             fallback = SearchResult(

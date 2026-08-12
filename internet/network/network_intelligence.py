@@ -58,8 +58,8 @@ class NetworkIntelligence:
                 else:
                     self.last_diagnostic = "HEALTHY_OPTIMAL_STREAMS"
 
-            # Automatically sync findings with AGI Blackboard
-            self.publish_to_agi_blackboard()
+        # Automatically sync findings with AGI Blackboard (outside the lock to prevent deadlocks)
+        self.publish_to_agi_blackboard()
 
     def diagnose_connection_problem(self, target_host: str = "duckduckgo.com") -> Dict[str, Any]:
         """
@@ -90,8 +90,9 @@ class NetworkIntelligence:
         finally:
             try:
                 s.close()
-            except Exception:
-                pass
+            except Exception as _e:
+                import logging
+                logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
         # 3. Assess metadata parameters
         diag["tests"]["jitter_ms"] = self.jitter_ms
@@ -125,12 +126,21 @@ class NetworkIntelligence:
                 tor_status = {"active_circuit": "DIRECT_HTTPS"}
                 net_mode = "NORMAL_DIRECT_HTTPS"
 
+            with self._lock:
+                diag_status = self.last_diagnostic
+                lat_history = list(self.latency_history_ms)
+                jitt = self.jitter_ms
+                pkt_loss = self.packet_loss_percent
+                est_bw = self.estimated_bandwidth_mbps
+                
+            avg_lat = round(sum(lat_history)/len(lat_history), 1) if lat_history else 0.0
+
             payload = {
-                "diagnostic_status": self.last_diagnostic,
-                "avg_latency_ms": round(sum(self.latency_history_ms)/len(self.latency_history_ms), 1) if self.latency_history_ms else 0.0,
-                "jitter_ms": self.jitter_ms,
-                "packet_loss_pct": self.packet_loss_percent,
-                "estimated_bandwidth_mbps": self.estimated_bandwidth_mbps,
+                "diagnostic_status": diag_status,
+                "avg_latency_ms": avg_lat,
+                "jitter_ms": jitt,
+                "packet_loss_pct": pkt_loss,
+                "estimated_bandwidth_mbps": est_bw,
                 "active_network_defense": bouncer_identity.get("tool_pipeline", "Standard"),
                 "tor_circuit_path": tor_status.get("path_summary", "None"),
                 "network_routing_mode": net_mode,

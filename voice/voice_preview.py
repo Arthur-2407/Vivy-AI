@@ -11,6 +11,7 @@ This enables instantaneous, transparent Left vs. Right side-by-side comparison i
 
 import os
 import time
+from runtime.environment_manager import get_runtime_manager
 import shutil
 import threading
 
@@ -67,8 +68,7 @@ class VoicePreviewEngine:
                     if os.path.exists(rvc_script):
                         import subprocess
                         import sys
-                        rvc_python = os.path.join(base_dir, "venv_rvc", "Scripts", "python.exe")
-                        exec_py = rvc_python if os.path.exists(rvc_python) else sys.executable
+                        exec_py = get_runtime_manager().get_python_executable("rvc")
                         # Execute lightweight conversion
                         subprocess.run([
                             exec_py, rvc_script,
@@ -83,7 +83,7 @@ class VoicePreviewEngine:
                     
                     if os.path.exists(tts_tmp):
                         try: os.remove(tts_tmp)
-                        except Exception: pass
+                        except Exception as _e: print(f"[VoicePreview] Cleanup warning: {_e}")
                     success_cloned = os.path.exists(cloned_preview_path)
             except Exception as e_tts:
                 print(f"[VoicePreview] Cloned speech synthesis warning: {e_tts}")
@@ -110,7 +110,7 @@ class VoicePreviewEngine:
                 for f in files[keep_last:]:
                     if os.path.isfile(f):
                         try: os.remove(f)
-                        except Exception: pass
+                        except Exception as _e: print(f"[VoicePreview] File cleanup warning: {_e}")
             except Exception as e:
                 print(f"[VoicePreview] Cleanup non-fatal warning: {e}")
 

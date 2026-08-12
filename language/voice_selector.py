@@ -69,8 +69,8 @@ class MultilingualVoiceSelector:
                             return True
                     except Exception as _r_err:
                         logger.warning(f"[VoiceSelector] Neural Voice Router fallback error: {_r_err}")
-        except Exception:
-            pass
+        except Exception as _e:
+            logger.warning(f"[VoiceSelector] Neural Voice Router error: {_e}")
 
         # 1. Standard English or non-localized dialect -> Invoke existing voice.generate_tts_only()
         if lang_code == "en" or not use_localized:

@@ -194,8 +194,9 @@ class ProtocolLab:
                 report["engine"] = "Scapy Native Assembler"
                 report["byte_length"] = len(raw_bytes)
                 return report
-            except Exception:
-                pass
+            except Exception as _e:
+                import logging
+                logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
         # Fallback Python struct assembler
         try:
@@ -256,8 +257,9 @@ class ProtocolLab:
                 ip = socket.gethostbyname(domain)
                 result["resolved_ips"].append(ip)
                 result["status"] = "success_via_fallback_resolver"
-            except Exception:
-                pass
+            except Exception as _e:
+                import logging
+                logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
         return result
 
     def custom_http_probe(self, host: str, path: str = "/", port: int = 80, timeout: float = 2.0) -> Dict[str, Any]:

@@ -55,7 +55,7 @@ class VoiceExportManager:
             print(f"[VoiceExport] Export failed for {voice_id}: {e}")
             if os.path.exists(zip_path):
                 try: os.remove(zip_path)
-                except Exception: pass
+                except Exception as _e: print(f"[VoiceExport] Cleanup warning: {_e}")
             return None
 
     def import_profile_bundle(self, zip_path: str) -> Optional[Dict[str, Any]]:

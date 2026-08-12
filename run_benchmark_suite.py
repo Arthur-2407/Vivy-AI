@@ -1,4 +1,5 @@
 import os
+import sys
 import shutil
 import subprocess
 
@@ -10,7 +11,7 @@ def main():
     
     for i in range(1, 6):
         print(f"\n=== Executing Benchmark Run {i}/5 ===")
-        subprocess.run([r".\venv\Scripts\python.exe", "scratch_run_pipeline.py"], check=True)
+        subprocess.run([sys.executable, "scratch_run_pipeline.py"], check=True)
         
         if os.path.exists(json_path):
             new_path = os.path.join(dest_dir, f"run_{i}_capture.json")

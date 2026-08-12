@@ -120,8 +120,8 @@ class LongHorizonPlanner:
             # Publish new goal state to Cognitive Blackboard
             try:
                 get_cognitive_blackboard().publish_state("active_long_horizon_goal", self.goals[g_id], source_engine="LongHorizonPlanner")
-            except Exception:
-                pass
+            except Exception as _e:
+                print(f"[LongHorizonPlanner] Blackboard publish failed: {_e}")
             return g_id
 
     def update_task_progress(self, goal_id: str, milestone_idx: int, task_idx: int, status: str) -> bool:
@@ -152,8 +152,8 @@ class LongHorizonPlanner:
             self.save_to_disk()
             try:
                 get_cognitive_blackboard().publish_state("active_long_horizon_goal", goal, source_engine="LongHorizonPlanner")
-            except Exception:
-                pass
+            except Exception as _e:
+                print(f"[LongHorizonPlanner] Blackboard publish failed: {_e}")
             return True
 
     def revise_plan(self, goal_id: str, reason: str, new_milestone_title: Optional[str] = None) -> bool:

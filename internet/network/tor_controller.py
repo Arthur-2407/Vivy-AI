@@ -72,8 +72,9 @@ class TorController:
         finally:
             try:
                 s.close()
-            except Exception:
-                pass
+            except Exception as _e:
+                import logging
+                logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
     def restart_process(self) -> bool:
         """Automatically called by TorMonitor if crash or disconnection occurs."""
@@ -90,8 +91,9 @@ class TorController:
             if self.process:
                 try:
                     self.process.terminate()
-                except Exception:
-                    pass
+                except Exception as _e:
+                    import logging
+                    logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
             print("[TorController] Tor process stopped safely.")
 
     def send_newnym_signal(self) -> bool:

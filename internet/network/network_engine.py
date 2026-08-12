@@ -66,8 +66,9 @@ class NetworkEngine:
                 with open(tmp, "w", encoding="utf-8") as f:
                     json.dump(self.reliability_db, f, indent=2, ensure_ascii=False)
                 os.replace(tmp, self.reliability_path)
-            except Exception:
-                pass
+            except Exception as _e:
+                import logging
+                logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
     def record_endpoint_telemetry(self, domain_or_url: str, success: bool, latency_ms: float):
         """Record connection success/failure and latency to continuously learn endpoint reliability."""
@@ -126,8 +127,9 @@ class NetworkEngine:
                     res["latency_ms"] = round((time.time() - t0) * 1000.0, 2)
                     self.record_endpoint_telemetry(domain, True, res["latency_ms"])
                     return res
-        except Exception:
-            pass
+        except Exception as _e:
+            import logging
+            logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
         # Fallback to mature OS system socket resolving
         try:

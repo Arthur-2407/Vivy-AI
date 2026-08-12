@@ -11,14 +11,14 @@
     "current_activity": "Unknown",
     "engagement_level": "High",
     "stress_estimate": 0.2,
-    "uncertainty": 0.109,
+    "uncertainty": 0.108,
     "relational_bond": {
       "score": 35,
       "warmth": 35.0,
       "trust": 30.0,
-      "familiarity": 20.0,
+      "familiarity": 22.0,
       "comfort": 30.0,
-      "playfulness": 40.0
+      "playfulness": 30.0
     },
     "current_topic_focus": "General"
   },
@@ -35,7 +35,7 @@
     "late_night_hour": "Activates circadian sleep throttling and gentle conversational pacing"
   },
   "temporal_meta": {
-    "last_sync_timestamp": 1785947246.0435805,
-    "session_turn_count": 25
+    "last_sync_timestamp": 1786531685.6109152,
+    "session_turn_count": 45
   }
 }

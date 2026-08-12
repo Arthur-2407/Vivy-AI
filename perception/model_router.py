@@ -114,7 +114,7 @@ class ModelRouter:
                     cls._instances[f"{category}:{p_name}"] = inst
                     return inst
             except Exception as _err:
-                print(f"[model_router.py] Silenced exception: {_err}")
+                logger.debug(f"[ModelRouter] Plugin initialization check failed: {_err}")
                 
         return None
 

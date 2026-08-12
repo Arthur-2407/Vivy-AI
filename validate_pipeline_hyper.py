@@ -4,6 +4,7 @@ Strict non-destructive validation framework adhering to all 15 architecture stag
 """
 
 import os
+from runtime.environment_manager import get_runtime_manager
 import sys
 import ast
 import json
@@ -446,8 +447,7 @@ class VivyPipelineValidator:
     def stage_11_12_repair_and_regression(self) -> bool:
         self.log_stage(11, "Automatic Repair & Regression Testing")
         
-        venv_py = os.path.join(BASE_DIR, "venv", "Scripts", "python.exe")
-        python_bin = venv_py if os.path.exists(venv_py) else sys.executable
+        python_bin = get_runtime_manager().get_python_executable("main")
         
         test_commands = [
             [python_bin, "-m", "unittest", "discover", "-s", os.path.join(BASE_DIR, "perception", "tests"), "-p", "test_*.py"],

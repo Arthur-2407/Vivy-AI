@@ -64,7 +64,7 @@ class ExperienceReplay:
         Offline process hook. Could be triggered during idle periods to scan the replay buffer
         and update embedding models or adjust generation temperatures.
         """
-        pass # To be implemented by the resource scheduler when idle
+        logger.info("[ExperienceReplay] consolidate_learning() invoked, but deep ML fine-tuning pipeline is not yet configured. Skipping.")
 
 _replay_instance = None
 def get_experience_replay():

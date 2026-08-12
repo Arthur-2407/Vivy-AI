@@ -89,8 +89,9 @@ class ContinuousLearningEngine:
                 with open(tmp, "w", encoding="utf-8") as f:
                     json.dump(self.knowledge_gaps, f, indent=2, ensure_ascii=False)
                 os.replace(tmp, self.gaps_path)
-            except Exception:
-                pass
+            except Exception as _e:
+                import logging
+                logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
     def save_study_log(self):
         with self._lock:
@@ -100,8 +101,9 @@ class ContinuousLearningEngine:
                 with open(tmp, "w", encoding="utf-8") as f:
                     json.dump(self.study_log[-200:], f, indent=2, ensure_ascii=False) # keep latest 200 items
                 os.replace(tmp, self.log_path)
-            except Exception:
-                pass
+            except Exception as _e:
+                import logging
+                logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
     def register_knowledge_gap(self, topic: str, priority: str = "medium") -> Dict[str, Any]:
         with self._lock:
@@ -143,8 +145,9 @@ class ContinuousLearningEngine:
                     if prov and prov.is_available():
                         try:
                             raw_res.extend(prov.search(topic, max_results=2))
-                        except Exception:
-                            pass
+                        except Exception as _e:
+                            import logging
+                            logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
                 verified = self.evaluator.evaluate_and_rank(raw_res)
                 if verified:

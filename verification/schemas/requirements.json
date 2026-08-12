@@ -1,0 +1,13 @@
+{
+    "REQ-L1": {"level": "L1", "desc": "Hardware Interfacing"},
+    "REQ-L2": {"level": "L2", "desc": "Multimodal Perception"},
+    "REQ-L3": {"level": "L3", "desc": "Memory & State Management"},
+    "REQ-L4": {"level": "L4", "desc": "Emotional & Empathy Engine"},
+    "REQ-L5": {"level": "L5", "desc": "Cognitive Reasoning"},
+    "REQ-L6": {"level": "L6", "desc": "Expression & Synthesis"},
+    "REQ-L7": {"level": "L7", "desc": "Network & Security Intelligence"},
+    "REQ-L8": {"level": "L8", "desc": "Neural Learning Fabric"},
+    "REQ-L9": {"level": "L9", "desc": "Executive Agency"},
+    "REQ-L10": {"level": "L10", "desc": "Unified Cognitive Event Bus"},
+    "REQ-L11": {"level": "L11", "desc": "Long-Term Continuity"}
+}

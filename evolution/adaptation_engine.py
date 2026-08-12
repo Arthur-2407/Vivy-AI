@@ -100,8 +100,22 @@ class AdaptationEngine:
                     "prompt_style": selected_style,
                     "search_threshold": self._search_bandit.select_action(last_exp.feature_vector),
                     "context_budget_modifier": 1.1 if reward > 0.8 else 0.9,
-                    "rie_min_score": 0.75
+                    "rie_min_score": 0.75,
+                    "empathy_budget": 1.0,
+                    "relationship_importance": 1.0
                 }
+                
+                # LEVEL 11: Long-Term Identity Continuity Gate
+                from evolution.identity_continuity import get_identity_continuity_engine
+                identity_engine = get_identity_continuity_engine()
+                # Determine strategy string based on the chosen styles
+                proposed_strategy_name = f"{selected_style}_adaptation"
+                id_score, id_reason = identity_engine.evaluate_identity_drift(proposed_strategy_name, new_weights)
+                
+                if id_score < 0.7:
+                    print(f"[AdaptationEngine] Adaptation rejected by Identity Gate: {id_reason}")
+                    return None
+                    
                 snapshot = PolicySnapshot(
                     snapshot_id=snapshot_id,
                     timestamp=time.time(),

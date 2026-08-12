@@ -51,8 +51,9 @@ class AcademicLiteratureProvider(SearchProvider):
             with urllib.request.urlopen(req, timeout=self.timeout) as resp:
                 xml_data = resp.read().decode("utf-8", errors="replace")
                 results = self._parse_arxiv_xml(xml_data)
-        except Exception:
-            pass
+        except Exception as _e:
+            import logging
+            logging.getLogger(__name__).debug(f"Fallback triggered: {_e}")
 
         # Fallback scientific knowledge formulation
         if not results:
