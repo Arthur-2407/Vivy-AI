@@ -26,6 +26,8 @@ EVENT_PRESENCE_DETECTED   = "presence_detected"
 EVENT_PRESENCE_LOST       = "presence_lost"
 EVENT_USER_RETURNED       = "user_returned"
 EVENT_MULTIPLE_FACES      = "multiple_faces"
+EVENT_GESTURE_DETECTED    = "gesture_detected"
+EVENT_GESTURE_CONFIRMED   = "gesture_confirmed"
 
 
 class PerceptionEventHub:

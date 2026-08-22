@@ -59,15 +59,23 @@ class TestGetConfigDefaults:
         _reset_loader()
         import perception.config_loader as cl
         cl._CONFIG_PATH = "/nonexistent/vivy_config.json"
-        assert cl.get("audio_perception", "enabled") is False
-        _reset_loader()
+        cl._DISABLE_SHARED_OVERRIDES = True
+        try:
+            assert cl.get("audio_perception", "enabled") is False
+        finally:
+            cl._DISABLE_SHARED_OVERRIDES = False
+            _reset_loader()
 
     def test_proactivity_disabled_by_default(self):
         _reset_loader()
         import perception.config_loader as cl
         cl._CONFIG_PATH = "/nonexistent/vivy_config.json"
-        assert cl.get("proactivity", "enabled") is False
-        _reset_loader()
+        cl._DISABLE_SHARED_OVERRIDES = True
+        try:
+            assert cl.get("proactivity", "enabled") is False
+        finally:
+            cl._DISABLE_SHARED_OVERRIDES = False
+            _reset_loader()
 
     def test_missing_key_returns_default_arg(self):
         _reset_loader()

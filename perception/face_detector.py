@@ -262,7 +262,7 @@ class FaceDetector:
                 if results and results.detections:
                     for idx, det in enumerate(results.detections):
                         score = det.score[0] if det.score else self._confidence_threshold
-                        if score < min(0.35, self._confidence_threshold):
+                        if score < self._confidence_threshold:
                             continue
 
                         bbox_relative = det.location_data.relative_bounding_box
@@ -282,13 +282,40 @@ class FaceDetector:
                         face_ratio = bw / float(w) if w > 0 else 0.2
                         dist_m = max(0.3, min(3.0, 0.4 / max(0.05, face_ratio)))
                         
+                        # Extract keypoints for yaw/pitch heuristic
+                        yaw = 0.0
+                        pitch = 0.0
+                        if hasattr(det.location_data, 'relative_keypoints') and len(det.location_data.relative_keypoints) >= 3:
+                            kps = det.location_data.relative_keypoints
+                            # kps[0] = right eye, kps[1] = left eye, kps[2] = nose tip
+                            eyes_mid_x = (kps[0].x + kps[1].x) / 2.0
+                            nose_x = kps[2].x
+                            
+                            eyes_mid_y = (kps[0].y + kps[1].y) / 2.0
+                            nose_y = kps[2].y
+                            
+                            dx = nose_x - eyes_mid_x
+                            dy = nose_y - eyes_mid_y
+                            
+                            if bbox_relative.width > 0:
+                                yaw = (dx / bbox_relative.width) * 100.0  # Approx scaling
+                            if bbox_relative.height > 0:
+                                # Normal face has nose ~25% down from eyes
+                                pitch = -((dy / bbox_relative.height) - 0.25) * 100.0
+                                
+                        orientation = "Head Facing Vivy"
+                        if yaw < -20: orientation = "Head Turned Left"
+                        elif yaw > 20: orientation = "Head Turned Right"
+                        elif pitch > 20: orientation = "Head Turned Up"
+                        elif pitch < -20: orientation = "Head Turned Down"
+                        
                         face = FaceData(
                             tracking_id=idx + 1,
                             bbox=BoundingBox(x=bx, y=by, width=bw, height=bh),
                             confidence=float(score),
                             center_point=Point3D(x=round(cx, 1), y=round(cy, 1), z=round(dist_m, 2)),
                             distance_estimate=round(dist_m, 2),
-                            head_pose=HeadPose(yaw=0.0, pitch=0.0, roll=0.0, orientation_label="Head Facing Vivy"),
+                            head_pose=HeadPose(yaw=round(yaw, 2), pitch=round(pitch, 2), roll=0.0, orientation_label=orientation),
                             identity="User",
                             is_primary=(idx == 0)
                         )
@@ -297,23 +324,24 @@ class FaceDetector:
                 logger.debug(f"[FaceDetector] MediaPipe detection error: {ex}")
 
         # Backend 2: OpenCV Haar Cascade with CLAHE Low-Light & Multi-Scale Fallback
-        if not faces and _OPENCV_AVAILABLE and self._haar_cascade is not None:
+        # DISABLED: This fallback causes severe "Ghost Face" hallucinations on textured walls (CRITICAL BUG).
+        if False and not faces and _OPENCV_AVAILABLE and self._haar_cascade is not None:
             try:
                 gray = cv2.cvtColor(img_np, cv2.COLOR_BGR2GRAY) if len(img_np.shape) == 3 else img_np
                 haar_faces = self._haar_cascade.detectMultiScale(
-                    gray, scaleFactor=1.06, minNeighbors=3, minSize=(25, 25)
+                    gray, scaleFactor=1.06, minNeighbors=3, minSize=(60, 60)
                 )
                 # Low-light / contrast CLAHE fallback if 0 faces found
                 if len(haar_faces) == 0:
                     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
                     eq_gray = clahe.apply(gray)
                     haar_faces = self._haar_cascade.detectMultiScale(
-                        eq_gray, scaleFactor=1.05, minNeighbors=2, minSize=(20, 20)
+                        eq_gray, scaleFactor=1.05, minNeighbors=2, minSize=(60, 60)
                     )
 
                 for idx, (bx, by, bw, bh) in enumerate(haar_faces):
                     bx, by, bw, bh = int(bx), int(by), int(bw), int(bh)
-                    if bw < 15 or bh < 15:
+                    if bw < 60 or bh < 60:
                         continue
 
                     cx = bx + bw / 2.0
@@ -368,8 +396,8 @@ class FaceDetector:
                                 is_primary=True,
                                 validation_state="heuristic"  # Gate flag for downstream
                             )
-                            faces.append(face)
-                            logger.debug("[FaceDetector] Heuristic candidate produced (validation_state=heuristic, confidence=0.40)")
+                            # DO NOT append this fake face to downstream pipeline. It causes ghost boxes.
+                            logger.debug("[FaceDetector] Heuristic candidate produced and suppressed from UI (telemetry only)")
             except Exception as ex_f:
                 logger.debug(f"[FaceDetector] Fallback heuristic error: {ex_f}")
 

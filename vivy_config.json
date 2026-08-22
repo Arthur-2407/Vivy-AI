@@ -18,6 +18,7 @@
     "vision":    "models/moondream-vision.gguf",
     "embedding": "BAAI/bge-small-en-v1.5",
     "face_detection": "models/yolov11/yolo11n-face.pt",
+    "object_detection": "yolo11n.pt",
     "lip_sync_musetalk": "models/musetalk/musetalk.pt",
     "lip_sync_wav2lip": "models/wav2lip/wav2lip.pth"
   },
@@ -65,7 +66,7 @@
   },
 
   "pipeline": {
-    "auto_listen":              false,
+    "auto_listen":              true,
     "poll_interval_seconds":    0.25,
     "mic_sample_rate":          16000,
     "mic_frame_ms":             30,

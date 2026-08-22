@@ -66,6 +66,22 @@ def set_camera_disabled(disabled: bool):
         logger.warning(f"[CameraManager] set_camera_disabled error: {e}")
 
 
+class PerceptionSessionState:
+    """Encapsulates the stateful trackers for a single perception session (e.g. a specific camera source)."""
+    def __init__(self):
+        from perception.face_tracker import FaceTracker
+        from perception.presence_manager import PresenceManager
+        from perception.attention_estimator import AttentionEstimator
+        from perception.landmark_detector import LandmarkDetector
+        from perception.gaze_detector import GazeDetector
+        from perception.object_detector import ObjectDetector
+        self.face_tracker = FaceTracker()
+        self.presence_manager = PresenceManager()
+        self.attention_estimator = AttentionEstimator()
+        self.landmark_detector = LandmarkDetector()
+        self.gaze_detector = GazeDetector()
+        self.object_detector = ObjectDetector()
+
 class CameraManager:
     """
     Manages non-blocking camera capture loop.
@@ -96,6 +112,12 @@ class CameraManager:
         self._latest_perception_frame: Optional[str] = None
         self._perception_worker_running: bool = False
         self._perception_worker_thread: Optional[threading.Thread] = None
+        self._local_session = None
+
+    def _get_local_session(self):
+        if self._local_session is None:
+            self._local_session = PerceptionSessionState()
+        return self._local_session
 
     def register_frame_processor(self, callback):
         """Register a callback to receive base64 frame strings whenever a new frame is captured or ingested."""
@@ -105,14 +127,23 @@ class CameraManager:
     def start_camera(self) -> bool:
         """Start local hardware webcam capture thread with device scan fallback."""
         if is_camera_disabled():
-            logger.info("[CameraManager] Camera is disabled via camera_disable.txt. Skipping start.")
-            self._camera_active = False
-            try:
-                from perception.perception_manager import get_writer
-                get_writer().record_camera_state(active=False, paused=False)
-            except Exception as _err:
-                print(f"[camera_manager.py] Silenced exception: {_err}")
-            return False
+            # RC1-FIX: Defensively clear a stale sentinel before giving up.
+            # The sentinel may have been left behind from a previous session's
+            # stop_camera() call. Callers (web endpoints) already call
+            # set_camera_disabled(False) before invoking start_camera(), but on
+            # Windows file-write latency can cause a stale read here. Clear it
+            # once and re-check instead of silently refusing to start.
+            logger.warning("[CameraManager] camera_disable.txt found during start — clearing stale sentinel and retrying.")
+            set_camera_disabled(False)
+            if is_camera_disabled():
+                logger.info("[CameraManager] Camera remains disabled after sentinel clear. Skipping start.")
+                self._camera_active = False
+                try:
+                    from perception.perception_manager import get_writer
+                    get_writer().record_camera_state(active=False, paused=False)
+                except Exception as _err:
+                    print(f"[camera_manager.py] Silenced exception: {_err}")
+                return False
 
         with self._lock:
             self._paused = False
@@ -238,18 +269,25 @@ class CameraManager:
         logger.info("[CameraManager] Camera paused.")
 
     def resume_camera(self):
-        """Resume frame capture loop."""
+        """Resume frame capture loop. If the camera was fully stopped (cap is None),
+        re-opens the hardware device by calling start_camera() internally."""
         set_camera_disabled(False)
         with self._lock:
             self._paused = False
-            if self._cap is not None and self._cap.isOpened():
+            cap_is_open = self._cap is not None and self._cap.isOpened()
+        if cap_is_open:
+            with self._lock:
                 self._camera_active = True
-        try:
-            from perception.perception_manager import get_writer
-            get_writer().record_camera_state(active=self._camera_active, paused=False)
-        except Exception as _err:
-            print(f"[camera_manager.py] Silenced exception: {_err}")
-        logger.info("[CameraManager] Camera resumed.")
+            try:
+                from perception.perception_manager import get_writer
+                get_writer().record_camera_state(active=True, paused=False)
+            except Exception as _err:
+                print(f"[camera_manager.py] Silenced exception: {_err}")
+            logger.info("[CameraManager] Camera resumed (unpause only).")
+        else:
+            # RC3-FIX: Camera was fully stopped (cap released). Re-open the device.
+            logger.info("[CameraManager] Camera cap is None on resume — re-opening hardware device via start_camera().")
+            self.start_camera()
 
     def is_paused(self) -> bool:
         with self._lock:
@@ -392,9 +430,13 @@ class CameraManager:
         return None, 0.0
 
     def get_latest_frame_bytes(self) -> Tuple[Optional[bytes], float]:
-        """Returns tuple of (raw_jpeg_bytes, capture_timestamp) for zero-copy web serving."""
-        if is_camera_disabled():
-            return None, 0.0
+        """Returns tuple of (raw_jpeg_bytes, capture_timestamp) for zero-copy web serving.
+
+        RC2/RC5-FIX: Removed is_camera_disabled() gate from frame-serve path.
+        The disable sentinel should only prevent NEW capture sessions from starting,
+        not block serving frames that were already captured and are still fresh.
+        Frames older than 10 s are naturally stale and return None anyway.
+        """
         now = time.time()
         with self._lock:
             if hasattr(self, "_latest_frame_bytes") and self._latest_frame_bytes and (now - self._latest_frame_time) <= 10.0:
@@ -402,9 +444,11 @@ class CameraManager:
         return None, 0.0
 
     def get_latest_raw_frame(self) -> Tuple[Optional[np.ndarray], float]:
-        """Returns tuple of (raw_numpy_array, capture_timestamp) for zero-copy AI perception."""
-        if is_camera_disabled():
-            return None, 0.0
+        """Returns tuple of (raw_numpy_array, capture_timestamp) for zero-copy AI perception.
+
+        RC2/RC5-FIX: Same rationale as get_latest_frame_bytes — sentinel should not
+        block serving already-captured numpy frames.
+        """
         now = time.time()
         with self._lock:
             if hasattr(self, "_latest_raw_frame") and self._latest_raw_frame is not None and (now - self._latest_frame_time) <= 10.0:
@@ -464,6 +508,10 @@ class CameraManager:
                 try:
                     ret, frame = self._cap.read()
                     if ret and frame is not None:
+                        # Flip horizontally to create a natural mirror effect (selfie view)
+                        # This also fixes MediaPipe's Left/Right hand classification which assumes a mirrored input
+                        frame = cv2.flip(frame, 1)
+                        
                         # Encode frame to JPEG base64
                         ret_encode, buf = cv2.imencode('.jpg', frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
                         if ret_encode:
@@ -561,8 +609,95 @@ class CameraManager:
             else:
                 time.sleep(0.008)
 
+    def process_frame(self, frame_b64: str, is_remote: bool = False, session_state: Optional[PerceptionSessionState] = None) -> dict:
+        """Run ML perception models on a frame. If is_remote is False, it updates the global PerceptionManager."""
+        if not frame_b64 or not isinstance(frame_b64, str) or not frame_b64.strip():
+            return {}
+            
+        if session_state is None:
+            session_state = self._get_local_session()
+            
+        with self._perception_lock:
+            try:
+                if not hasattr(self, "_perception_initialized"):
+                    from perception.face_detector import FaceDetector
+                    from perception.hardware_scheduler import get_hardware_scheduler
+                    from perception.perception_events import get_event_hub, EVENT_GESTURE_CONFIRMED
+                    from perception.gesture_interpreter import get_gesture_interpreter
+                    self._face_detector = FaceDetector()
+                    self._hw_scheduler = get_hardware_scheduler()
+                    self._event_hub = get_event_hub()
+                    self._gesture_interpreter = get_gesture_interpreter()
+                    self._perception_initialized = True
+
+                # Preprocess frame for lighting and noise adaptivity
+                raw_np, h, w = self._face_detector._to_numpy_bgr(frame_b64)
+                img_np = self.preprocess_camera_frame(raw_np) if raw_np is not None else None
+
+                detected_faces = self._face_detector.detect_faces(img_np if img_np is not None else frame_b64)
+                tracked_faces = session_state.face_tracker.update(detected_faces)
+                detected_objects = session_state.object_detector.detect_objects(img_np if img_np is not None else frame_b64)
+
+                if img_np is not None:
+                    tracked_faces = session_state.landmark_detector.process_landmarks(img_np, tracked_faces)
+
+                gaze = session_state.gaze_detector.estimate_gaze(tracked_faces, frame_width=w or 640, frame_height=h or 480)
+                att_data, primary_face = session_state.attention_estimator.estimate_attention(tracked_faces, gaze, camera_active=not is_remote)
+                presence_state = session_state.presence_manager.update_presence(tracked_faces, camera_active=not is_remote)
+                hw_state = self._hw_scheduler.get_state()
+
+                hand_state = session_state.object_detector.get_hand_state() if hasattr(session_state.object_detector, "get_hand_state") else {}
+                held_objects = [o.to_dict() for o in detected_objects if getattr(o, 'validation_state', '') == 'hand_held' or getattr(o, 'category', '') == 'held_item']
+
+                system_state = {
+                    "camera_active": True if is_remote else self.is_active(),
+                    "camera_fps": self.get_fps(),
+                    "presence_state": presence_state,
+                    "face_count": len(tracked_faces),
+                    "object_count": len(detected_objects),
+                    "hand_state": hand_state,
+                    "held_objects": held_objects,
+                    "primary_face": primary_face.to_dict() if primary_face else None,
+                    "all_faces": [f.to_dict() for f in tracked_faces],
+                    "all_objects": [o.to_dict() for o in detected_objects],
+                    "gaze": gaze.to_dict() if hasattr(gaze, "to_dict") else {},
+                    "attention": att_data.to_dict() if hasattr(att_data, "to_dict") else {},
+                    "hardware": hw_state.to_dict() if hasattr(hw_state, "to_dict") else {},
+                }
+                
+                if not is_remote:
+                    # Update global PerceptionManager
+                    try:
+                        from perception.perception_manager import get_writer
+                        writer = get_writer()
+                        if writer:
+                            writer.record_face_perception_state(system_state)
+                            writer.record_object_perception_state(detected_objects)
+                            if hasattr(writer, "record_hand_perception_state"):
+                                writer.record_hand_perception_state(hand_state, held_objects)
+                    except Exception as _err:
+                        pass
+                        
+                    # Publish event hub notifications
+                    if tracked_faces:
+                        self._event_hub.publish("face_detected", {"face_count": len(tracked_faces), "primary": primary_face.to_dict() if primary_face else None})
+                    if detected_objects:
+                        self._event_hub.publish("object_detected", {"object_count": len(detected_objects), "objects": [o.to_dict() for o in detected_objects]})
+                    if hand_state and hand_state.get("hands_tracked", 0) > 0:
+                        self._event_hub.publish("hand_detected", hand_state)
+                        for h_dict in hand_state.get("hands", []):
+                            if h_dict.get("gesture_newly_confirmed"):
+                                self._event_hub.publish(self._event_hub.EVENT_GESTURE_CONFIRMED if hasattr(self._event_hub, 'EVENT_GESTURE_CONFIRMED') else "gesture_confirmed", h_dict)
+                    if presence_state:
+                        self._event_hub.publish("presence_detected", {"presence_state": presence_state})
+                
+                return system_state
+            except Exception as ex:
+                logger.debug(f"[CameraManager] perception processing error: {ex}")
+                return {}
+
     def _run_default_perception(self, frame_b64: str):
-        """Internal worker: runs pre-processing, face/hand/object detection, gaze estimation, and updates PerceptionManager."""
+        """Internal worker: runs pre-processing, face/hand/object detection, gaze estimation."""
         if not frame_b64 or not isinstance(frame_b64, str) or not frame_b64.strip():
             return
         
@@ -575,113 +710,7 @@ class CameraManager:
         except Exception as _err:
             print(f"[camera_manager.py] Silenced exception: {_err}")
 
-        with self._perception_lock:
-            try:
-                if not hasattr(self, "_perception_initialized"):
-                    from perception.face_detector import FaceDetector
-                    from perception.face_tracker import FaceTracker
-                    from perception.landmark_detector import LandmarkDetector
-                    from perception.gaze_detector import GazeDetector
-                    from perception.attention_estimator import AttentionEstimator
-                    from perception.presence_manager import PresenceManager
-                    from perception.object_detector import ObjectDetector
-                    from perception.hardware_scheduler import get_hardware_scheduler
-                    from perception.perception_events import get_event_hub
-
-                    self._face_detector = FaceDetector()
-                    self._face_tracker = FaceTracker()
-                    self._landmark_detector = LandmarkDetector()
-                    self._gaze_detector = GazeDetector()
-                    self._attention_estimator = AttentionEstimator()
-                    self._presence_manager = PresenceManager()
-                    self._object_detector = ObjectDetector()
-                    self._hw_scheduler = get_hardware_scheduler()
-                    self._event_hub = get_event_hub()
-                    self._perception_initialized = True
-
-                # Preprocess frame for lighting and noise adaptivity
-                raw_np, h, w = self._face_detector._to_numpy_bgr(frame_b64)
-                img_np = self.preprocess_camera_frame(raw_np) if raw_np is not None else None
-
-                detected_faces = self._face_detector.detect_faces(img_np if img_np is not None else frame_b64)
-                tracked_faces = self._face_tracker.update(detected_faces)
-                detected_objects = self._object_detector.detect_objects(img_np if img_np is not None else frame_b64)
-
-                if img_np is not None:
-                    tracked_faces = self._landmark_detector.process_landmarks(img_np, tracked_faces)
-
-                gaze = self._gaze_detector.estimate_gaze(tracked_faces, frame_width=w or 640, frame_height=h or 480)
-                att_data, primary_face = self._attention_estimator.estimate_attention(tracked_faces, gaze, camera_active=True)
-                presence_state = self._presence_manager.update_presence(tracked_faces, camera_active=True)
-                hw_state = self._hw_scheduler.get_state()
-
-                hand_state = self._object_detector.get_hand_state() if hasattr(self._object_detector, "get_hand_state") else {}
-                held_objects = [o.to_dict() for o in detected_objects if getattr(o, 'validation_state', '') == 'hand_held' or getattr(o, 'category', '') == 'held_item']
-
-                system_state = {
-                    "camera_active": self.is_active(),
-                    "camera_fps": self.get_fps(),
-                    "presence_state": presence_state,
-                    "face_count": len(tracked_faces),
-                    "object_count": len(detected_objects),
-                    "hand_state": hand_state,
-                    "held_objects": held_objects,
-                    "primary_face": primary_face.to_dict() if primary_face else None,
-                    "all_faces": [f.to_dict() for f in tracked_faces],
-                    "all_objects": [o.to_dict() for o in detected_objects],
-                    "gaze": gaze.to_dict(),
-                    "attention": att_data.to_dict(),
-                    "hardware": hw_state.to_dict(),
-                }
-
-                # Developer Diagnostic Mode Hook (Phase 3 Instrumentation)
-                try:
-                    from developer_diagnostic_manager import get_developer_diagnostic_manager
-                    ddm = get_developer_diagnostic_manager()
-                    if ddm.is_enabled():
-                        detections = {
-                            "face": {"face_count": len(tracked_faces), "confidence": primary_face.confidence if primary_face and hasattr(primary_face, 'confidence') else (0.95 if tracked_faces else 0.0)},
-                            "hand": {"hand_detected": hand_state.get("hands_tracked", 0) > 0, "confidence": 0.95 if hand_state.get("hands_tracked", 0) > 0 else 0.0},
-                            "object": {"object_count": len(detected_objects), "objects": [getattr(o, 'label', 'object') for o in detected_objects[:5]] if detected_objects else []},
-                            "pose": {"pose_detected": False, "confidence": 0.0},
-                            "gaze": gaze.to_dict() if hasattr(gaze, "to_dict") else {},
-                            "ocr": {},
-                            "scene": f"Camera active ({len(tracked_faces)} face(s), {len(detected_objects)} object(s), {hand_state.get('hands_tracked', 0)} hand(s))",
-                        }
-                        ddm.record_frame(
-                            frame_num=self._frames_captured,
-                            camera_source=f"Device #{self._device_index}",
-                            resolution=self._resolution,
-                            latency_ms=max(0.1, (time.time() - self._latest_frame_time) * 1000.0),
-                            fps=self.get_fps(),
-                            dropped_frames=0,
-                            detections=detections
-                        )
-                except Exception as _err:
-                    print(f"[camera_manager.py] Silenced exception: {_err}")
-
-                try:
-                    from perception.perception_manager import get_writer
-                    writer = get_writer()
-                    if writer:
-                        writer.record_face_perception_state(system_state)
-                        writer.record_object_perception_state(detected_objects)
-                        if hasattr(writer, "record_hand_perception_state"):
-                            writer.record_hand_perception_state(hand_state, held_objects)
-                except Exception as _err:
-                    print(f"[camera_manager.py] Silenced exception: {_err}")
-
-                # Publish event hub notifications
-                if tracked_faces:
-                    self._event_hub.publish("face_detected", {"face_count": len(tracked_faces), "primary": primary_face.to_dict() if primary_face else None})
-                if detected_objects:
-                    self._event_hub.publish("object_detected", {"object_count": len(detected_objects), "objects": [o.to_dict() for o in detected_objects]})
-                if hand_state and hand_state.get("hands_tracked", 0) > 0:
-                    self._event_hub.publish("hand_detected", hand_state)
-                if presence_state:
-                    self._event_hub.publish("presence_detected", {"presence_state": presence_state})
-            except Exception as ex:
-                logger.debug(f"[CameraManager] Default perception processing error: {ex}")
+        self.process_frame(frame_b64, is_remote=False)
 
     def _update_fps(self):
         if len(self._timestamps) >= 2:

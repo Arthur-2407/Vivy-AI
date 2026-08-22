@@ -35,6 +35,21 @@ PREF_GPU  = "GPU"
 
 
 class HardwareScheduler:
+
+    def apply_resource_governance(self):
+        """Hardware Scheduling & VRAM policies (Phase 5)"""
+        if self._vram_total and self._vram_used:
+            ratio = self._vram_used / self._vram_total
+            if ratio > 0.85:
+                # Critical memory pressure: prioritize LLM over vision
+                self.current_device = "cpu"
+                self.vision_fps_limit = 1
+                return
+        
+        # Enforce frame drop bounds based on latency
+        # Example bounds: drop frames if latency exceeds 100ms
+        self.vision_fps_limit = max(5, int(1.0 / (self.avg_inference_time + 0.001))) if hasattr(self, 'avg_inference_time') else 15
+
     """
     Adaptive Hardware Scheduler for Vivy's perception and compute modules.
     Thread-safe and non-blocking.

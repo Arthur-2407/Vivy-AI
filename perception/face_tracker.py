@@ -35,7 +35,7 @@ class FaceTracker:
     Tracks detected faces across consecutive frames using lightweight motion/bounding-box tracking.
     """
 
-    def __init__(self, max_missing_frames: int = 15, iou_threshold: float = 0.3):
+    def __init__(self, max_missing_frames: int = 3, iou_threshold: float = 0.3):
         self._max_missing_frames = max_missing_frames
         self._iou_threshold = iou_threshold
         self._tracked_faces: Dict[int, Dict[str, Any]] = {}
@@ -64,6 +64,7 @@ class FaceTracker:
                     to_remove.append(face_id)
                 else:
                     face = t_info["face"]
+                    face.missing_frames = t_info["missing_frames"]
                     coasted_faces.append(face)
 
             for fid in to_remove:
@@ -90,6 +91,7 @@ class FaceTracker:
             if best_iou >= self._iou_threshold and best_match_idx >= 0:
                 matched_det = unmatched_detections.pop(best_match_idx)
                 matched_det.tracking_id = face_id
+                matched_det.missing_frames = 0
                 t_info["face"] = matched_det
                 t_info["missing_frames"] = 0
                 t_info["last_seen"] = time.time()
@@ -97,6 +99,7 @@ class FaceTracker:
             else:
                 t_info["missing_frames"] += 1
                 if t_info["missing_frames"] <= self._max_missing_frames:
+                    t_info["face"].missing_frames = t_info["missing_frames"]
                     matched_result.append(t_info["face"])
 
         # Register new unmatched detections
@@ -104,6 +107,7 @@ class FaceTracker:
             assigned_id = self._next_id
             self._next_id += 1
             new_det.tracking_id = assigned_id
+            new_det.missing_frames = 0
             self._tracked_faces[assigned_id] = {
                 "face": new_det,
                 "missing_frames": 0,

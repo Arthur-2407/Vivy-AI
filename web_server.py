@@ -1862,17 +1862,31 @@ def receive_camera_frame():
     """
     if request.method == "GET":
         try:
-            from perception.camera_manager import get_camera_manager
+            from perception.camera_manager import get_camera_manager, is_camera_disabled
             cam = get_camera_manager()
-            raw_jpg, _ = cam.get_latest_frame_bytes()
+            raw_jpg, ts = cam.get_latest_frame_bytes()
             if raw_jpg:
                 from flask import Response
                 resp = Response(raw_jpg, mimetype="image/jpeg")
                 resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+                resp.headers["Pragma"] = "no-cache"
+                resp.headers["Expires"] = "0"
+                resp.headers["X-Camera-Active"] = "1"
+                resp.headers["X-Frame-Timestamp"] = str(ts)
                 return resp
-            return jsonify({"success": False, "error": "No frame available"}), 404
+            # No frame buffered yet — return diagnostic info so frontend can decide what to do
+            cam_active = cam.is_active()
+            cam_paused = cam.is_paused()
+            cam_disabled = is_camera_disabled()
+            return jsonify({
+                "success": False,
+                "error": "No frame buffered yet" if (cam_active and not cam_disabled) else "Camera not active",
+                "camera_active": cam_active,
+                "camera_paused": cam_paused,
+                "camera_disabled": cam_disabled,
+            }), 404
         except Exception as e:
-            return jsonify({"success": False, "error": str(e)}), 500
+            return jsonify({"success": False, "error": str(e), "camera_active": False}), 500
 
     try:
         data = request.get_json(force=True) or {}

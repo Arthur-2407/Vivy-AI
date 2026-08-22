@@ -95,6 +95,8 @@ class ActionPlanner:
             return self._plan_browser(intent)
         if domain == "device":
             return self._plan_device(intent)
+        if domain == "system":
+            return self._plan_system(intent)
 
         # Default: single step, dispatch to registered capability executor
         return ActionPlan(
@@ -246,6 +248,26 @@ class ActionPlanner:
             ],
         )
 
+
+    def _plan_system(self, intent: IntentModel) -> ActionPlan:
+        """System action plan."""
+        return ActionPlan(
+            intent=intent,
+            description=f"System: {intent.action} {intent.target}",
+            steps=[
+                ActionStep(
+                    step_id=1,
+                    description=f"{intent.action.title()} {intent.target}",
+                    executor_name="system",
+                    action=intent.action,
+                    target=intent.target,
+                    parameters=dict(intent.parameters),
+                    expected_result="system_action_completed",
+                    requires_observation=False,
+                    is_final=True,
+                ),
+            ],
+        )
 
 # ── Singleton ──────────────────────────────────────────────────────────────────
 

@@ -7234,6 +7234,11 @@
         let _webcamCaptureTimer = null;
         let _webcamFpsCounter = 0;
         let _webcamFpsLastReset = performance.now();
+        // RC4-FIX: failure counter for backend preview loop — triggers browser fallback after N misses
+        let _backendPreviewFailures = 0;
+        const _BACKEND_PREVIEW_MAX_FAILURES = 8;
+        // RC3-FIX: persistent canvas 2D context stored in closure (survives canvas dimension changes)
+        let _camCanvasCtx = null;
 
         const btnCamToggle = document.getElementById('btn-cam-toggle');
         const btnCamPause = document.getElementById('btn-cam-pause');
@@ -7285,38 +7290,101 @@
                     btnCamToggle.style.background = isActive ? "rgba(255,51,102,0.8)" : "var(--accent-cyan)";
                     btnCamToggle.style.color = isActive ? "#fff" : "#000";
                 }
+                // RC4-FIX: If backend says camera is active but our loop is not running, start it
+                if (data.camera_active && !_webcamPaused && !_backendCameraActive && !_webcamActive) {
+                    console.log('[CameraUI] Backend camera active detected — auto-starting preview loop.');
+                    _webcamActive = true;
+                    _backendCameraActive = true;
+                    _backendPreviewFailures = 0;
+                    // Ensure canvas is ready
+                    if (!_camCanvasCtx) {
+                        camCanvas.width = 640;
+                        camCanvas.height = 480;
+                        _camCanvasCtx = camCanvas.getContext('2d');
+                        _camCanvasCtx.fillStyle = '#000';
+                        _camCanvasCtx.fillRect(0, 0, 640, 480);
+                        camCanvas._ctx = _camCanvasCtx;
+                    }
+                    const stream = camCanvas.captureStream(30);
+                    if (camVideo) { camVideo.srcObject = stream; camVideo.style.display = 'block'; }
+                    if (camPlaceholder) camPlaceholder.style.display = 'none';
+                    _runBackendCameraPreviewLoop();
+                }
             } catch (e) {
                 console.warn('[CameraUI] Status update error:', e.message);
+            }
+        }
+
+        async function _initCamCanvas() {
+            // RC3-FIX: Always re-fetch canvas context after any operation — store in closure.
+            // Do NOT rely on camCanvas._ctx which gets cleared on canvas dimension changes.
+            camCanvas.width = 640;
+            camCanvas.height = 480;
+            _camCanvasCtx = camCanvas.getContext('2d');
+            camCanvas._ctx = _camCanvasCtx; // keep both references in sync
+            _camCanvasCtx.fillStyle = '#000000';
+            _camCanvasCtx.fillRect(0, 0, 640, 480);
+        }
+
+        async function _startBrowserCameraFallback() {
+            // Shared helper: opens getUserMedia and wires it to video/overlay elements.
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return false;
+            try {
+                _webcamStream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: { ideal: 640 }, height: { ideal: 480 }, frameRate: { ideal: 30 } }
+                });
+                if (camVideo) {
+                    camVideo.srcObject = _webcamStream;
+                    camVideo.style.display = 'block';
+                    if (camPlaceholder) camPlaceholder.style.display = 'none';
+                    try { await camVideo.play(); } catch(e){}
+                }
+                const homeCamVideo = document.getElementById('home-camera-video-el');
+                const homeCamOverlay = document.getElementById('home-camera-preview-overlay');
+                if (homeCamVideo && homeCamOverlay) {
+                    homeCamVideo.srcObject = _webcamStream;
+                    homeCamOverlay.style.display = 'block';
+                    try { await homeCamVideo.play(); } catch (pErr) {}
+                }
+                return true;
+            } catch (gErr) {
+                console.log('[CameraUI] Browser camera fallback notice:', gErr.message);
+                return false;
             }
         }
 
         async function startWebcamCapture() {
             if (_webcamActive) return;
             try {
-                const resp = await fetch('/api/camera/start', { method: 'POST' });
-                const data = await resp.json();
+                // Retry once on transient failure (handles Windows file-write latency on sentinel)
+                let resp, data;
+                try {
+                    resp = await fetch('/api/camera/start', { method: 'POST' });
+                    data = await resp.json();
+                } catch (fetchErr) {
+                    await new Promise(r => setTimeout(r, 500));
+                    resp = await fetch('/api/camera/start', { method: 'POST' });
+                    data = await resp.json();
+                }
                 
                 // If backend hardware camera activated successfully, backend manages camera capture
                 if (data && data.camera_active) {
                     _webcamActive = true;
                     _webcamPaused = false;
                     _backendCameraActive = true;
+                    _backendPreviewFailures = 0;
                     updateCameraUI();
                     PreviewWindowManager.updateLayout();
                     
-                    if (!camCanvas._ctx) {
-                        camCanvas.width = 640;
-                        camCanvas.height = 480;
-                        camCanvas._ctx = camCanvas.getContext('2d');
-                        // Initialize canvas with a black frame to prevent captureStream bug
-                        camCanvas._ctx.fillStyle = '#000000';
-                        camCanvas._ctx.fillRect(0, 0, 640, 480);
-                    }
+                    // RC3-FIX: Always fully re-initialize canvas + ctx when starting
+                    await _initCamCanvas();
                     const stream = camCanvas.captureStream(30);
-                    camVideo.srcObject = stream;
-                    camVideo.style.display = 'block';
-                    if (camPlaceholder) camPlaceholder.style.display = 'none';
-                    
+                    if (camVideo) {
+                        camVideo.srcObject = stream;
+                        camVideo.style.display = 'block';
+                        if (camPlaceholder) camPlaceholder.style.display = 'none';
+                        try { camVideo.play(); } catch(e){}
+                    }
                     const homeCamVideo = document.getElementById('home-camera-video-el');
                     const homeCamOverlay = document.getElementById('home-camera-preview-overlay');
                     if (homeCamVideo && homeCamOverlay) {
@@ -7324,33 +7392,12 @@
                         homeCamOverlay.style.display = 'block';
                         try { homeCamVideo.play(); } catch(e){}
                     }
-                    try { camVideo.play(); } catch(e){}
-                    
                     _runBackendCameraPreviewLoop();
                     return;
                 }
 
                 // Fallback: browser webcam capture if backend hardware camera is not active
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    try {
-                        _webcamStream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 640 }, height: { ideal: 480 }, frameRate: { ideal: 30 } } });
-                        if (camVideo) {
-                            camVideo.srcObject = _webcamStream;
-                            camVideo.style.display = 'block';
-                            if (camPlaceholder) camPlaceholder.style.display = 'none';
-                        }
-                        // Floating Camera Preview Card
-                        const homeCamVideo = document.getElementById('home-camera-video-el');
-                        const homeCamOverlay = document.getElementById('home-camera-preview-overlay');
-                        if (homeCamVideo && homeCamOverlay) {
-                            homeCamVideo.srcObject = _webcamStream;
-                            homeCamOverlay.style.display = 'block';
-                            try { await homeCamVideo.play(); } catch (pErr) {}
-                        }
-                    } catch (gErr) {
-                        console.log('[CameraUI] Browser camera fallback notice:', gErr.message);
-                    }
-                }
+                await _startBrowserCameraFallback();
                 _webcamActive = true;
                 _webcamPaused = false;
                 updateCameraUI();
@@ -7358,7 +7405,7 @@
                 _runWebcamCaptureLoop();
             } catch (e) {
                 console.error('[CameraUI] Failed to start camera:', e);
-                alert("Failed to start camera: " + e.message);
+                alert('Failed to start camera: ' + e.message);
             }
         }
 
@@ -7403,19 +7450,24 @@
                 const ts = Date.now();
                 const resp = await fetch('/api/camera/frame?t=' + ts, { cache: 'no-store' });
                 if (resp.ok) {
+                    // RC3-FIX: successful frame — reset failure counter
+                    _backendPreviewFailures = 0;
                     const blob = await resp.blob();
                     const objectUrl = URL.createObjectURL(blob);
                     const img = new Image();
                     img.onload = () => {
                         const vw = img.width || 640;
                         const vh = img.height || 480;
+                        // RC3-FIX: Re-fetch context after any canvas resize to keep _camCanvasCtx valid
                         if (camCanvas.width !== vw || camCanvas.height !== vh) {
                             camCanvas.width = vw;
                             camCanvas.height = vh;
+                            _camCanvasCtx = camCanvas.getContext('2d');
+                            camCanvas._ctx = _camCanvasCtx;
                         }
-                        if (camCanvas._ctx) {
-                            camCanvas._ctx.drawImage(img, 0, 0, vw, vh);
-                        }
+                        // Always use the closure context, not the property (which may be stale)
+                        const ctx = _camCanvasCtx || camCanvas.getContext('2d');
+                        if (ctx) ctx.drawImage(img, 0, 0, vw, vh);
                         URL.revokeObjectURL(objectUrl);
                         
                         _webcamFpsCounter++;
@@ -7426,26 +7478,52 @@
                             _webcamFpsCounter = 0;
                             _webcamFpsLastReset = now;
                         }
-
                         if (_backendCameraActive) {
                             requestAnimationFrame(_runBackendCameraPreviewLoop);
                         }
                     };
                     img.onerror = () => {
                         URL.revokeObjectURL(objectUrl);
-                        if (_backendCameraActive) {
-                            setTimeout(_runBackendCameraPreviewLoop, 33);
-                        }
+                        _backendPreviewFailures++;
+                        if (_backendCameraActive) setTimeout(_runBackendCameraPreviewLoop, 33);
                     };
                     img.src = objectUrl;
                     return; // Wait for onload/onerror to schedule next frame
                 } else {
-                    if (camFpsBadge) camFpsBadge.innerText = 'OFFLINE';
+                    // RC4-FIX: count consecutive backend failures
+                    _backendPreviewFailures++;
+                    let respData = null;
+                    try { respData = await resp.json(); } catch(e) {}
+                    if (_backendPreviewFailures <= 3) {
+                        // Brief startup grace period — show 'starting' in badge
+                        if (camFpsBadge) camFpsBadge.innerText = 'Starting...';
+                    } else if (_backendPreviewFailures >= _BACKEND_PREVIEW_MAX_FAILURES) {
+                        // RC4-FIX: Too many failures — fall back to browser camera
+                        console.warn('[CameraUI] Backend camera preview failed ' + _backendPreviewFailures + ' times. Falling back to browser camera.');
+                        if (camFpsBadge) camFpsBadge.innerText = 'Fallback';
+                        _backendCameraActive = false;
+                        _backendPreviewFailures = 0;
+                        // Attempt browser camera fallback
+                        const ok = await _startBrowserCameraFallback();
+                        if (ok) {
+                            _webcamActive = true;
+                            _webcamPaused = false;
+                            _runWebcamCaptureLoop();
+                        } else {
+                            if (camFpsBadge) camFpsBadge.innerText = 'NO FEED';
+                            if (camPlaceholder) { camPlaceholder.style.display = 'flex'; }
+                            if (camVideo) camVideo.style.display = 'none';
+                        }
+                        return;
+                    } else {
+                        if (camFpsBadge) camFpsBadge.innerText = 'NO FRAME';
+                    }
                     _webcamFpsCounter = 0;
                     _webcamFpsLastReset = performance.now();
                 }
             } catch (e) {
-                // Ignore silent fetch failures
+                _backendPreviewFailures++;
+                // Ignore silent fetch failures during brief network hiccups
             }
             if (_backendCameraActive) {
                 setTimeout(_runBackendCameraPreviewLoop, 33);
@@ -7461,17 +7539,18 @@
             if (sourceVideo && sourceVideo.srcObject && sourceVideo.readyState >= 2) {
                 const vw = sourceVideo.videoWidth || 640;
                 const vh = sourceVideo.videoHeight || 480;
-                if (!camCanvas._ctx) {
+                // RC3-FIX: use closure ctx; re-initialize on first call or after resize
+                if (!_camCanvasCtx || camCanvas.width !== vw || camCanvas.height !== vh) {
                     camCanvas.width = vw;
                     camCanvas.height = vh;
-                    camCanvas._ctx = camCanvas.getContext('2d');
+                    _camCanvasCtx = camCanvas.getContext('2d');
+                    camCanvas._ctx = _camCanvasCtx; // keep in sync
                 }
-                // Resize canvas if source dimensions changed (e.g. switching between sources)
-                if (camCanvas.width !== vw || camCanvas.height !== vh) {
-                    camCanvas.width = vw;
-                    camCanvas.height = vh;
-                }
-                camCanvas._ctx.drawImage(sourceVideo, 0, 0, vw, vh);
+                // Always use the closure reference (survives canvas backing-store resets)
+                const ctx = _camCanvasCtx || camCanvas.getContext('2d');
+
+                if (ctx) ctx.drawImage(sourceVideo, 0, 0, vw, vh);
+
                 const b64 = camCanvas.toDataURL('image/jpeg', 0.75);
                 try {
                     const r = await fetch('/api/camera/frame', {
@@ -7524,7 +7603,18 @@
             btnCamResume.addEventListener('click', async () => {
                 _webcamPaused = false;
                 await fetch('/api/camera/resume', { method: 'POST' });
-                if (_webcamActive && _webcamStream) _runWebcamCaptureLoop();
+                if (_webcamActive && _webcamStream) {
+                    // Browser-camera path: just restart the capture loop
+                    _runWebcamCaptureLoop();
+                } else if (_webcamActive && _backendCameraActive) {
+                    // Backend-camera path was paused: restart preview loop
+                    _backendPreviewFailures = 0;
+                    _runBackendCameraPreviewLoop();
+                } else if (!_webcamActive) {
+                    // RC5-FIX: Camera was fully stopped (not just paused). Re-open everything.
+                    _webcamActive = false; // let startWebcamCapture() proceed
+                    await startWebcamCapture();
+                }
                 updateCameraUI();
             });
         }

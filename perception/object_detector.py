@@ -65,48 +65,8 @@ except ImportError:
     _UltralyticsYOLO = None
 
 
-@dataclass
-class HandData:
-    """Dataclass representing a tracked hand."""
-    hand_label: str  # "Left", "Right"
-    confidence: float
-    bbox: BoundingBox
-    center_point: Point3D
-    holding_item: bool = False
-    gesture: str = "Open Palm"  # "Open Palm", "Closed Fist", "Pinch/Holding", "Pointing"
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "hand_label": self.hand_label,
-            "confidence": round(float(self.confidence), 2),
-            "bbox": self.bbox.to_dict(),
-            "center_point": self.center_point.to_dict(),
-            "holding_item": self.holding_item,
-            "gesture": self.gesture,
-        }
-
-
-@dataclass
-class ObjectData:
-    """Dataclass representing a detected object in frame."""
-    tracking_id: int
-    label: str
-    confidence: float
-    bbox: BoundingBox
-    center_point: Point3D
-    category: str = "general"
-    validation_state: str = "verified"  # verified | heuristic | hand_held
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "tracking_id": self.tracking_id,
-            "label": self.label,
-            "confidence": round(float(self.confidence), 2),
-            "bbox": self.bbox.to_dict(),
-            "center_point": self.center_point.to_dict(),
-            "category": self.category,
-            "validation_state": self.validation_state,
-        }
+from perception.perception_state import BoundingBox, Point3D, HandData, ObjectData
+from perception.gesture_engine import GestureEngine
 
 
 # Standard COCO dataset 20 class labels for MobileNet-SSD / CPU fallback
@@ -144,6 +104,25 @@ class ObjectDetector:
         self._dnn_net = None
         self._current_backend = "Unknown"
         self._last_hands: List[HandData] = []
+        
+        # Dedicated engine per handedness to prevent trajectory scrambling when two hands are detected
+        self._gesture_engines = {
+            "Left": GestureEngine(),
+            "Right": GestureEngine()
+        }
+        from collections import deque
+        self._hand_hold_history = {
+            "Left": deque(maxlen=5),
+            "Right": deque(maxlen=5)
+        }
+        self._hand_track_info = {
+            "Left": {"id": 1, "missed_frames": 0},
+            "Right": {"id": 2, "missed_frames": 0}
+        }
+        self._next_hand_track_id = 3
+        self._was_clapping = False
+        self._last_two_hands_dist = 9999.0
+        self._last_two_hands_width = 0.0
 
         # YOLOv11 model instance
         self._yolo_model = None
@@ -168,7 +147,7 @@ class ObjectDetector:
             return {
                 "backend":            obj_cfg.get("backend", "auto") if isinstance(obj_cfg, dict) else "auto",
                 "device":             obj_cfg.get("device", "auto") if isinstance(obj_cfg, dict) else "auto",
-                "yolov11_model_path": get_absolute_path(get("models", "face_detection", default="models/yolov11/yolo11n-face.pt")),
+                "yolov11_model_path": get("models", "object_detection", default="yolo11n.pt"),
                 "yolov11_input_size": int(obj_cfg.get("yolov11_input_size", 640)) if isinstance(obj_cfg, dict) else 640,
                 "min_confidence":     float(obj_cfg.get("min_confidence", 0.5)) if isinstance(obj_cfg, dict) else 0.5,
                 "max_detections":     int(obj_cfg.get("max_detections", 10)),
@@ -201,10 +180,10 @@ class ObjectDetector:
         if self._cfg.get("hand_enabled", True) and _MEDIAPIPE_HANDS_AVAILABLE:
             try:
                 self._mp_hands = mp.solutions.hands.Hands(
-                    static_image_mode=False,
+                    static_image_mode=False,  # Enables continuous LSTM tracking
                     max_num_hands=self._cfg.get("hand_max", 2),
                     min_detection_confidence=self._confidence_threshold,
-                    min_tracking_confidence=0.5
+                    min_tracking_confidence=self._confidence_threshold
                 )
                 logger.info("[ObjectDetector] MediaPipe Hands tracking initialized successfully.")
             except Exception as ex:
@@ -216,7 +195,10 @@ class ObjectDetector:
         if backend_pref in ("auto", "yolov11") and _ULTRALYTICS_AVAILABLE:
             try:
                 model_path = self._cfg.get("yolov11_model_path", "")
-                if model_path and os.path.exists(model_path):
+                is_standard_model = model_path and not os.path.isabs(model_path) and os.path.basename(model_path).startswith("yolo")
+                if model_path and (os.path.exists(model_path) or is_standard_model):
+                    if not os.path.exists(model_path):
+                        logger.info(f"[ObjectDetector] Auto-downloading Ultralytics model: {model_path}")
                     self._yolo_model = _UltralyticsYOLO(model_path)
                     device = self._resolve_device()
                     # Ultralytics accepts device='cpu' or device=0 (first GPU)
@@ -264,6 +246,39 @@ class ObjectDetector:
         # 3. Fallback: OpenCV Contour & Saliency Heuristic Engine (+ MediaPipe Hands if active)
         self._current_backend = "MediaPipe Hands + Region Proposal" if self._mp_hands else "OpenCV Region Proposal"
         logger.info(f"[ObjectDetector] Operating with {self._current_backend} backend.")
+    @staticmethod
+    def _is_valid_hand_topology(x_norm: List[float], y_norm: List[float]) -> bool:
+        """
+        Validates whether the MediaPipe landmarks form a geometrically plausible hand.
+        Rejects degenerate squashed hands (often hallucinated on faces).
+        """
+        if len(x_norm) != 21 or len(y_norm) != 21:
+            return False
+            
+        # Calculate intrinsic scale (Wrist to Middle Finger MCP)
+        palm_length = math.hypot(x_norm[0] - x_norm[9], y_norm[0] - y_norm[9])
+        
+        # If palm length is virtually zero, the detection is entirely degenerate
+        if palm_length < 0.01:
+            return False
+            
+        # Check if the whole hand is squashed into a tiny dot
+        width = max(x_norm) - min(x_norm)
+        height = max(y_norm) - min(y_norm)
+        
+        # Extremely elongated or extremely squashed bounding boxes are usually false positives on edges
+        if width < 0.01 and height < 0.01:
+            return False
+            
+        # Optional: check if fingers are impossibly long compared to the palm
+        # Middle finger tip (12) to MCP (9)
+        middle_length = math.hypot(x_norm[12] - x_norm[9], y_norm[12] - y_norm[9])
+        
+        # If middle finger is 5x longer than the palm, it's a hallucination (e.g. hair strands, headphone bands)
+        if middle_length > palm_length * 5.0:
+            return False
+            
+        return True
 
     def detect_objects(self, image_data: Any) -> List[ObjectData]:
         """
@@ -277,7 +292,7 @@ class ObjectDetector:
             return []
 
         # Ensure correct uint8 array layout
-        if not isinstance(img_np, np.ndarray) or img_np.dtype != np.uint8:
+        if not isinstance(img_np, np.ndarray) or img_np.dtype != np.uint8 or not img_np.flags['C_CONTIGUOUS']:
             try:
                 img_np = np.ascontiguousarray(img_np, dtype=np.uint8)
             except Exception as e:
@@ -296,11 +311,64 @@ class ObjectDetector:
                 results = self._mp_hands.process(rgb_img)
 
                 if results.multi_hand_landmarks and results.multi_handedness:
-                    for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
-                        label = handedness.classification[0].label  # "Left" or "Right"
+                    seen_hands = set()
+                    
+                    # Sort detected hands by confidence to guarantee high-confidence real hands claim labels first
+                    sorted_hands = sorted(
+                        zip(results.multi_hand_landmarks, results.multi_handedness),
+                        key=lambda x: x[1].classification[0].score,
+                        reverse=True
+                    )
+                    
+                    for hand_landmarks, handedness in sorted_hands:
+                        # MediaPipe Handedness already compensates for selfie-view/mirroring by default.
+                        # So raw_label is the correct anatomical handedness. No inversion needed.
+                        label = handedness.classification[0].label
                         score = float(handedness.classification[0].score)
+                        
+                        # Normalized coords (0..1) for gesture classification
+                        x_norm = [lm.x for lm in hand_landmarks.landmark]
+                        y_norm = [lm.y for lm in hand_landmarks.landmark]
+                        
+                        # Strict Hand Validity Gate: Reject degenerate/squashed hands (e.g. hallucinated on faces)
+                        if not self._is_valid_hand_topology(x_norm, y_norm):
+                            logger.debug(f"[ObjectDetector] Suppressed invalid hand topology for {label} hand.")
+                            continue
+                        
+                        bx = int(max(0, min(x_norm) * w))
+                        by = int(max(0, min(y_norm) * h))
+                        bw = int(min(w - bx, max(0, (max(x_norm) - min(x_norm)) * w)))
+                        bh = int(min(h - by, max(0, (max(y_norm) - min(y_norm)) * h)))
+                        
+                        if bw < 10 or bh < 10:
+                            continue
 
-                        # Extract normalized pixel coordinates of landmarks
+                        # Check for spatial overlap hallucination
+                        # If a hand was already accepted that heavily overlaps with this one, skip this lower-confidence one
+                        is_hallucination = False
+                        for h_data in tracked_hands:
+                            ix1 = max(bx, h_data.bbox.x)
+                            iy1 = max(by, h_data.bbox.y)
+                            ix2 = min(bx + bw, h_data.bbox.x + h_data.bbox.width)
+                            iy2 = min(by + bh, h_data.bbox.y + h_data.bbox.height)
+                            if ix2 > ix1 and iy2 > iy1:
+                                inter_area = (ix2 - ix1) * (iy2 - iy1)
+                                area_current = bw * bh
+                                if inter_area > area_current * 0.70:
+                                    is_hallucination = True
+                                    break
+                                    
+                        if is_hallucination:
+                            logger.debug(f"[ObjectDetector] Suppressed spatial hallucination for {label} hand (score: {score:.2f})")
+                            continue
+                            
+                        # Fix trajectory scrambling: Never process the same physical hand twice in a single frame.
+                        if label in seen_hands:
+                            logger.debug(f"[ObjectDetector] Suppressed duplicate {label} hand hallucination (score: {score:.2f})")
+                            continue
+                        seen_hands.add(label)
+
+                        # Pixel coords for bounding box only
                         x_coords = [lm.x * w for lm in hand_landmarks.landmark]
                         y_coords = [lm.y * h for lm in hand_landmarks.landmark]
 
@@ -311,29 +379,28 @@ class ObjectDetector:
                         by = min_y
                         bw = max(15, max_x - min_x)
                         bh = max(15, max_y - min_y)
+                        
+                        # Spatial Filter: A real hand close to the camera must take up at least 50x50 pixels.
+                        # Tiny detections are background shadows/hallucinations.
+                        if bw < 50 or bh < 50:
+                            logger.debug(f"[ObjectDetector] Ignored hallucinated hand (size: {bw}x{bh}, score: {score:.2f})")
+                            continue
 
                         cx = round(bx + bw / 2.0, 1)
                         cy = round(by + bh / 2.0, 1)
 
-                        # Gesture analysis: Check finger curl (compare fingertip to MCP joint)
-                        # Landmarks: 4 (thumb tip), 8 (index tip), 12 (middle tip), 16 (ring tip), 20 (pinky tip)
-                        # MCP joints: 2, 5, 9, 13, 17
-                        tips = [8, 12, 16, 20]
-                        mcps = [5, 9, 13, 17]
-                        extended_fingers = 0
-                        for tip, mcp in zip(tips, mcps):
-                            if y_coords[tip] < y_coords[mcp]:  # Fingertip higher than MCP in frame coordinates
-                                extended_fingers += 1
+                        # Check if this hand was holding an item in the previous frame
+                        prev_holding = any(h.holding_item for h in self._last_hands if h.hand_label == label)
 
-                        if extended_fingers >= 3:
-                            gesture = "Open Palm"
-                            holding_item = False
-                        elif extended_fingers == 1 and y_coords[8] < y_coords[5]:
-                            gesture = "Pointing"
-                            holding_item = False
-                        else:
-                            gesture = "Closed Fist / Holding"
-                            holding_item = True
+                        gesture, gesture_phase, gesture_confidence, newly_confirmed = self._gesture_engines[label].process_hand(
+                            x_coords=x_norm,
+                            y_coords=y_norm,
+                            handedness_label=label,
+                            timestamp=time.time(),
+                            holding_item=prev_holding
+                        )
+                        
+                        gesture_is_grab = (gesture in ["PINCH", "FIST"])
 
                         # Check for object in hand region (hand ROI expansion)
                         roi_margin = int(max(bw, bh) * 0.4)
@@ -342,15 +409,8 @@ class ObjectDetector:
                         roi_x2 = min(w, bx + bw + roi_margin)
                         roi_y2 = min(h, by + bh + roi_margin)
 
-                        hand_data = HandData(
-                            hand_label=label,
-                            confidence=score,
-                            bbox=BoundingBox(x=bx, y=by, width=bw, height=bh),
-                            center_point=Point3D(x=cx, y=cy, z=1.0),
-                            holding_item=holding_item,
-                            gesture=gesture
-                        )
-                        tracked_hands.append(hand_data)
+                        # HandData will be created after actual_holding_item is determined
+                        pass
 
                         # Create hand ObjectData entry so downstreams see the hand clearly
                         hand_obj = ObjectData(
@@ -365,47 +425,102 @@ class ObjectDetector:
                         objects.append(hand_obj)
                         track_id += 1
 
-                        # If hand is holding something, perform foreground ROI blob extraction around fingers
-                        if holding_item or (roi_x2 - roi_x1 > 30 and roi_y2 - roi_y1 > 30):
-                            try:
-                                roi = img_np[roi_y1:roi_y2, roi_x1:roi_x2]
-                                gray_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-                                roi_blur = cv2.GaussianBlur(gray_roi, (5, 5), 0)
-                                roi_edges = cv2.Canny(roi_blur, 40, 120)
-                                contours, _ = cv2.findContours(roi_edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                        # If hand gesture is grab, it might be holding something. Actual intersection check done after object detection.
+                        actual_holding_item = False
+                        if gesture_is_grab:
+                            actual_holding_item = True
+                                
+                        # Hand Tracking ID logic
+                        t_info = self._hand_track_info[label]
+                        if t_info["missed_frames"] > 5:
+                            t_info["id"] = self._next_hand_track_id
+                            self._next_hand_track_id += 1
+                            # Cause 3 fix: clear stale trajectory when hand re-enters frame.
+                            # Without this, old position data (within the 0.4s swipe window)
+                            # causes phantom swipes when the hand reappears at a new position.
+                            self._gesture_engines[label].trajectory.clear()
+                            logger.debug(f"[ObjectDetector] Hand {label} re-entry detected after {t_info['missed_frames']} missed frames. Trajectory cleared.")
+                        t_info["missed_frames"] = 0
+                        hand_track_id = t_info["id"]
 
-                                best_contour = None
-                                best_area = 0
-                                for c in contours:
-                                    area = cv2.contourArea(c)
-                                    if area > (bw * bh * 0.15) and area > best_area:
-                                        best_area = area
-                                        best_contour = c
+                        hand_data = HandData(
+                            tracking_id=hand_track_id,
+                            hand_label=label,
+                            confidence=score,
+                            bbox=BoundingBox(x=bx, y=by, width=bw, height=bh),
+                            center_point=Point3D(x=cx, y=cy, z=1.0),
+                            holding_item=actual_holding_item,
+                            gesture=gesture,
+                            gesture_phase=gesture_phase,
+                            gesture_confidence=gesture_confidence,
+                            gesture_newly_confirmed=newly_confirmed
+                        )
+                        tracked_hands.append(hand_data)
+                    # Increment missed frames for unseen hands
+                    for h_lbl in ["Left", "Right"]:
+                        if h_lbl not in seen_hands:
+                            self._hand_track_info[h_lbl]["missed_frames"] += 1
 
-                                if best_contour is not None:
-                                    rx, ry, rw, rh = cv2.boundingRect(best_contour)
-                                    item_x = roi_x1 + rx
-                                    item_y = roi_y1 + ry
-                                    if rw >= 15 and rh >= 15:
-                                        item_cx = round(item_x + rw / 2.0, 1)
-                                        item_cy = round(item_y + rh / 2.0, 1)
-                                        held_obj = ObjectData(
-                                            tracking_id=track_id,
-                                            label=f"item held in {label.lower()} hand",
-                                            confidence=round(score * 0.85, 2),
-                                            bbox=BoundingBox(x=item_x, y=item_y, width=rw, height=rh),
-                                            center_point=Point3D(x=item_cx, y=item_cy, z=0.9),
-                                            category="held_item",
-                                            validation_state="hand_held"
-                                        )
-                                        objects.append(held_obj)
-                                        track_id += 1
-                            except Exception as roi_ex:
-                                logger.debug(f"[ObjectDetector] Hand ROI object analysis error: {roi_ex}")
             except Exception as ex:
                 logger.debug(f"[ObjectDetector] MediaPipe Hands error: {ex}")
 
         self._last_hands = tracked_hands
+
+        # --- Dual Hand Spatial Clap Detection ---
+        if len(tracked_hands) == 2:
+            h1, h2 = tracked_hands[0], tracked_hands[1]
+            if h1.hand_label != h2.hand_label:
+                dist = math.hypot(h1.center_point.x - h2.center_point.x, h1.center_point.y - h2.center_point.y)
+                avg_width = (h1.bbox.width + h2.bbox.width) / 2.0
+                
+                # Calculate convergence velocity
+                if hasattr(self, '_last_two_hands_dist') and self._last_two_hands_dist != 9999.0:
+                    velocity = dist - self._last_two_hands_dist
+                else:
+                    velocity = 0.0
+
+                # High negative velocity means rapid convergence
+                rapid_convergence = velocity < -(avg_width * 0.15)
+                
+                if dist < (avg_width * 1.2): 
+                    if rapid_convergence and not self._was_clapping:
+                        self._was_clapping = True
+                        logger.info(f"[ObjectDetector] CLAP DETECTED! Hands collided with velocity {velocity:.1f} at dist {dist:.1f}")
+                        h1.gesture = "CLAP"
+                        h1.gesture_newly_confirmed = True
+                        h1.gesture_confidence = 1.0
+                    elif self._was_clapping:
+                        # Hold clap state to prevent spurious static gestures
+                        h1.gesture = "CLAP_HOLD"
+                        h1.gesture_newly_confirmed = False
+                else:
+                    self._was_clapping = False
+                    
+                self._last_two_hands_dist = dist
+                self._last_two_hands_width = avg_width
+            else:
+                self._last_two_hands_dist = 9999.0
+                self._was_clapping = False
+        elif len(tracked_hands) == 1:
+            # Merged Hand Clap Detection: If we lost a hand, but they were converging rapidly in the previous frame
+            if hasattr(self, '_last_two_hands_dist') and self._last_two_hands_dist < (self._last_two_hands_width * 2.5):
+                if self._was_clapping:
+                    logger.debug("[ObjectDetector] CLAP HOLD via hand merge!")
+                    tracked_hands[0].gesture = "CLAP_HOLD"
+                    tracked_hands[0].gesture_newly_confirmed = False
+                elif self._last_two_hands_dist < self._last_two_hands_width * 1.5:
+                     self._was_clapping = True
+                     logger.info("[ObjectDetector] CLAP DETECTED via rapid hand merge!")
+                     tracked_hands[0].gesture = "CLAP"
+                     tracked_hands[0].gesture_newly_confirmed = True
+                     tracked_hands[0].gesture_confidence = 1.0
+            
+            # Reset dist so we don't continuously fire clap if the user keeps their hands merged
+            self._last_two_hands_dist = 9999.0
+        else:
+            self._was_clapping = False
+            self._last_two_hands_dist = 9999.0
+            self._last_two_hands_dist = 9999.0
 
         # ── Step B-0: YOLOv11 / Ultralytics Detection ────────────────────────
         if self._yolo_model is not None:
@@ -477,40 +592,50 @@ class ObjectDetector:
                 logger.debug(f"[ObjectDetector] OpenCV DNN detection error: {ex}")
 
         # ── Step C: Region Proposal Heuristic (Foreground object proposal) ──────
-        if len([o for o in objects if o.category not in ("hand", "held_item")]) == 0 and _OPENCV_AVAILABLE:
+        # Run region proposal if no non-person, non-hand objects were detected. 
+        # This allows detecting non-COCO objects (like hats or headphones) when only a "person" was found by YOLO.
+        non_person_objects = [o for o in objects if o.category not in ("hand", "held_item") and o.label != "person"]
+        if len(non_person_objects) == 0 and _OPENCV_AVAILABLE:
             try:
                 gray = cv2.cvtColor(img_np, cv2.COLOR_BGR2GRAY)
                 blur = cv2.GaussianBlur(gray, (5, 5), 0)
-                edged = cv2.Canny(blur, 40, 140)
+                edged = cv2.Canny(blur, 20, 100) # Lowered thresholds to catch softer edges
                 contours, _ = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
                 for c in contours:
                     area = cv2.contourArea(c)
-                    if (w * h * 0.015) < area < (w * h * 0.75):  # Between 1.5% and 75% frame area
+                    if (w * h * 0.005) < area < (w * h * 0.25):  # Max area 25% to prevent claiming full face/head
                         bx, by, bw, bh = cv2.boundingRect(c)
                         if bw >= 25 and bh >= 25:
-                            # Skip bounding box if it severely overlaps an already tracked hand box
-                            is_hand_overlap = False
-                            for h_data in tracked_hands:
-                                hbx = h_data.bbox.x
-                                hby = h_data.bbox.y
-                                hbw = h_data.bbox.width
-                                hbh = h_data.bbox.height
-                                if (abs(bx - hbx) < hbw * 0.6) and (abs(by - hby) < hbh * 0.6):
-                                    is_hand_overlap = True
-                                    break
-                            if is_hand_overlap:
+                            # Skip bounding box if it heavily overlaps an already tracked hand box
+                            # This prevents the hand's own edges/motion from being classified as a held object
+                            is_hand_contour = False
+                            for hand in tracked_hands:
+                                ix1 = max(bx, hand.bbox.x)
+                                iy1 = max(by, hand.bbox.y)
+                                ix2 = min(bx + bw, hand.bbox.x + hand.bbox.width)
+                                iy2 = min(by + bh, hand.bbox.y + hand.bbox.height)
+                                if ix2 > ix1 and iy2 > iy1:
+                                    inter_area = (ix2 - ix1) * (iy2 - iy1)
+                                    # If the contour is mostly inside the hand, it's just the hand's own edges
+                                    if inter_area > (bw * bh) * 0.7:
+                                        is_hand_contour = True
+                                        break
+                            if is_hand_contour:
                                 continue
-
                             cx = round(bx + bw / 2.0, 1)
                             cy = round(by + bh / 2.0, 1)
 
                             aspect = bw / float(bh)
                             if aspect > 1.4:
+                                if by < h * 0.4:
+                                    continue # Ignore wide contours at the top of the screen (e.g. headphones, ceiling lights)
                                 category_label = "display/screen/keyboard"
                             elif aspect < 0.7:
                                 category_label = "phone/bottle/cup/book"
                             else:
+                                if by < h * 0.4:
+                                    continue # Ignore squarish contours at top of screen
                                 category_label = "desktop item/object"
 
                             obj = ObjectData(
@@ -528,6 +653,88 @@ class ObjectDetector:
                                 break
             except Exception as ex:
                 logger.debug(f"[ObjectDetector] Region proposal error: {ex}")
+
+        # ── Step D: Validate Holding Items via Bounding Box Intersection ──────
+        current_holding = {"Left": False, "Right": False}
+        valid_objects = []
+        for obj in objects:
+            if obj.category in ("hand", "held_item") or obj.label == "person":
+                valid_objects.append(obj)
+                continue
+                
+            is_hallucination = False
+            is_held = False
+            holding_hand = None
+            
+            for hand in tracked_hands:
+                ix1 = max(hand.bbox.x, obj.bbox.x)
+                iy1 = max(hand.bbox.y, obj.bbox.y)
+                ix2 = min(hand.bbox.x + hand.bbox.width, obj.bbox.x + obj.bbox.width)
+                iy2 = min(hand.bbox.y + hand.bbox.height, obj.bbox.y + obj.bbox.height)
+                
+                if ix2 > ix1 and iy2 > iy1:
+                    inter_area = (ix2 - ix1) * (iy2 - iy1)
+                    hand_area = hand.bbox.width * hand.bbox.height
+                    obj_area = obj.bbox.width * obj.bbox.height
+                    
+                    # If object is >80% inside hand box, it's likely a misclassified finger/palm (hallucination)
+                    if inter_area > obj_area * 0.80:
+                        is_hallucination = True
+                        break
+                    
+                    # If intersection is at least 15% of the hand OR 25% of the object, it's a held item
+                    if inter_area > hand_area * 0.15 or inter_area > obj_area * 0.25:
+                        is_held = True
+                        holding_hand = hand.hand_label
+            
+            if not is_hallucination:
+                if is_held:
+                    current_holding[holding_hand] = True
+                    obj.validation_state = "hand_held"
+                    obj.category = "held_item"
+                valid_objects.append(obj)
+        objects = valid_objects
+        
+        for hand in tracked_hands:
+            # Static Object Inference (Association Layer)
+            if not current_holding[hand.hand_label] and hand.gesture in ["PINCH", "FIST", "OPEN_PALM"]:
+                # In Region Proposal mode, static objects are invisible. If hand is closed,
+                # use Canny edge density to infer if it's grasping a rigid object.
+                if "Region Proposal" in self._current_backend and _OPENCV_AVAILABLE:
+                    try:
+                        # Extract Hand ROI
+                        hx, hy = hand.bbox.x, hand.bbox.y
+                        hw, hh = hand.bbox.width, hand.bbox.height
+                        roi = img_np[max(0, hy):min(h, hy+hh), max(0, hx):min(w, hx+hw)]
+                        if roi.size > 0:
+                            gray_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+                            edges = cv2.Canny(gray_roi, 50, 150)
+                            edge_density = np.sum(edges > 0) / (hw * hh + 1e-5)
+                            # If significant edges exist (not just skin), infer object
+                            if edge_density > 0.08:
+                                current_holding[hand.hand_label] = True
+                                syn_obj = ObjectData(
+                                    tracking_id=track_id,
+                                    label="inferred_held_item",
+                                    confidence=0.60,
+                                    bbox=BoundingBox(x=hx, y=hy, width=hw, height=hh),
+                                    center_point=Point3D(x=hand.center_point.x, y=hand.center_point.y, z=hand.center_point.z),
+                                    category="held_item",
+                                    validation_state="inferred"
+                                )
+                                objects.append(syn_obj)
+                                track_id += 1
+                    except Exception as ex:
+                        logger.debug(f"[ObjectDetector] Static Object Inference error: {ex}")
+                        
+            # Apply temporal persistence
+            self._hand_hold_history[hand.hand_label].append(current_holding[hand.hand_label])
+            history = self._hand_hold_history[hand.hand_label]
+            # Must be holding in at least 3 of the last 5 frames
+            if sum(history) >= 3:
+                hand.holding_item = True
+            else:
+                hand.holding_item = False
 
         # Deduplicate & Sort by confidence / area
         max_det = self._cfg.get("max_detections", 10)

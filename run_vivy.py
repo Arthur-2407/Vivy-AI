@@ -129,6 +129,21 @@ except Exception as _evo_import_err:
     _evolution_orchestrator = None
 
 # ──────────────────────────────────────────────────────────────────────
+# VIVY HUB SUBSYSTEM — Ecosystem Federation & Smart Home
+# ──────────────────────────────────────────────────────────────────────
+_vivy_hub = None
+try:
+    from hub.hub_manager import VivyHub
+    _tracer.trace("MANAGER", "vivy_hub", "START")
+    _vivy_hub = VivyHub.get_instance()
+    _vivy_hub.start()
+    print("[run_vivy] Vivy Hub Ecosystem Core started.")
+    _tracer.trace("MANAGER", "vivy_hub", "END")
+except Exception as _hub_import_err:
+    print(f"[run_vivy] Vivy Hub package unavailable ({_hub_import_err}). Continuing without ecosystem federation.")
+    _vivy_hub = None
+
+# ──────────────────────────────────────────────────────────────────────
 # MULTILINGUAL INTELLIGENCE SUBSYSTEM — Language Engine integration
 # v2.0: Hybrid Language Intelligence Layer (NLLB-200 CPU + Qwen3)
 # Imported with graceful fallback: absent package = full existing behaviour.

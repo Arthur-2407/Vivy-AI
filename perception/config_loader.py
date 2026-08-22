@@ -197,6 +197,14 @@ _THIS_DIR   = os.path.dirname(os.path.abspath(__file__))
 _PROJECT_ROOT = os.path.dirname(_THIS_DIR)  # d:\Vivy
 _CONFIG_PATH  = os.path.join(_PROJECT_ROOT, "vivy_config.json")
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Test isolation flag — set to True in tests to prevent the shared-folder
+# override scan from reading real machine-local .txt files.
+# Production code must NEVER set this flag.
+# ─────────────────────────────────────────────────────────────────────────────
+_DISABLE_SHARED_OVERRIDES: bool = False
+
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Deep merge helper
@@ -252,38 +260,41 @@ def get_config() -> dict:
         _config = _deep_merge(_DEFAULTS, file_cfg)
 
         # Apply shared folder config overrides (for hot-reloading)
-        shared_dir = _config.get("paths", {}).get("shared_dir", "shared")
-        shared_path = os.path.join(_PROJECT_ROOT, shared_dir)
-        if os.path.exists(shared_path):
-            # Audio Perception Override
-            if os.path.exists(os.path.join(shared_path, "audio_perception_disable.txt")):
-                _config.setdefault("audio_perception", {})["enabled"] = False
-            elif os.path.exists(os.path.join(shared_path, "audio_perception_enable.txt")):
-                _config.setdefault("audio_perception", {})["enabled"] = True
+        # Skipped when _DISABLE_SHARED_OVERRIDES is True (test isolation).
+        if not _DISABLE_SHARED_OVERRIDES:
+            shared_dir = _config.get("paths", {}).get("shared_dir", "shared")
+            shared_path = os.path.join(_PROJECT_ROOT, shared_dir)
+            if os.path.exists(shared_path):
+                # Audio Perception Override
+                if os.path.exists(os.path.join(shared_path, "audio_perception_disable.txt")):
+                    _config.setdefault("audio_perception", {})["enabled"] = False
+                elif os.path.exists(os.path.join(shared_path, "audio_perception_enable.txt")):
+                    _config.setdefault("audio_perception", {})["enabled"] = True
 
-            # Proactivity Override
-            if os.path.exists(os.path.join(shared_path, "proactivity_disable.txt")):
-                _config.setdefault("proactivity", {})["enabled"] = False
-            elif os.path.exists(os.path.join(shared_path, "proactivity_enable.txt")):
-                _config.setdefault("proactivity", {})["enabled"] = True
+                # Proactivity Override
+                if os.path.exists(os.path.join(shared_path, "proactivity_disable.txt")):
+                    _config.setdefault("proactivity", {})["enabled"] = False
+                elif os.path.exists(os.path.join(shared_path, "proactivity_enable.txt")):
+                    _config.setdefault("proactivity", {})["enabled"] = True
 
-            # Screen Perception Override
-            if os.path.exists(os.path.join(shared_path, "screen_perception_disable.txt")):
-                _config.setdefault("screen_perception", {})["enabled"] = False
-            elif os.path.exists(os.path.join(shared_path, "screen_perception_enable.txt")):
-                _config.setdefault("screen_perception", {})["enabled"] = True
+                # Screen Perception Override
+                if os.path.exists(os.path.join(shared_path, "screen_perception_disable.txt")):
+                    _config.setdefault("screen_perception", {})["enabled"] = False
+                elif os.path.exists(os.path.join(shared_path, "screen_perception_enable.txt")):
+                    _config.setdefault("screen_perception", {})["enabled"] = True
 
-            # Vision Model Override
-            if os.path.exists(os.path.join(shared_path, "vision_model_disable.txt")):
-                _config.setdefault("screen_perception", {})["vision_model_enabled"] = False
-            elif os.path.exists(os.path.join(shared_path, "vision_model_enable.txt")):
-                _config.setdefault("screen_perception", {})["vision_model_enabled"] = True
+                # Vision Model Override
+                if os.path.exists(os.path.join(shared_path, "vision_model_disable.txt")):
+                    _config.setdefault("screen_perception", {})["vision_model_enabled"] = False
+                elif os.path.exists(os.path.join(shared_path, "vision_model_enable.txt")):
+                    _config.setdefault("screen_perception", {})["vision_model_enabled"] = True
 
-            # Adaptive Sampling Override
-            if os.path.exists(os.path.join(shared_path, "adaptive_sampling_disable.txt")):
-                _config.setdefault("screen_perception", {})["adaptive_sampling_enabled"] = False
-            elif os.path.exists(os.path.join(shared_path, "adaptive_sampling_enable.txt")):
-                _config.setdefault("screen_perception", {})["adaptive_sampling_enabled"] = True
+                # Adaptive Sampling Override
+                if os.path.exists(os.path.join(shared_path, "adaptive_sampling_disable.txt")):
+                    _config.setdefault("screen_perception", {})["adaptive_sampling_enabled"] = False
+                elif os.path.exists(os.path.join(shared_path, "adaptive_sampling_enable.txt")):
+                    _config.setdefault("screen_perception", {})["adaptive_sampling_enabled"] = True
+
 
     return _config
 

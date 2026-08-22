@@ -186,9 +186,18 @@ vivy_skill_memory.json
 cleanup_rvc.py
 patch_torch_load.py
 demo_run.py
-test_*.py
+/test_*.py
 vivy_env.py
 
 # ── RVC Generated Folders ──
 rvc_cpu/i18n/
 rvc_cpu/infer/modules/train/index/
+
+# Generated Runtime States & Backups
+data/neural_experiences.json
+vivy_knowledge_graph.json
+vivy_world_model.json
+env_audit.json
+validation_dashboard.json
+gesture_e2e_results.json
+*.bak

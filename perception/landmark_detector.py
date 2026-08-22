@@ -140,6 +140,11 @@ class LandmarkDetector:
             face.left_eye.is_blinking = (ear_l < 0.18)
             face.left_eye.pupil_center = Point3D(x=float(l_iris_x), y=float(l_iris_y), z=0.0)
 
+            # Store true relative ocular position in eye_position (0.0 to 1.0)
+            l_rel_x = (l_iris_x - min(l_outer[0], l_inner[0])) / max(1.0, horiz_l)
+            l_rel_y = (l_iris_y - min(l_top[1], l_bot[1])) / max(1.0, vert_l)
+            face.left_eye.eye_position = Point3D(x=float(l_rel_x), y=float(l_rel_y), z=0.0)
+
             # Right Eye
             r_inner = np.array([lm_list[362].x * w, lm_list[362].y * h])
             r_outer = np.array([lm_list[263].x * w, lm_list[263].y * h])
@@ -159,6 +164,10 @@ class LandmarkDetector:
             face.right_eye.eye_openness = float(min(1.0, max(0.0, ear_r / 0.35)))
             face.right_eye.is_blinking = (ear_r < 0.18)
             face.right_eye.pupil_center = Point3D(x=float(r_iris_x), y=float(r_iris_y), z=0.0)
+            
+            r_rel_x = (r_iris_x - min(r_outer[0], r_inner[0])) / max(1.0, horiz_r)
+            r_rel_y = (r_iris_y - min(r_top[1], r_bot[1])) / max(1.0, vert_r)
+            face.right_eye.eye_position = Point3D(x=float(r_rel_x), y=float(r_rel_y), z=0.0)
 
         except Exception as ex:
             logger.debug(f"[LandmarkDetector] Eye metrics extraction error: {ex}")

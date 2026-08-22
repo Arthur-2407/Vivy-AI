@@ -25,6 +25,57 @@ class BoundingBox:
 
 
 @dataclass
+class HandData:
+    """Dataclass representing a tracked hand."""
+    hand_label: str  # "Left", "Right"
+    confidence: float
+    bbox: BoundingBox
+    center_point: Point3D
+    tracking_id: int = 0
+    holding_item: bool = False
+    gesture: str = "Open Palm"  # "Open Palm", "Closed Fist", "Pinch/Holding", "Pointing"
+    gesture_phase: str = "IDLE" # IDLE, CANDIDATE, CONFIRMED, COOLDOWN
+    gesture_confidence: float = 0.0
+    gesture_newly_confirmed: bool = False
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "hand_label": self.hand_label,
+            "confidence": round(float(self.confidence), 2),
+            "bbox": self.bbox.to_dict(),
+            "center_point": self.center_point.to_dict(),
+            "holding_item": self.holding_item,
+            "gesture": self.gesture,
+            "gesture_phase": self.gesture_phase,
+            "gesture_confidence": round(float(self.gesture_confidence), 2),
+            "gesture_newly_confirmed": self.gesture_newly_confirmed,
+        }
+
+
+@dataclass
+class ObjectData:
+    """Dataclass representing a detected object in frame."""
+    tracking_id: int
+    label: str
+    confidence: float
+    bbox: BoundingBox
+    center_point: Point3D
+    category: str = "general"
+    validation_state: str = "verified"  # verified | heuristic | hand_held
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "tracking_id": self.tracking_id,
+            "label": self.label,
+            "confidence": round(float(self.confidence), 2),
+            "bbox": self.bbox.to_dict(),
+            "center_point": self.center_point.to_dict(),
+            "category": self.category,
+            "validation_state": self.validation_state,
+        }
+
+
+@dataclass
 class Point3D:
     x: float = 0.0
     y: float = 0.0
@@ -77,6 +128,7 @@ class FaceData:
     distance_estimate: float = 1.0  # meters approx
     head_pose: HeadPose = field(default_factory=HeadPose)
     landmarks_count: int = 0
+    landmarks: List[Point3D] = field(default_factory=list)
     left_eye: EyeData = field(default_factory=EyeData)
     right_eye: EyeData = field(default_factory=EyeData)
     identity: str = "Unknown"
@@ -89,6 +141,7 @@ class FaceData:
 
     source: str = "camera"
     validation_state: str = "verified"
+    missing_frames: int = 0
     latency_ms: float = 0.0
     quality: float = 1.0
     freshness: float = 1.0
@@ -102,6 +155,7 @@ class FaceData:
             "distance_estimate": round(self.distance_estimate, 2),
             "head_pose": self.head_pose.to_dict(),
             "landmarks_count": self.landmarks_count,
+            "landmarks": [p.to_dict() for p in self.landmarks],
             "left_eye": self.left_eye.to_dict(),
             "right_eye": self.right_eye.to_dict(),
             "identity": self.identity,
@@ -215,6 +269,14 @@ class PerceptionSystemState:
     gaze: GazeData = field(default_factory=GazeData)
     attention: AttentionData = field(default_factory=AttentionData)
     hardware: HardwareSchedulerState = field(default_factory=HardwareSchedulerState)
+    hand_state: Dict[str, Any] = field(default_factory=dict)
+    objects: List[ObjectData] = field(default_factory=list)
+    held_objects: List[Dict[str, Any]] = field(default_factory=list)
+    object_in_hand: bool = False
+    hand_object_confidence: float = 0.0
+    gesture_enabled: bool = True
+    gesture_state: str = "IDLE"
+    gesture_suppression_reason: Optional[str] = None
     updated_at: float = field(default_factory=time.time)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -232,6 +294,14 @@ class PerceptionSystemState:
             "gaze": self.gaze.to_dict(),
             "attention": self.attention.to_dict(),
             "hardware": self.hardware.to_dict(),
+            "hand_state": self.hand_state,
+            "objects": [o.to_dict() for o in self.objects],
+            "held_objects": self.held_objects,
+            "object_in_hand": self.object_in_hand,
+            "hand_object_confidence": round(self.hand_object_confidence, 2),
+            "gesture_enabled": self.gesture_enabled,
+            "gesture_state": self.gesture_state,
+            "gesture_suppression_reason": self.gesture_suppression_reason,
             "updated_at": self.updated_at,
         }
 

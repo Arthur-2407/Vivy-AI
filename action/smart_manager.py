@@ -114,6 +114,13 @@ _INTENT_PATTERNS: List[Dict[str, Any]] = [
                   r"(?:recommend|suggest)\s+(?:a|the\s+best|the\s+cheapest)?(.*)"],
      "source": "online_only", "risk": "LOW_RISK",
      "expected": "recommendation_given"},
+
+    # ── OBJECT IDENTIFICATION ────────────────────────────────────────────────
+    {"domain": "object", "action": "identify",
+     "patterns": [r"what\s+is\s+in\s+my\s+hand", r"what\s+am\s+i\s+holding", 
+                  r"identify\s+this\s+object", r"what\s+is\s+this"],
+     "source": "local_then_online", "risk": "LOW_RISK",
+     "expected": "object_identified"},
 ]
 
 
@@ -448,6 +455,12 @@ class SmartManager:
             if name == "shopping":
                 from action.executors.shopping_executor import get_shopping_executor
                 return get_shopping_executor().execute(intent)
+            if name == "object":
+                from action.executors.object_executor import get_object_executor
+                return get_object_executor().execute(intent)
+            if name == "system":
+                from action.executors.system_executor import get_system_executor
+                return get_system_executor().execute(intent)
         except Exception as err:
             return ActionResult(
                 success=False, domain=intent.domain, action=intent.action,

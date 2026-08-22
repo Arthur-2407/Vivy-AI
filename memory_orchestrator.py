@@ -23,6 +23,16 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MEMORY_FILE = os.path.join(BASE_DIR, "vivy_memory.json")
 
 class ModularMemoryOrchestrator:
+
+    def get_canonical_state(self) -> dict:
+        """Canonical Memory Source of Truth (Phase 2)"""
+        return {
+            "version": "1.0",
+            "active_mode": self._memory_data.get("last_director_mode", "companion"),
+            "working_memory_items": len(self._memory_data.get("temporary_states", {})),
+            "is_authoritative": True
+        }
+
     """Orchestrates structured long-term memory subsystems and retrieval."""
     _instance = None
     _lock = threading.RLock()

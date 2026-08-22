@@ -391,7 +391,7 @@ def start_mic_listening(output_txt_path=None, mic_index=None):
     # [VOICE STATE MANAGEMENT] Ensure mic does not automatically open unthrottled loop by default
     # unless auto_listen is enabled in config or user activates voice mode in UI/push-to-talk.
     try:
-        from config_manager import get_config_manager
+        from config.config_manager import get_config_manager
         _cfg = get_config_manager()
         auto_listen_enabled = _cfg.get("pipeline.auto_listen", False)
         mic_mute_path = os.path.join(BASE_DIR, "shared", "mic_mute.txt")
@@ -402,6 +402,7 @@ def start_mic_listening(output_txt_path=None, mic_index=None):
             print(Fore.YELLOW + "\n[Voice Input] Standby Mode Active (auto_listen=false). Mic is muted until toggled ON in Dashboard UI or Config.\n" + Style.RESET_ALL)
     except Exception as _al_err:
         print(f"[mic_input] Auto-listen initialization check warning: {_al_err}")
+
 
     if mic_index is None:
         mic_index = select_mic()
@@ -568,11 +569,45 @@ def start_mic_listening(output_txt_path=None, mic_index=None):
                         tmp_wav = os.path.join(RECORD_DIR, "partial_tmp.wav")
                         wav.write(tmp_wav, SAMPLE_RATE, pcm16)
                         
-                        partial_text = _stt_backend.transcribe(tmp_wav)
-                        if partial_text and partial_text != last_partial_text:
-                            last_partial_text = partial_text
-                            text_queue.put({"type": "partial", "text": partial_text})
-                    except Exception as e:
+                        # Lazy import of text_queue and stt backend to avoid NameError
+                        # from incomplete patch application (patch_mic.py was only partially applied)
+                        try:
+                            from pipeline.queues import text_queue as _partial_text_queue
+                        except Exception:
+                            _partial_text_queue = None
+
+                        # Resolve the STT backend: prefer ModelRouter speech plugin,
+                        # fall back to WhisperCLIBackend subprocess
+                        _partial_stt = None
+                        try:
+                            from perception.model_router import ModelRouter as _MR
+                            _sp = _MR.get_speech_plugin()
+                            if _sp and _sp.is_available():
+                                _partial_stt = _sp
+                        except Exception:
+                            pass
+                        if _partial_stt is None:
+                            try:
+                                from pipeline.stt import WhisperCLIBackend as _WCLIBE
+                                _partial_stt = _WCLIBE(model_path=MODEL_PATH, whisper_exe=WHISPER_PATH)
+                            except Exception:
+                                pass
+
+                        if _partial_stt is not None:
+                            raw_result = _partial_stt.transcribe(tmp_wav)
+                            # Handle both dict (ModelRouter) and str (pipeline.stt) return types
+                            if isinstance(raw_result, dict):
+                                partial_text = raw_result.get("text", "")
+                            else:
+                                partial_text = raw_result or ""
+                            if partial_text and partial_text != last_partial_text:
+                                last_partial_text = partial_text
+                                if _partial_text_queue is not None:
+                                    try:
+                                        _partial_text_queue.put_nowait({"type": "partial", "text": partial_text})
+                                    except Exception:
+                                        pass
+                    except Exception:
                         pass
 
 

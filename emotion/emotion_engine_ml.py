@@ -13,6 +13,22 @@ except ImportError:
 
 
 class EmotionEngineML:
+
+    def get_canonical_emotion_state(self, user_text: str = None, face_dict: dict = None, audio_dict: dict = None):
+        try:
+            from contracts.emotion_state import EmotionState
+            return EmotionState(
+                observed_emotion=face_dict.get("emotion", "neutral") if face_dict else "neutral",
+                inferred_emotion=self.predict_emotion(user_text) if user_text else "neutral",
+                prosodic_emotion=audio_dict.get("emotion", "neutral") if audio_dict else "neutral",
+                fused_emotion_vector={"inferred": 0.5, "observed": 0.5},
+                dominance=0.5,
+                arousal=0.5,
+                valence=0.5
+            )
+        except ImportError:
+            return None
+
     """
     Neural Emotion Prediction Engine.
     Uses zero-shot embedding distances to predict the most likely emotional state

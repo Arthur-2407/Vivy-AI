@@ -88,6 +88,8 @@ class FaceEmotionClassifier:
         self._onnx_session = None
         self._backend = "Landmark Heuristics"
         self._cfg = self._load_model_config()
+        from collections import deque
+        self._history = {}  # tracking_id -> deque
         self._init_classifier()
 
     @staticmethod
@@ -129,9 +131,24 @@ class FaceEmotionClassifier:
         # 1. HSEmotion (ResNet18 or enet)
         if backend_pref in ("auto", "hsemotion") and _HSEMOTION_AVAILABLE:
             try:
+                if _TORCH_AVAILABLE:
+                    original_load = torch.load
+                    def unsafe_load(*args, **kwargs):
+                        kwargs['weights_only'] = False
+                        return original_load(*args, **kwargs)
+                    torch.load = unsafe_load
+
                 model_name = self._cfg.get("hsemotion_model_name", "enet_b0_8_best_vgaf")
                 device_str = "cuda" if self._resolve_device() == "gpu" and torch.cuda.is_available() else "cpu"
                 self._hsemotion = HSEmotionRecognizer(model_name=model_name, device=device_str)
+                
+                # TEST INFERENCE: Catch timm incompatible checkpoint errors eagerly
+                import numpy as np
+                test_img = np.zeros((224, 224, 3), dtype=np.uint8)
+                self._hsemotion.predict_emotions(test_img, logits=False)
+                
+                if _TORCH_AVAILABLE:
+                    torch.load = original_load
                 self._backend = f"HSEmotion ({model_name} on {device_str})"
                 logger.info(f"[FaceEmotionClassifier] Initialized {self._backend} backend.")
                 return
@@ -169,8 +186,15 @@ class FaceEmotionClassifier:
         """
         if face_image is None and face_landmarks is None:
             return FacialEmotion("neutral", 0.8, 0.0, 0.1)
+            
+        tid = getattr(face_landmarks, "tracking_id", 0) if face_landmarks else 0
+        if tid not in self._history:
+            from collections import deque
+            self._history[tid] = deque(maxlen=10)
 
         img_np = self._to_numpy_bgr(face_image)
+        
+        raw_pred = None
 
         # Method 0.5: HSEmotion Model
         if getattr(self, "_hsemotion", None) is not None and img_np is not None and img_np.size > 0:
@@ -201,19 +225,36 @@ class FaceEmotionClassifier:
             try:
                 res = self._predict_from_onnx(img_np)
                 if res is not None:
-                    return res
+                    raw_pred = res
             except Exception as ex:
                 logger.debug(f"[FaceEmotionClassifier] ONNX inference failed: {ex}")
 
-        # Method 1: If landmarks are provided (e.g. from landmark detector / FaceData)
-        if face_landmarks is not None:
-            return self._predict_from_landmarks(face_landmarks)
+            # Method 1: If landmarks are provided (e.g. from landmark detector / FaceData)
+            if face_landmarks is not None:
+                raw_pred = self._predict_from_landmarks(face_landmarks)
 
-        # Method 2: Image intensity / aspect ratio / facial geometry heuristics
-        if img_np is not None and img_np.size > 0:
-            return self._predict_from_image(img_np)
-
-        return FacialEmotion("neutral", 0.8, 0.0, 0.1)
+            # Method 2: Image intensity / aspect ratio / facial geometry heuristics
+            elif img_np is not None and img_np.size > 0:
+                raw_pred = self._predict_from_image(img_np)
+        
+        if raw_pred is None:
+            raw_pred = FacialEmotion("neutral", 0.8, 0.0, 0.1)
+            
+        self._history[tid].append(raw_pred)
+        
+        # Temporal smoothing
+        labels = [p.label for p in self._history[tid]]
+        import statistics
+        try:
+            mode_label = statistics.mode(labels)
+        except statistics.StatisticsError:
+            mode_label = labels[-1]
+            
+        avg_conf = sum(p.confidence for p in self._history[tid]) / len(self._history[tid])
+        avg_val = sum(p.valence for p in self._history[tid]) / len(self._history[tid])
+        avg_aro = sum(p.arousal for p in self._history[tid]) / len(self._history[tid])
+        
+        return FacialEmotion(mode_label, avg_conf, avg_val, avg_aro)
 
     def _predict_from_onnx(self, img_np: np.ndarray) -> Optional[FacialEmotion]:
         """Run ONNX FER model on face crop."""

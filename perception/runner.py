@@ -386,22 +386,25 @@ class PerceptionRunner:
                 ):
                     return
 
-            state_update = {
-                "camera_active": True,
-                "presence_state": "User Present" if has_faces else "User Missing",
-                "face_count": len(faces),
-                "primary_face": faces[0].to_dict() if faces else None,
-                "gaze": getattr(gaze_data, "to_dict", lambda: {"eye_contact_score": 0.0, "gaze_direction": "Unknown", "eye_contact_strength": "None"})(),
-                "attention": {
-                    "attention_score": 100.0 if sustained_eye_contact else (75.0 if has_faces else 0.0),
-                    "engagement_score": 90.0 if sustained_eye_contact else 50.0,
-                    "presence_score": 100.0 if has_faces else 0.0,
-                },
-                "hardware": {
-                    "backend": self.gpu_pool.face_detector.get_backend_name() if self.gpu_pool.face_detector else "CPU",
-                    "mode": "Live Perception Active" if has_faces else "Standby Mode"
-                }
-            }
+            from perception.perception_state import PerceptionSystemState, HardwareSchedulerState, AttentionData
+            
+            p_state = PerceptionSystemState(
+                camera_active=True,
+                presence_state="User Present" if has_faces else "User Missing",
+                primary_face=faces[0] if faces else None,
+                all_faces=faces,
+                gaze=gaze_data,
+                attention=AttentionData(
+                    attention_score=100.0 if sustained_eye_contact else (75.0 if has_faces else 0.0),
+                    engagement_score=90.0 if sustained_eye_contact else 50.0,
+                    presence_score=100.0 if has_faces else 0.0,
+                ),
+                hardware=HardwareSchedulerState(
+                    backend=self.gpu_pool.face_detector.get_backend_name() if self.gpu_pool.face_detector else "CPU",
+                    mode="Live Perception Active" if has_faces else "Standby Mode"
+                )
+            )
+            state_update = p_state.to_dict()
             writer.record_face_perception_state(state_update)
             if objects is not None:
                 writer.record_object_perception_state(objects)
