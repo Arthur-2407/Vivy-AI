@@ -228,3 +228,8 @@ test_*.jpg
 test_*.png
 test_*.mp4
 test_out.jpg
+test_*.wav
+test.wav
+static/
+gesture_list.txt
+mock_unity.py

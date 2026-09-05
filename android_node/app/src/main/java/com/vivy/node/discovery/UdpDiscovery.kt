@@ -15,10 +15,12 @@ class UdpDiscovery(private val onDiscovered: (String, Int) -> Unit) {
     private var listenJob: Job? = null
     private var socket: DatagramSocket? = null
     private val PORT = 8766
+    private val discoveredSet = mutableSetOf<String>()
 
     fun startListening() {
         if (listenJob != null) return
         
+        discoveredSet.clear()
         Log.d("UdpDiscovery", "Starting UDP broadcast listener on port $PORT")
         
         listenJob = GlobalScope.launch(Dispatchers.IO) {
@@ -39,11 +41,11 @@ class UdpDiscovery(private val onDiscovered: (String, Int) -> Unit) {
                             if (parts.size >= 3) {
                                 val ip = packet.address.hostAddress
                                 val port = parts[2].toIntOrNull() ?: 8800
-                                Log.d("UdpDiscovery", "Found Vivy Hub via UDP: $ip:$port")
-                                
-                                stopListening()
-                                onDiscovered(ip, port)
-                                break
+                                val key = "$ip:$port"
+                                if (discoveredSet.add(key)) {
+                                    Log.d("UdpDiscovery", "Found Vivy Hub via UDP: $ip:$port")
+                                    onDiscovered(ip, port)
+                                }
                             }
                         }
                     } catch (e: SocketTimeoutException) {

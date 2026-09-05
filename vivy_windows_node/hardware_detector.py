@@ -182,6 +182,16 @@ def detect() -> Dict[str, Any]:
         )
         if "Bluetooth" in result.stdout:
             info["bluetooth_available"] = True
+            
+        # Detect BT PAN adapter presence and connection status
+        nic_result = subprocess.run(
+            ["wmic", "nic", "where", "Name like '%Bluetooth Device (Personal Area Network)%'", "get", "NetConnectionStatus"],
+            capture_output=True, text=True, timeout=5
+        )
+        if "2" in nic_result.stdout:
+            info["metadata"]["bt_pan_connected"] = True
+        elif nic_result.stdout.strip():
+            info["metadata"]["bt_pan_present"] = True
     except Exception:
         pass
 

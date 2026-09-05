@@ -14,6 +14,7 @@ import time
 import uuid
 import threading
 import socket
+import subprocess
 import hashlib
 import hmac
 import base64
@@ -54,8 +55,43 @@ def _get_or_create_node_id() -> str:
 
 NODE_ID = _get_or_create_node_id()
 
-# ── Hub discovery via mDNS ────────────────────────────────────────────────────
-def discover_hub_mdns(timeout: float = 10.0):
+_ENDPOINT_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".last_hub")
+
+def _get_cached_endpoint():
+    if os.path.exists(_ENDPOINT_FILE):
+        try:
+            with open(_ENDPOINT_FILE) as f:
+                parts = f.read().strip().split(":")
+                if len(parts) == 2:
+                    return parts[0], int(parts[1])
+        except Exception:
+            pass
+    return None, None
+
+def _save_cached_endpoint(host, port):
+    try:
+        with open(_ENDPOINT_FILE, "w") as f:
+            f.write(f"{host}:{port}")
+    except Exception:
+        pass
+
+def get_bt_pan_gateway() -> str:
+    """Detect Bluetooth PAN adapter and return its default gateway (likely the Hub)."""
+    try:
+        result = subprocess.run(
+            ["wmic", "nicconfig", "where", "Description like '%Bluetooth%' and IPEnabled=TRUE", "get", "DefaultIPGateway", "/value"],
+            capture_output=True, text=True, timeout=5
+        )
+        for line in result.stdout.splitlines():
+            if "DefaultIPGateway=" in line:
+                gw = line.split("=", 1)[1].strip().strip('{"}')
+                if gw:
+                    return gw
+    except Exception:
+        pass
+    return None
+
+def discover_hub_mdns(timeout: float = 6.0):
     """
     Discover the Vivy Hub on the local network using zeroconf mDNS.
     Returns (host, port) or (None, None) if not found.
@@ -92,22 +128,82 @@ def discover_hub_mdns(timeout: float = 10.0):
         print(f"[VivyNode] mDNS discovery error: {e}")
     return None, None
 
+def discover_hub_udp(timeout: float = 3.0):
+    """Listen for UDP broadcasts from the Hub (VIVY_HUB:<IP>:<PORT>)."""
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.bind(('', 8766))
+        sock.settimeout(timeout)
+        t0 = time.time()
+        while time.time() - t0 < timeout:
+            try:
+                data, addr = sock.recvfrom(1024)
+                msg = data.decode('utf-8', errors='ignore')
+                if msg.startswith("VIVY_HUB:"):
+                    parts = msg.split(":")
+                    if len(parts) >= 3:
+                        return parts[1], int(parts[2])
+            except socket.timeout:
+                pass
+    except Exception as e:
+        print(f"[VivyNode] UDP discovery error: {e}")
+    finally:
+        try:
+            sock.close()
+        except:
+            pass
+    return None, None
+
 
 def get_hub_address() -> tuple:
     """
-    Try mDNS discovery first, then fall back to manual entry.
-    Returns (host, port).
+    Try cached endpoint, then UDP discovery, then mDNS discovery,
+    then BT PAN gateway heuristic, then fall back to manual entry.
     """
-    print("[VivyNode] Discovering Vivy Hub via mDNS...")
-    host, port = discover_hub_mdns(timeout=8.0)
+    cached_host, cached_port = _get_cached_endpoint()
+    if cached_host and cached_port:
+        print(f"[VivyNode] Probing cached endpoint {cached_host}:{cached_port}...")
+        try:
+            with socket.create_connection((cached_host, cached_port), timeout=2.0):
+                print(f"[VivyNode] ✅ Cached endpoint reachable.")
+                return cached_host, cached_port
+        except Exception:
+            print("[VivyNode] Cached endpoint unreachable.")
+
+    print("[VivyNode] Discovering Vivy Hub via UDP broadcast...")
+    host, port = discover_hub_udp(timeout=4.0)
     if host and port:
-        print(f"[VivyNode] ✅ Hub discovered at {host}:{port}")
+        print(f"[VivyNode] ✅ Hub discovered via UDP at {host}:{port}")
+        _save_cached_endpoint(host, port)
         return host, port
 
-    print("[VivyNode] mDNS discovery timed out. Enter Hub address manually.")
+    print("[VivyNode] Discovering Vivy Hub via mDNS...")
+    host, port = discover_hub_mdns(timeout=6.0)
+    if host and port:
+        print(f"[VivyNode] ✅ Hub discovered via mDNS at {host}:{port}")
+        _save_cached_endpoint(host, port)
+        return host, port
+
+    print("[VivyNode] Checking for Bluetooth PAN Gateway...")
+    gw = get_bt_pan_gateway()
+    if gw:
+        print(f"[VivyNode] Probing BT PAN Gateway {gw}:8800...")
+        try:
+            with socket.create_connection((gw, 8800), timeout=2.0):
+                print(f"[VivyNode] ✅ Hub discovered via BT PAN at {gw}:8800")
+                _save_cached_endpoint(gw, 8800)
+                return gw, 8800
+        except Exception:
+            print("[VivyNode] BT PAN Gateway unreachable.")
+
+    print("[VivyNode] Discovery timed out. Enter Hub address manually.")
     host = input("  Hub IP address (e.g. 192.168.1.100): ").strip()
     port_str = input("  Hub port [8800]: ").strip() or "8800"
-    return host, int(port_str)
+    if host and port_str:
+        _save_cached_endpoint(host, int(port_str))
+        return host, int(port_str)
+    return None, None
 
 
 # ── PIN-based authentication ────────────────────────────────────────────────

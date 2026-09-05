@@ -16,6 +16,7 @@ class BleDiscovery(private val context: Context, private val onDiscovered: (Stri
     private val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
     private val adapter: BluetoothAdapter? = bluetoothManager.adapter
     private var isScanning = false
+    private val discoveredSet = mutableSetOf<String>()
 
     private val scanCallback = object : ScanCallback() {
         @SuppressLint("MissingPermission")
@@ -30,8 +31,11 @@ class BleDiscovery(private val context: Context, private val onDiscovered: (Stri
                     if (parts.size >= 3) {
                         val ip = parts[1]
                         val port = parts[2].toIntOrNull() ?: 8800
-                        stopScan()
-                        onDiscovered(ip, port)
+                        val key = "$ip:$port"
+                        if (discoveredSet.add(key)) {
+                            Log.d("BleDiscovery", "Found VivyHub via BLE: $ip:$port")
+                            onDiscovered(ip, port)
+                        }
                     }
                 }
             }
@@ -56,6 +60,7 @@ class BleDiscovery(private val context: Context, private val onDiscovered: (Stri
             }
         }
         
+        discoveredSet.clear()
         Log.d("BleDiscovery", "Starting BLE scan for Hub")
         isScanning = true
         val scanner = adapter.bluetoothLeScanner
@@ -83,6 +88,12 @@ class BleDiscovery(private val context: Context, private val onDiscovered: (Stri
         if (!isScanning) return
         isScanning = false
         try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                if (androidx.core.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.BLUETOOTH_SCAN) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                    Log.w("BleDiscovery", "Missing BLUETOOTH_SCAN permission. Cannot safely stop scan.")
+                    return
+                }
+            }
             adapter?.bluetoothLeScanner?.stopScan(scanCallback)
             Log.d("BleDiscovery", "Stopped BLE scan")
         } catch (e: SecurityException) {

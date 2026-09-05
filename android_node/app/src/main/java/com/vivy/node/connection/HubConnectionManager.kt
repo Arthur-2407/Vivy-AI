@@ -2,10 +2,8 @@ package com.vivy.node.connection
 
 import android.util.Log
 import com.vivy.node.security.CredentialManager
-import okhttp3.*
 import org.json.JSONObject
 import java.util.UUID
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,14 +12,29 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import com.vivy.node.transport.Transport
-import com.vivy.node.transport.WiFiTransport
 import com.vivy.node.transport.TransportListener
+import com.vivy.node.transport.TransportStatus
 
 enum class ConnectionState {
     DISCONNECTED, DISCOVERING, DISCOVERY_FAILED, TRANSPORT_SWITCHING, CONNECTING, CONNECTION_FAILED, AUTHENTICATING, PAIRING_REQUIRED, AUTH_FAILED, CONNECTED
 }
 
 class HubConnectionManager(private val credentialManager: CredentialManager) : TransportListener {
+    /**
+     * Called when the active transport disconnects or fails.
+     * Set by TransportManager after construction to avoid circular dependency.
+     * The lambda should trigger transport failover logic.
+     */
+    var onTransportLost: (() -> Unit)? = null
+
+    /** Expose available transports from TransportManager for UI consumption. */
+    private val _availableTransports = MutableStateFlow<List<TransportStatus>>(emptyList())
+    val availableTransports: StateFlow<List<TransportStatus>> = _availableTransports
+
+    fun updateAvailableTransports(statuses: List<TransportStatus>) {
+        _availableTransports.value = statuses
+    }
+
     private var currentTransport: Transport? = null
     
     private val _activeTransportName = MutableStateFlow<String?>(null)
@@ -32,6 +45,9 @@ class HubConnectionManager(private val credentialManager: CredentialManager) : T
 
     private val _state = MutableStateFlow(ConnectionState.DISCONNECTED)
     val state: StateFlow<ConnectionState> = _state
+
+    /** True when the connection is in CONNECTED state. Used by health monitor. */
+    fun isConnected(): Boolean = _state.value == ConnectionState.CONNECTED
 
     private val _pairingCode = MutableStateFlow<String?>(null)
     val pairingCode: StateFlow<String?> = _pairingCode
@@ -49,7 +65,7 @@ class HubConnectionManager(private val credentialManager: CredentialManager) : T
 
     private var currentHost: String? = null
 
-    fun connect(host: String, port: Int, transport: Transport = WiFiTransport()) {
+    fun connect(host: String, port: Int, transport: Transport) {
         if (_state.value == ConnectionState.CONNECTED && currentTransport?.name == transport.name) return
 
         currentTransport?.disconnect()
@@ -155,26 +171,46 @@ class HubConnectionManager(private val credentialManager: CredentialManager) : T
 
     override fun onDisconnected(transportName: String) {
         Log.d("Connection", "Closed: $transportName")
-        _state.value = ConnectionState.DISCONNECTED
-        
-        // Fail any pending requests
+
+        // Fail any pending requests immediately so feature callers get an error
         pendingRequests.values.forEach { it.resumeWithException(Exception("$transportName closed")) }
         pendingRequests.clear()
-        
+
         if (currentTransport?.name == transportName) {
             _activeTransportName.value = null
+        }
+
+        // Trigger transport failover rather than just going to DISCONNECTED.
+        // TransportManager will set TRANSPORT_SWITCHING and try alternate paths.
+        // If no alternate is available it will call setDiscoveryFailed / discoverAndConnect.
+        val failoverHandler = onTransportLost
+        if (failoverHandler != null) {
+            Log.i("Connection", "Transport lost — attempting failover")
+            failoverHandler()
+        } else {
+            _state.value = ConnectionState.DISCONNECTED
         }
     }
 
     override fun onConnectionFailed(transportName: String, error: Throwable) {
-        Log.e("Connection", "Error on $transportName", error)
-        _state.value = ConnectionState.CONNECTION_FAILED
-        
-        pendingRequests.values.forEach { it.resumeWithException(Exception("$transportName failure: ${error.message}")) }
+        Log.e("Connection", "Error on $transportName: ${error.message}")
+
+        pendingRequests.values.forEach {
+            it.resumeWithException(Exception("$transportName failure: ${error.message}"))
+        }
         pendingRequests.clear()
-        
+
         if (currentTransport?.name == transportName) {
             _activeTransportName.value = null
+        }
+
+        // Attempt failover on connection failure, same as on disconnect
+        val failoverHandler = onTransportLost
+        if (failoverHandler != null) {
+            Log.i("Connection", "Connection failed — attempting failover")
+            failoverHandler()
+        } else {
+            _state.value = ConnectionState.CONNECTION_FAILED
         }
     }
 
