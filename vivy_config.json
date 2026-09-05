@@ -269,10 +269,22 @@
 
     "telemetry_events": true,
 
+
     "action_risk_classes": {
       "LOW_RISK":    ["browsing", "searching", "opening", "reading", "filtering", "find", "list"],
       "MEDIUM_RISK": ["downloading", "modifying_files", "changing_settings", "sending_messages"],
       "HIGH_RISK":   ["deleting", "purchasing", "financial_transactions", "account_changes", "irreversible"]
     }
+  },
+
+  "hub": {
+    "_comment": "Vivy Hub & Distributed Ecosystem — Cross-device federation, capability leasing, and smart home gateway.",
+    "enabled":            true,
+    "port":               8800,
+    "require_pin":        true,
+    "key_rotation_hours": 24,
+    "max_nodes":          5,
+    "lease_timeout_s":    300,
+    "disable_discovery":  false
   }
 }

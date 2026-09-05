@@ -6265,6 +6265,7 @@
                 if (data.success && data.preview_url) {
                     // Force cache bust to ensure new audio loads if previewing same name
                     audioPlayer.src = data.preview_url + "&t=" + new Date().getTime();
+                    audioPlayer.load();
                     playerContainer.style.display = 'block';
                     audioPlayer.play().catch(e => console.warn("Autoplay prevented:", e));
                 } else {
@@ -6305,11 +6306,36 @@
                 if (data.success) {
                     statusEl.innerText = "Generation complete. Playing...";
                     statusEl.style.color = "var(--accent-green)";
-                    player.src = data.preview_url;
+                    // [FIX] Add cache-busting timestamp so the browser always fetches the fresh audio file.
+                    // Setting src resets the media element. Calling load() explicitly ensures the browser
+                    // discards any previously buffered audio and starts fetching the new file immediately.
+                    // We then wait for the 'canplay' event before calling play() — calling play() synchronously
+                    // right after load() races against the buffer and triggers "play request interrupted" errors.
+                    // A one-shot canplay listener is the correct pattern for programmatic audio src switching.
+                    player.src = data.preview_url + "&t=" + new Date().getTime();
+                    player.load();
                     player.style.display = 'block';
                     btnStop.style.display = 'block';
                     btnGen.innerText = "Regenerate Preview";
-                    player.play();
+                    // One-shot canplay listener: auto-play once enough data is buffered
+                    const onCanPlay = () => {
+                        player.removeEventListener('canplay', onCanPlay);
+                        clearTimeout(canPlayTimeout);
+                        player.play().catch(e => {
+                            console.warn("[VoicePreview] Autoplay prevented:", e);
+                            statusEl.innerText = "Ready to play — click the player bar below.";
+                            statusEl.style.color = "var(--accent-cyan)";
+                        });
+                    };
+                    player.addEventListener('canplay', onCanPlay);
+                    // Safety fallback: if canplay never fires (network issue), show hint after 8s
+                    const canPlayTimeout = setTimeout(() => {
+                        player.removeEventListener('canplay', onCanPlay);
+                        if (player.paused) {
+                            statusEl.innerText = "Click the player bar to play.";
+                            statusEl.style.color = "var(--accent-cyan)";
+                        }
+                    }, 8000);
                 } else {
                     statusEl.innerText = "Error: " + (data.error || "Unknown failure");
                     statusEl.style.color = "var(--accent-pink)";

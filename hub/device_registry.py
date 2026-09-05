@@ -53,3 +53,17 @@ class DeviceRegistry:
                 if getattr(d, capability_flag, False):
                     results.append(d)
             return results
+
+    def unregister_device(self, device_id: str) -> bool:
+        """Remove a device profile on disconnect or revocation."""
+        with self._lock:
+            if device_id in self._devices:
+                del self._devices[device_id]
+                print(f"[DeviceRegistry] Unregistered device: {device_id}")
+                return True
+            return False
+
+    def get_device_ids(self) -> List[str]:
+        """Return all currently registered device IDs."""
+        with self._lock:
+            return list(self._devices.keys())

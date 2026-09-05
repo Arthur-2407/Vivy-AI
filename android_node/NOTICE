@@ -1,0 +1,35 @@
+Vivy Node (Android Client)
+Copyright 2026 Satyajeet Aich
+
+This product includes software developed by third parties.
+The following sets forth attribution notices for third party software that may be contained in portions of the Vivy Node repository.
+
+-------------------------------------------------------------------------------
+1. ANDROID / KOTLIN DEPENDENCIES
+-------------------------------------------------------------------------------
+
+Android Jetpack / AndroidX Libraries
+Copyright (c) The Android Open Source Project
+Licensed under the Apache License, Version 2.0.
+
+Kotlin
+Copyright (c) 2010-2023 JetBrains s.r.o.
+Licensed under the Apache License, Version 2.0.
+
+-------------------------------------------------------------------------------
+2. NETWORKING AND MEDIA DEPENDENCIES
+-------------------------------------------------------------------------------
+
+OkHttp
+Copyright (c) 2019 Square, Inc.
+Licensed under the Apache License, Version 2.0.
+
+Coil
+Copyright (c) 2019 Coil Contributors
+Licensed under the Apache License, Version 2.0.
+
+JSON (org.json)
+Copyright (c) 2002 JSON.org
+Licensed under the JSON License.
+
+-------------------------------------------------------------------------------

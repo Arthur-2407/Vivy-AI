@@ -1,0 +1,17 @@
+buildscript {
+    val kotlin_version = "2.0.20"
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.7.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    }
+}
+
+plugins {
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.20" apply false
+}

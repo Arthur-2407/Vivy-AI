@@ -1,0 +1,103 @@
+Vivy AI
+Copyright 2026 Satyajeet Aich
+
+This product includes software developed by third parties.
+The following sets forth attribution notices for third party software that may be contained in portions of the Vivy AI repository.
+
+-------------------------------------------------------------------------------
+1. PYTHON / MACHINE LEARNING DEPENDENCIES
+-------------------------------------------------------------------------------
+
+PyTorch, TorchVision, TorchAudio
+Copyright (c) 2016- Facebook, Inc (Adam Paszke)
+Copyright (c) 2014- Facebook, Inc (Soumith Chintala)
+Copyright (c) 2011-2014 Idiap Research Institute (Ronan Collobert)
+Copyright (c) 2012-2014 Deepmind Technologies (Koray Kavukcuoglu)
+Licensed under the BSD-style license.
+
+Whisper.cpp (ggerganov/whisper.cpp)
+Copyright (c) 2023 Georgi Gerganov
+Licensed under the MIT License.
+
+Coqui TTS
+Copyright (c) Coqui GmbH
+Licensed under the Mozilla Public License 2.0.
+
+NumPy
+Copyright (c) 2005-2023, NumPy Developers.
+Licensed under the BSD-style license.
+
+SciPy
+Copyright (c) 2001-2002 Enthought, Inc. 
+Copyright (c) 2003-2023, SciPy Developers.
+Licensed under the BSD-style license.
+
+Librosa
+Copyright (c) 2013--2023, librosa development team.
+Licensed under the ISC License.
+
+OpenCV-Python
+Copyright (C) 2000-2023, Intel Corporation, all rights reserved.
+Licensed under the Apache License, Version 2.0.
+
+Ultralytics YOLO (yolo11n.pt)
+Copyright (c) 2023 Ultralytics
+Licensed under the AGPL-3.0 License.
+
+FAISS
+Copyright (c) Meta Platforms, Inc. and affiliates.
+Licensed under the MIT License.
+
+-------------------------------------------------------------------------------
+2. ANDROID / HUB DEPENDENCIES
+-------------------------------------------------------------------------------
+
+Android Jetpack / AndroidX Libraries
+Copyright (c) The Android Open Source Project
+Licensed under the Apache License, Version 2.0.
+
+Gradle
+Copyright (c) 2007-2023 Gradle, Inc.
+Licensed under the Apache License, Version 2.0.
+
+Kotlin
+Copyright (c) 2010-2023 JetBrains s.r.o.
+Licensed under the Apache License, Version 2.0.
+
+-------------------------------------------------------------------------------
+3. UNITY / MATE-ENGINE DEPENDENCIES
+-------------------------------------------------------------------------------
+
+UniGLTF / VRM / VRM10
+Copyright (c) 2018 VRM Consortium
+Licensed under the MIT License.
+
+DiscordRPC
+Copyright (c) 2017 Lachee
+Licensed under the MIT License.
+
+Poiyomi Toon Shader (com.poiyomi.toon)
+Copyright (c) 2023 Poiyomi
+Licensed under the MIT License.
+
+lilToon (jp.lilxyzw.liltoon)
+Copyright (c) 2020-2023 lilxyzw
+Licensed under the MIT License.
+
+Steamworks.NET
+Copyright (c) 2013-2023 Riley Labrecque
+Licensed under the MIT License.
+
+LLMUnity
+Copyright (c) 2023 undreamai
+Licensed under the MIT License.
+
+-------------------------------------------------------------------------------
+4. EMBEDDED REPOSITORIES
+-------------------------------------------------------------------------------
+
+Retrieval-based-Voice-Conversion-WebUI
+Copyright (c) 2023 RVC-Project
+Licensed under the MIT License.
+
+-------------------------------------------------------------------------------

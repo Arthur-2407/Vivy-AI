@@ -73,3 +73,23 @@ class LeaseManager:
             for lease in self._leases.values():
                 if lease.status == "active" and now > lease.expires_at:
                     lease.status = "expired"
+
+    def revoke_all_for_device(self, device_id: str) -> int:
+        """Revoke all active leases for a given requester device (e.g. on disconnect).
+        Returns the number of leases revoked."""
+        with self._lock:
+            count = 0
+            for lease in self._leases.values():
+                if lease.status == "active" and lease.requester_device_id == device_id:
+                    lease.status = "cancelled"
+                    count += 1
+                    print(f"[LeaseManager] Revoked lease {lease.lease_id} (device disconnect: {device_id})")
+            return count
+
+    def get_active_leases_for_device(self, device_id: str) -> list:
+        """Return all currently active leases for a given requester device."""
+        with self._lock:
+            return [
+                lease for lease in self._leases.values()
+                if lease.status == "active" and lease.requester_device_id == device_id
+            ]

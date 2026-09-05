@@ -201,3 +201,30 @@ env_audit.json
 validation_dashboard.json
 gesture_e2e_results.json
 *.bak
+
+# ── Android & Gradle (Generated & Local Files) ──
+android_node/.gradle/
+android_node/.idea/
+android_node/build/
+android_node/app/build/
+android_node/local.properties
+android_node/logcat.txt
+android_node/stacktrace.txt
+android_node/gradle.zip
+android_node/gradle-8.2/
+
+# ── Certificates, Keys & Local Credentials ──
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*credentials*.json
+*token*.json
+
+# ── Temporary Media & Test Outputs ──
+test_*.jpg
+test_*.png
+test_*.mp4
+test_out.jpg

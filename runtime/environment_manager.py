@@ -286,7 +286,7 @@ class RuntimeManager:
         print("  Vivy Runtime Environment Diagnostics")
         print("=" * 60)
         for env_id, env_info in self.registry.items():
-            status = "✓ AVAILABLE" if env_info.is_available else "✗ MISSING"
+            status = "[OK] AVAILABLE" if env_info.is_available else "[FAIL] MISSING"
             print(f"  [{env_id:10s}] {status}")
             print(f"              Path  : {env_info.python_executable}")
             print(f"              Owners: {', '.join(env_info.owner)}")

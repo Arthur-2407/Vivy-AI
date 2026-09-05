@@ -229,13 +229,13 @@ class FaceEmotionClassifier:
             except Exception as ex:
                 logger.debug(f"[FaceEmotionClassifier] ONNX inference failed: {ex}")
 
-            # Method 1: If landmarks are provided (e.g. from landmark detector / FaceData)
-            if face_landmarks is not None:
-                raw_pred = self._predict_from_landmarks(face_landmarks)
+        # Method 1: If landmarks are provided (e.g. from landmark detector / FaceData)
+        if raw_pred is None and face_landmarks is not None:
+            raw_pred = self._predict_from_landmarks(face_landmarks)
 
-            # Method 2: Image intensity / aspect ratio / facial geometry heuristics
-            elif img_np is not None and img_np.size > 0:
-                raw_pred = self._predict_from_image(img_np)
+        # Method 2: Image intensity / aspect ratio / facial geometry heuristics
+        elif raw_pred is None and img_np is not None and img_np.size > 0:
+            raw_pred = self._predict_from_image(img_np)
         
         if raw_pred is None:
             raw_pred = FacialEmotion("neutral", 0.8, 0.0, 0.1)

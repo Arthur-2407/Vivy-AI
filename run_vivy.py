@@ -130,18 +130,28 @@ except Exception as _evo_import_err:
 
 # ──────────────────────────────────────────────────────────────────────
 # VIVY HUB SUBSYSTEM — Ecosystem Federation & Smart Home
+# Enabled/port controlled via vivy_config.json hub.enabled / hub.port
 # ──────────────────────────────────────────────────────────────────────
 _vivy_hub = None
 try:
-    from hub.hub_manager import VivyHub
-    _tracer.trace("MANAGER", "vivy_hub", "START")
-    _vivy_hub = VivyHub.get_instance()
-    _vivy_hub.start()
-    print("[run_vivy] Vivy Hub Ecosystem Core started.")
-    _tracer.trace("MANAGER", "vivy_hub", "END")
+    from config.config_manager import get_config_manager as _hub_cfg_get
+    _hub_cfg = _hub_cfg_get()
+    _hub_enabled = _hub_cfg.get("hub.enabled", True)
+    _hub_port = int(_hub_cfg.get("hub.port", 8800))
+    _hub_disable_discovery = bool(_hub_cfg.get("hub.disable_discovery", False))
+    if _hub_enabled:
+        from hub.hub_manager import VivyHub
+        _tracer.trace("MANAGER", "vivy_hub", "START")
+        _vivy_hub = VivyHub.get_instance()
+        _vivy_hub.start(port=_hub_port, disable_discovery=_hub_disable_discovery)
+        print(f"[run_vivy] Vivy Hub Ecosystem Core started on port {_hub_port}.")
+        _tracer.trace("MANAGER", "vivy_hub", "END")
+    else:
+        print("[run_vivy] Vivy Hub disabled by configuration (hub.enabled=false).")
 except Exception as _hub_import_err:
     print(f"[run_vivy] Vivy Hub package unavailable ({_hub_import_err}). Continuing without ecosystem federation.")
     _vivy_hub = None
+
 
 # ──────────────────────────────────────────────────────────────────────
 # MULTILINGUAL INTELLIGENCE SUBSYSTEM — Language Engine integration

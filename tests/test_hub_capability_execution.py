@@ -12,7 +12,7 @@ class TestHubCapabilityExecution(unittest.IsolatedAsyncioTestCase):
         self.hub._is_running = False
         if self.hub.ws_server._thread:
             self.hub.ws_server.stop()
-        self.hub.start(disable_discovery=True, port=8800)
+        self.hub.start(disable_discovery=True, port=8801)
         await asyncio.sleep(0.5)
 
     async def asyncTearDown(self):
@@ -39,7 +39,7 @@ class TestHubCapabilityExecution(unittest.IsolatedAsyncioTestCase):
         self.hub.registry.register_device(node_profile)
         
         print("--- Connecting Node ---")
-        conn = NodeConnection("127.0.0.1", 8800, node_id, session_key)
+        conn = NodeConnection("127.0.0.1", 8801, node_id, session_key)
         await conn.connect()
         
         print("--- Requesting Capability ---")

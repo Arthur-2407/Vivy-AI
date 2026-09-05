@@ -1196,12 +1196,99 @@ def get_cognitive_state():
         "screen_impact_shake": shake_impact
     })
 
+@app.route("/api/memory", methods=["GET"])
+def get_memory():
+    mem = load_memory()
+    return jsonify({
+        "success": True,
+        "facts": mem.get("long_term_facts", {}),
+        "recent_episodes": mem.get("growth_diary", []),
+        "topic": mem.get("current_topic", "general"),
+        "symptoms": mem.get("active_symptoms", [])
+    })
+
 @app.route("/api/health", methods=["GET"])
 def get_health():
     tm = get_telemetry_manager()
     return jsonify(tm.get_health_status())
 
 
+def remote_node_auth_guard(min_trust: str = "AUTHENTICATED") -> bool:
+    """
+    Validates that a request arriving from the LAN carries a valid Hub session.
+    Returns True if the caller is localhost OR has a valid X-Node-Session header.
+    This guard does NOT alter existing behaviour for localhost callers.
+    Fault class: Recoverable.
+    """
+    from flask import request as _req
+    remote_addr = _req.remote_addr or ""
+    # Localhost is always allowed
+    if remote_addr in ("127.0.0.1", "::1", "localhost"):
+        return True
+    session_key = _req.headers.get("X-Node-Session", "")
+    if not session_key:
+        return False
+    # Validate session_key against Hub's WebSocket session store
+    try:
+        from hub.transport.websocket_server import VivyWebSocketServer
+        server = VivyWebSocketServer.get_instance() if hasattr(VivyWebSocketServer, "get_instance") else None
+        if server and hasattr(server, "_sessions"):
+            if session_key in server._sessions:
+                return True
+    except Exception:
+        pass
+    return False
+
+
+@app.route("/api/hub/nodes", methods=["GET"])
+def get_hub_nodes():
+    """Return the list of all currently connected Vivy Nodes and their hardware profiles."""
+    try:
+        from hub.device_registry import DeviceRegistry
+        registry = DeviceRegistry.get_instance()
+        devices = registry.list_devices()
+        result = []
+        for d in devices:
+            result.append({
+                "device_id": d.device_id,
+                "platform": getattr(d, "platform", d.device_type),
+                "role": d.role.value,
+                "trust_level": d.trust_level.value,
+                "os": d.operating_system,
+                "cpu_cores": d.cpu_cores,
+                "gpu_available": d.gpu_available,
+                "ram_mb": d.ram_mb,
+                "vram_mb": d.vram_mb,
+                "camera": d.camera_available,
+                "mic": d.mic_available,
+                "speaker": d.speaker_available,
+                "gps": getattr(d, "gps_available", False),
+                "bluetooth": getattr(d, "bluetooth_available", False),
+                "battery_pct": getattr(d, "battery_pct", 100.0),
+                "app_version": getattr(d, "app_version", "unknown"),
+                "protocol_version": getattr(d, "protocol_version", "1.0"),
+                "capabilities": d.permissions,
+                "sensors": d.sensors,
+            })
+        return jsonify({"success": True, "nodes": result, "count": len(result)})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e), "nodes": []}), 500
+
+
+@app.route("/api/session/state", methods=["GET"])
+def get_session_state():
+    """Expose active session info for cross-device conversation continuity."""
+    try:
+        from session_manager import get_session_manager
+        session = get_session_manager().get_active_session()
+        return jsonify({
+            "success": True,
+            "session_id": getattr(session, "session_id", "unknown"),
+            "conversation_id": getattr(session, "conversation_id", "unknown"),
+            "turn_count": len(getattr(session, "display_history", [])),
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 @app.route("/api/telemetry", methods=["GET"])
@@ -2719,7 +2806,11 @@ def serve_voice_preview_audio_api():
             if os.path.exists(fallback_path):
                 preview_path = fallback_path
         if os.path.exists(preview_path):
-            return send_file(preview_path, as_attachment=False)
+            # [FIX] Prevent browser caching so fresh audio is always fetched after each generation.
+            response = send_file(preview_path, as_attachment=False, max_age=0)
+            response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+            response.headers["Pragma"] = "no-cache"
+            return response
         return jsonify({"success": False, "error": "Preview audio file not found on disk."}), 404
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
@@ -3623,7 +3714,7 @@ if __name__ == "__main__":
     monitor_thread = threading.Thread(target=monitor_pipeline, daemon=True)
     monitor_thread.start()
     
-    # Run web server
+    # Determine bind host and port
     default_port = int(os.getenv("VIVY_WEB_PORT", str(8000 + 80)))
     default_host = os.getenv("VIVY_WEB_HOST", "127.0.0.1")
     try:
@@ -3631,8 +3722,16 @@ if __name__ == "__main__":
         cfg = get_config_manager()
         host = cfg.get("network.web_server_host", cfg.get("server.host", default_host))
         port = int(cfg.get("network.web_server_port", cfg.get("server.web_port", default_port)))
+        hub_enabled = cfg.get("hub.enabled", False)
+        # Ensure Flask is strictly bound to localhost for security.
+        # Remote nodes must use the authenticated Vivy Hub WebSocket proxy on port 8800.
+        if host == "0.0.0.0":
+            print("[web_server] Warning: Refusing to bind Flask to 0.0.0.0. Enforcing 127.0.0.1.")
+            host = "127.0.0.1"
     except Exception:
         host = default_host
         port = default_port
+        hub_enabled = False
     app.run(host=host, port=port, debug=False)
+
 

@@ -456,6 +456,86 @@ Intent (from LLM or Gesture)
 
 ### 🌍 Vivy Hub & Distributed Ecosystem (`hub/`) 🟡
 
+The Vivy Hub transforms the local runtime into a distributed intelligence platform. The host acts as the primary orchestrator; edge devices (Windows, Android, etc.) connect as **Vivy Nodes**.
+
+**Distributed Architecture Model:**
+
+```text
+                 ONE VIVY
+                    │
+               PRIMARY HOST
+                    │
+                 VIVY HUB
+                    │
+        ┌───────────┼───────────┐
+        │           │           │
+     Android     Windows     Other Node
+       Node        Node
+        │           │
+ local hardware   local hardware
+        │           │
+        └───────────┼───────────┘
+                    │
+             dynamic routing
+                    │
+          canonical Vivy services
+```
+
+- Heavy computation remains on appropriate capable providers (e.g., primary host GPU).
+- Edge devices contribute hardware/capabilities (mic, camera, display).
+- Global Vivy state remains canonical.
+- Provider selection is dynamic based on leases and capabilities.
+- Transport is decoupled below the feature layer.
+- Security remains centralized.
+
+**Mandatory Transport Table:**
+
+| Transport | Discovery | Connection | Authentication | Encryption | Bandwidth | Latency | Android | Windows | Failover | Current Status |
+|---|---|---|---|---|---|---|---|---|---|---|
+| **Fast Reconnect** | Cached Endpoint | WebSocket | PIN / Keystore | WSS / TLS (Pending) | High | Low | ✅ | ⚪ | Fallback to mDNS | INTEGRATED |
+| **mDNS / Wi-Fi** | ZeroConf `_vivy._tcp` | WebSocket | PIN / Keystore | WSS / TLS (Pending) | High | Low | ✅ | ✅ | Fallback to UDP/BLE | INTEGRATED |
+| **UDP Broadcast** | UDP Port | WebSocket | PIN / Keystore | WSS / TLS (Pending) | High | Low | ✅ | ⚪ | Fallback to BLE | PARTIAL |
+| **Bluetooth (PAN/SPP)**| BLE Advert. | RFCOMM/PAN | Pairing | Native BT | Med | Med | ⚪ | ⚪ | N/A | PLANNED / NOT CURRENTLY IMPLEMENTED |
+
+**Android Node Status:**
+- **Hub Discovery:** Fast Reconnect (Cache) + mDNS + UDP + BLE concurrent fallbacks. (IMPLEMENTED)
+- **Pairing:** PIN-based cryptographic persistent identity. (IMPLEMENTED)
+- **Microphone / Voice:** Chunks streamed via Hub to canonical RVC backend. (IMPLEMENTED)
+- **Screen Sharing:** HTTP out-of-band frames via Flask (Port 5000). (PARTIAL)
+- **Avatar:** HTTP out-of-band frames via Flask (Port 5000). (PARTIAL)
+- **Security:** Strict `RECORD_AUDIO` permission checks. Capability leases verified on Hub. (IMPLEMENTED)
+
+**Windows Node Status:**
+- **Startup Flow:** Hardware detection → Resource detection → Capability registration → Hub discovery → Authentication → Feature access.
+- **Dynamic Resources:** Detects CPU, RAM, GPU, and VRAM automatically without hardcoding. (IMPLEMENTED)
+
+**Mandatory Feature Status Table:**
+
+| Feature | Canonical Owner | Current Backend | Hub Route | Capability | Lease | Provider | Fallback | Android | Windows Node | Streaming | Security | Privacy | Implementation Status | Real Test Status |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Voice Identity | `voice_database.py` | RVC (Primary GPU) | `/api/voice` (via Hub) | `voice.stream` | Node Lease | Primary Host | Default TTS | ✅ | ✅ | Yes | Auth Gate | Local Only | IMPLEMENTED | Verified |
+| Screen Share | `screen_pipeline.py` | Flask Server (Port 5000) | `vision.screen_capture` | `vision.screen` | Node Lease | Primary Host | None | 🟡 | ⚪ | OOB HTTP | Token Auth | Opt-in | PARTIAL | Out-of-band HTTP |
+| Avatar Render | `avatar_bridge.py` | MateEngine (Port 8765) | `avatar.status` | `display.avatar` | Node Lease | Primary Host | Placeholder | 🟡 | ⚪ | OOB HTTP | Token Auth | Local Only | PARTIAL | Out-of-band HTTP |
+| AGI Cognition | `blackboard.py` | Qwen3-8B (Primary GPU) | WebSocket | `cognition` | Implicit | Primary Host | CPU-LLM | ✅ | ✅ | Token | Auth Gate | Local Only | IMPLEMENTED | Verified |
+| Memory Sync | `sync_manager.py` | `memory_orchestrator.py` | WebSocket | `memory.sync` | Node Lease | Primary Host | Local Cache | 🟡 | 🟡 | Event | Auth Gate | Local Only | PARTIAL (Stubbed) | Conflict resolution pending |
+
+**Feature Routing (How a request flows):**
+Every feature on a remote node routes dynamically to the canonical backend:
+*Example: Android Camera Request*
+`Android Node` → `Hub` → requests `vision.camera` capability → `lease granted` → `Primary Host Perception Provider` → `Canonical Perception Engine` → `Result` → `Android UI`.
+
+**Mandatory Resource Table (Resource Governance):**
+The Hub dynamically manages workloads based on reported hardware constraints. 
+
+| Node | CPU | GPU | VRAM | RAM | Storage | Camera | Mic | Display | Network | Other Hardware | Registered Capabilities | Provider Role |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| **Primary Host** | i7/i9 | RTX 4080 | 16GB+ | 64GB | 1TB NVMe | Yes | Yes | Main Display | Gigabit LAN | VR Headset | `vision`, `voice`, `llm`, `rvc` | Primary Compute |
+| **Android Node** | ARM SoC| Adreno | Shared | 4GB+ | 64GB Flash | Yes | Yes | Mobile Touch | Wi-Fi 6 | GPS | `audio.stream`, `vision.stream` | Edge Sensor / UI |
+| **Windows Node** | Core i5| Intel Iris | Shared | 16GB | 512GB SSD | Yes | Yes | Laptop Screen| Wi-Fi 6 | None | `action.system`, `audio` | Secondary Actor |
+
+> [!NOTE]
+> True dynamic workload migration (e.g., offloading LLM inference to a node) is ⚪ PLANNED. Currently, heavy compute remains hard-pinned to the Primary Host, with nodes acting as sensors and displays.
+
 The Vivy Hub transforms the local runtime into a distributed intelligence platform. The host acts as the primary orchestrator; edge devices (phones, tablets, smart hubs) connect as **Vivy Nodes**.
 
 **Single Vivy Identity Model:**
@@ -1406,7 +1486,7 @@ The web server exposes **60+ REST API endpoints**. All endpoints are bound to `1
 | `/api/screen/start` | POST | Write | Initiate screen sharing |
 | `/api/memory` | GET | Read | Inspect long-term memory |
 | `/api/evolution/status` | GET | Read | Self-evolution engine state |
-| `/api/voice/identities` | GET | Read | List all registered voice identities |
+| `/api/voice` (via Hub Capability) | GET | Read | List all registered voice identities |
 | `/api/voice/train` | POST | **Privileged** | Enqueue a voice cloning training job |
 | `/api/voice/training_status` | GET | Read | Live training progress and hardware metrics |
 | `/api/voice/switch` | POST | Write | Hot-swap active voice identity |
@@ -1604,7 +1684,18 @@ The threshold values are configurable via `vivy_config.json → resources`.
 | **Offline** | Local | Local | Disabled | Local only | Optional (LAN) |
 | **Online** | Local | Local | External via Tor/proxy | Local only | Optional (LAN) |
 
-### Security Threat Model
+### Security Threat Model & Implementation
+
+**Security Implementation Status:**
+- **PIN Bootstrap:** Devices pair via a secure 4-digit PIN exchange.
+- **Persistent Credentials:** Android Keystore and Windows DPAPI protect long-term node identities.
+- **Authorization & Leases:** All capabilities are strictly leased and verified per-turn by the Hub.
+- **Risk Policy:** LOW/MEDIUM/HIGH gates apply to remote actions.
+- **Transport Security:** WSS/TLS is ⚪ PLANNED. Currently operates on plaintext WebSocket over trusted LAN.
+- **Replay Protection:** Anti-replay counters are implemented on message dispatchers.
+- **Node Quarantine:** Nodes failing authentication multiple times are quarantined.
+
+The following threats are within Vivy's design consideration:
 
 The following threats are within Vivy's design consideration:
 
@@ -1643,6 +1734,20 @@ Vivy enforces a strict canonical data lifecycle. All systems operate as derived 
 
 ---
 
+---
+
+## Troubleshooting
+
+| Issue | Root Cause & Resolution |
+|---|---|
+| **mDNS Discovery Fails** | Some routers block multicast UDP. *Resolution:* The Android node caches the last known IP (Fast Reconnect). If that fails, ensure your Android and Host are on the same subnet (not isolated by AP isolation). |
+| **Missing Image in Payload (Screen/Avatar)** | The Hub currently serves video/frames out-of-band via Flask on port 5000. *Resolution:* Ensure port 5000 is unblocked on the host firewall. |
+| **Authentication Failure / Quarantine** | The node submitted an invalid credential too many times. *Resolution:* Delete the app data on Android to reset the credential, then re-pair with the host PIN. |
+| **Microphone / Audio Stream Fails** | Android 12+ requires explicit runtime permission. *Resolution:* Ensure `RECORD_AUDIO` is granted in Android settings. |
+| **Transport Reconnect Loops** | Hotspot IP changed. *Resolution:* The 30s fallback discovery cycle will automatically locate the new IP and update the Fast Reconnect cache. |
+| **RVC `voice.profiles` 404** | Do not access `/api/voice` (via Hub Capability) directly. *Resolution:* Use the Hub `voice.profiles` capability route. |
+
+---
 ## Key Dependencies — License Summary
 
 > [!IMPORTANT]
@@ -1670,7 +1775,9 @@ Vivy enforces a strict canonical data lifecycle. All systems operate as derived 
 
 ## Licensing
 
-Vivy AI is licensed under the **Vivy AI License**.
+Vivy AI is licensed under the **Vivy AI License**. Please see the [`LICENSE`](./LICENSE) file for the full terms.
+
+For a comprehensive list of third-party dependencies, open-source libraries, and their respective licenses, please refer to the [`NOTICE`](./NOTICE) file.
 
 This repository also contains **MateEngine**, located in the `Mate-Engine/` directory. MateEngine and any files derived from it are licensed separately under the **MateEngine Pro License**. See `Mate-Engine/LICENSE` for details.
 

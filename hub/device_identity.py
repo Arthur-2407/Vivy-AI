@@ -55,7 +55,24 @@ class DeviceProfile:
     mic_available: bool = False
     speaker_available: bool = False
     display_available: bool = False
+    gps_available: bool = False
+    bluetooth_available: bool = False
     sensors: List[str] = field(default_factory=list)
+
+    # Runtime state (updated by heartbeat / telemetry)
+    battery_pct: float = 100.0      # 0-100
+    thermal_state: str = "normal"   # normal, warm, hot, critical
+    current_cpu_pct: float = 0.0    # current CPU utilization %
+    current_gpu_pct: float = 0.0    # current GPU utilization %
+    current_ram_pct: float = 0.0    # current RAM utilization %
+    network_latency_ms: float = 0.0 # round-trip latency to Hub
+    last_seen: float = 0.0          # UNIX timestamp of last heartbeat
+
+    # Version negotiation
+    app_version: str = "unknown"
+    protocol_version: str = "1.0"
+    security_version: str = "1.0"
+    platform: str = "unknown"       # android | windows | linux | ios | macos
     
     # Execution runtimes
     supported_runtimes: List[str] = field(default_factory=list)
