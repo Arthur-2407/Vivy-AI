@@ -178,28 +178,65 @@ def deploy(target_commit: str = None, dry_run: bool = False, env: str = "product
         log("Dry-run mode active. Skipping live process rollout.", "WARN")
         return True
 
-    # Step 3: Rolling Restart via Service Supervisor
-    py_exe = get_python_exe()
-    supervisor_script = BASE_DIR / "scripts" / "production_service.py"
+    # Step 3: Rolling Update via Docker Compose (if available) or Service Supervisor
+    domain = os.environ.get("VIVY_DOMAIN", "").strip()
+    has_docker = False
+    docker_cmd = None
 
-    log("Restarting Vivy AI production service...", "STEP")
-    res_stop = subprocess.run([py_exe, str(supervisor_script), "stop"], cwd=str(BASE_DIR))
-    time.sleep(2)
-    res_start = subprocess.run([py_exe, str(supervisor_script), "start"], cwd=str(BASE_DIR))
+    if shutil.which("docker"):
+        try:
+            res_v2 = subprocess.run(["docker", "compose", "version"], capture_output=True, text=True)
+            if res_v2.returncode == 0:
+                has_docker = True
+                docker_cmd = ["docker", "compose"]
+        except Exception:
+            pass
+        if not has_docker and shutil.which("docker-compose"):
+            has_docker = True
+            docker_cmd = ["docker-compose"]
 
-    if res_start.returncode != 0:
-        log("Service failed to start! Commencing rollback...", "FAIL")
-        restore_state_backup(backup_dir)
-        subprocess.run([py_exe, str(supervisor_script), "start"], cwd=str(BASE_DIR))
-        return False
+    used_docker = False
+    if has_docker:
+        log("Docker detected. Deploying via Docker Compose container stack...", "STEP")
+        env_vars = os.environ.copy()
+        if domain:
+            env_vars["VIVY_DOMAIN"] = domain
+        subprocess.run(docker_cmd + ["down", "--remove-orphans"], cwd=str(BASE_DIR), env=env_vars)
+        res_docker = subprocess.run(docker_cmd + ["up", "-d", "--build"], cwd=str(BASE_DIR), env=env_vars)
+        if res_docker.returncode == 0:
+            used_docker = True
+            log("Docker Compose services launched successfully.", "PASS")
+        else:
+            log("Docker Compose failed, falling back to native supervisor...", "WARN")
+
+    if not used_docker:
+        py_exe = get_python_exe()
+        supervisor_script = BASE_DIR / "scripts" / "production_service.py"
+        log("Managing Vivy AI production service via native supervisor...", "STEP")
+        subprocess.run([py_exe, str(supervisor_script), "stop"], cwd=str(BASE_DIR))
+        time.sleep(2)
+        res_start = subprocess.run([py_exe, str(supervisor_script), "start"], cwd=str(BASE_DIR))
+        if res_start.returncode != 0:
+            log("Service failed to start! Commencing rollback...", "FAIL")
+            restore_state_backup(backup_dir)
+            subprocess.run([py_exe, str(supervisor_script), "start"], cwd=str(BASE_DIR))
+            return False
 
     # Step 4: Health Probing & Verification
     healthy = run_smoke_test(timeout_s=75)
     if not healthy:
         log("New deployment failed health checks! Initiating zero-data-loss rollback...", "FAIL")
-        subprocess.run([py_exe, str(supervisor_script), "stop"], cwd=str(BASE_DIR))
+        if used_docker and docker_cmd:
+            subprocess.run(docker_cmd + ["down"], cwd=str(BASE_DIR))
+        else:
+            py_exe = get_python_exe()
+            supervisor_script = BASE_DIR / "scripts" / "production_service.py"
+            subprocess.run([py_exe, str(supervisor_script), "stop"], cwd=str(BASE_DIR))
         restore_state_backup(backup_dir)
-        subprocess.run([py_exe, str(supervisor_script), "start"], cwd=str(BASE_DIR))
+        if used_docker and docker_cmd:
+            subprocess.run(docker_cmd + ["up", "-d"], cwd=str(BASE_DIR))
+        else:
+            subprocess.run([py_exe, str(supervisor_script), "start"], cwd=str(BASE_DIR))
         log("Rollback completed. Restored previous stable state.", "WARN")
         return False
 

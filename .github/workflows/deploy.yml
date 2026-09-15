@@ -358,12 +358,12 @@ jobs:
     environment:
       name: production
       url: ${{ vars.VIVY_DOMAIN != '' && format('https://{0}', vars.VIVY_DOMAIN) || '' }}
-    runs-on: [self-hosted, Windows, X64, vivy-production]
+    runs-on: [self-hosted, vivy-production]
     continue-on-error: true
     steps:
       - name: Verify Execution Authorization & Security Boundary
         run: |
-          echo "=== Commencing Protected Production Deployment on Hardware Runner ==="
+          echo "=== Commencing Protected Production Deployment on Dedicated Hardware Runner ==="
           echo "Repository : ${{ github.repository }}"
           echo "Ref        : ${{ github.ref }}"
           echo "Commit SHA : ${{ github.sha }}"
@@ -374,9 +374,9 @@ jobs:
 
       - name: Execute Production Deployment & Rolling Update
         run: |
-          python scripts/deploy_production.py --commit ${{ github.sha }} --env production
+          python3 scripts/deploy_production.py --commit ${{ github.sha }} --env production 2>/dev/null || python scripts/deploy_production.py --commit ${{ github.sha }} --env production
 
       - name: Execute End-to-End Production Smoke Test
         run: |
-          python scripts/smoke_test.py --host 127.0.0.1 --web-port 8080 --retries 5 --timeout 5
+          python3 scripts/smoke_test.py --host 127.0.0.1 --web-port 8080 --retries 5 --timeout 5 2>/dev/null || python scripts/smoke_test.py --host 127.0.0.1 --web-port 8080 --retries 5 --timeout 5
 
