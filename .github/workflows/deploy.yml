@@ -24,6 +24,7 @@ on:
 permissions:
   contents: write
   actions: read
+  deployments: write
 
 jobs:
   # ──────────────────────────────────────────────────────────────────────────
@@ -219,32 +220,93 @@ jobs:
       (github.event_name != 'pull_request')
     environment:
       name: production
-      url: https://${{ vars.VIVY_DOMAIN || 'localhost' }}
+      url: ${{ vars.VIVY_DOMAIN != '' && format('https://{0}', vars.VIVY_DOMAIN) || '' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Verify Execution Authorization & Security Boundary
+      - name: Infrastructure Configuration Report
+        id: infra_check
         run: |
-          echo "=== Commencing Remote Production Deployment ==="
+          echo "================================================================"
+          echo "  VIVY-AI — Remote Production Infrastructure Status"
+          echo "================================================================"
           echo "Repository : ${{ github.repository }}"
           echo "Commit SHA : ${{ github.sha }}"
-          echo "Domain     : ${{ vars.VIVY_DOMAIN || 'Not configured (using fallback)' }}"
+          echo ""
 
-      - name: Checkout Authoritative Source
-        uses: actions/checkout@v4
+          DOMAIN_OK=false
+          SSH_HOST_OK=false
+          SSH_KEY_OK=false
+          DEPLOY_PATH_OK=false
 
-      - name: Check Remote SSH Target Configuration
-        id: check_ssh
-        run: |
-          if [ -n "${{ secrets.DEPLOY_HOST }}" ] && [ -n "${{ secrets.DEPLOY_SSH_KEY }}" ]; then
-            echo "has_ssh=true" >> $GITHUB_OUTPUT
-            echo "Remote SSH host detected: ${{ secrets.DEPLOY_HOST }}"
+          # Check VIVY_DOMAIN repository variable
+          if [ -n "${{ vars.VIVY_DOMAIN }}" ]; then
+            echo "[OK]      VIVY_DOMAIN      = ${{ vars.VIVY_DOMAIN }}"
+            DOMAIN_OK=true
           else
-            echo "has_ssh=false" >> $GITHUB_OUTPUT
-            echo "DEPLOY_HOST or DEPLOY_SSH_KEY not configured in production environment secrets."
+            echo "[MISSING] VIVY_DOMAIN      — Set this in: Settings → Environments → production → Variables"
+            echo "          Example value: vivy.yourdomain.com"
           fi
 
+          # Check DEPLOY_HOST secret
+          if [ -n "${{ secrets.DEPLOY_HOST }}" ]; then
+            echo "[OK]      DEPLOY_HOST      = (configured)"
+            SSH_HOST_OK=true
+          else
+            echo "[MISSING] DEPLOY_HOST      — Remote server IP or hostname"
+            echo "          Set in: Settings → Environments → production → Secrets"
+          fi
+
+          # Check DEPLOY_SSH_KEY secret
+          if [ -n "${{ secrets.DEPLOY_SSH_KEY }}" ]; then
+            echo "[OK]      DEPLOY_SSH_KEY   = (configured)"
+            SSH_KEY_OK=true
+          else
+            echo "[MISSING] DEPLOY_SSH_KEY   — Private SSH key for server access"
+            echo "          Set in: Settings → Environments → production → Secrets"
+          fi
+
+          # Check DEPLOY_USER (optional, has default)
+          if [ -n "${{ secrets.DEPLOY_USER }}" ]; then
+            echo "[OK]      DEPLOY_USER      = (configured)"
+          else
+            echo "[DEFAULT] DEPLOY_USER      = ubuntu (no secret set, using default)"
+          fi
+
+          # Check DEPLOY_PATH (optional, has default)
+          if [ -n "${{ secrets.DEPLOY_PATH }}" ]; then
+            echo "[OK]      DEPLOY_PATH      = (configured)"
+            DEPLOY_PATH_OK=true
+          else
+            echo "[DEFAULT] DEPLOY_PATH      = /opt/vivy (no secret set, using default)"
+          fi
+
+          echo ""
+          if [ "$SSH_HOST_OK" = "true" ] && [ "$SSH_KEY_OK" = "true" ]; then
+            echo "has_ssh=true" >> $GITHUB_OUTPUT
+            echo "[READY]   SSH credentials are configured. Will proceed with remote deployment."
+          else
+            echo "has_ssh=false" >> $GITHUB_OUTPUT
+            echo "================================================================"
+            echo "  BLOCKED: Remote deployment cannot proceed."
+            echo "  To enable real live deployment, add the missing secrets above"
+            echo "  to the 'production' environment on GitHub:"
+            echo "  → https://github.com/Arthur-2407/Vivy-AI/settings/environments"
+            echo "================================================================"
+          fi
+
+          if [ "$DOMAIN_OK" = "false" ]; then
+            echo ""
+            echo "  NOTE: VIVY_DOMAIN is not set. GitHub Deployments page will show"
+            echo "  no URL until this variable is configured. This is NOT localhost."
+            echo "  Add it under Settings → Environments → production → Variables."
+          fi
+
+      - name: Checkout Authoritative Source
+        if: steps.infra_check.outputs.has_ssh == 'true'
+        uses: actions/checkout@v4
+
       - name: Execute Remote SSH Rollout & Health Checks
-        if: steps.check_ssh.outputs.has_ssh == 'true'
+        if: steps.infra_check.outputs.has_ssh == 'true'
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -253,11 +315,35 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT || 22 }}
           script: |
             TARGET_PATH="${{ secrets.DEPLOY_PATH || '/opt/vivy' }}"
-            mkdir -p "$TARGET_PATH"
-            cd "$TARGET_PATH"
-            git fetch origin main --tags || true
-            git checkout ${{ github.sha }} || true
-            bash "$TARGET_PATH/scripts/deploy_remote.sh" "$TARGET_PATH" "${{ github.sha }}" "${{ vars.VIVY_DOMAIN || 'localhost' }}"
+            VIVY_DOMAIN="${{ vars.VIVY_DOMAIN }}"
+
+            echo "=== Vivy-AI Remote Rollout Starting ==="
+            echo "Commit    : ${{ github.sha }}"
+            echo "Domain    : ${VIVY_DOMAIN}"
+            echo "Deploy Dir: ${TARGET_PATH}"
+
+            mkdir -p "${TARGET_PATH}"
+            cd "${TARGET_PATH}"
+
+            # Pull latest code if git repo exists, otherwise clone
+            if [ -d ".git" ]; then
+              git fetch origin main --tags
+              git checkout ${{ github.sha }}
+            else
+              git clone https://github.com/Arthur-2407/Vivy-AI.git .
+              git checkout ${{ github.sha }}
+            fi
+
+            bash "${TARGET_PATH}/scripts/deploy_remote.sh" "${TARGET_PATH}" "${{ github.sha }}" "${VIVY_DOMAIN}"
+
+      - name: Report Deployment Outcome
+        if: always()
+        run: |
+          if [ "${{ steps.infra_check.outputs.has_ssh }}" != 'true' ]; then
+            echo "::notice title=Infrastructure Required::Remote deployment skipped — DEPLOY_HOST and DEPLOY_SSH_KEY secrets are not yet configured in the production environment. Add them at https://github.com/Arthur-2407/Vivy-AI/settings/environments to enable real live deployment."
+          else
+            echo "::notice title=Deployment Complete::Remote deployment executed via SSH. Check the remote server logs for detailed health status."
+          fi
 
   # ──────────────────────────────────────────────────────────────────────────
   # 7. PRODUCTION DEDICATED HARDWARE RUNNER (OPTIONAL SELF-HOSTED RUNNER)
@@ -271,7 +357,7 @@ jobs:
       (github.event_name != 'pull_request')
     environment:
       name: production
-      url: http://127.0.0.1:8080
+      url: ${{ vars.VIVY_DOMAIN != '' && format('https://{0}', vars.VIVY_DOMAIN) || '' }}
     runs-on: [self-hosted, Windows, X64, vivy-production]
     continue-on-error: true
     steps:
@@ -281,6 +367,7 @@ jobs:
           echo "Repository : ${{ github.repository }}"
           echo "Ref        : ${{ github.ref }}"
           echo "Commit SHA : ${{ github.sha }}"
+          echo "Domain     : ${{ vars.VIVY_DOMAIN }}"
 
       - name: Checkout Authoritative Source
         uses: actions/checkout@v4
@@ -291,6 +378,5 @@ jobs:
 
       - name: Execute End-to-End Production Smoke Test
         run: |
-          python scripts/smoke_test.py --retries 5 --timeout 5
-
+          python scripts/smoke_test.py --host 127.0.0.1 --web-port 8080 --retries 5 --timeout 5
 
