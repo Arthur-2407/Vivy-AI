@@ -1,5 +1,8 @@
 import os
-import vivy_env
+try:
+    import vivy_env
+except ImportError:
+    pass
 os.environ["VIVY_PROCESS_ROLE"] = "runner"
 import sys
 import time

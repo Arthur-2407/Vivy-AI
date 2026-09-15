@@ -192,7 +192,6 @@ cleanup_rvc.py
 patch_torch_load.py
 demo_run.py
 /test_*.py
-vivy_env.py
 
 # ── RVC Generated Folders ──
 rvc_cpu/i18n/
