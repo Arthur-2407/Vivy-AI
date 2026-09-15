@@ -45,3 +45,20 @@ recordings/
 vivy_recordings/
 transcripts/
 *.wav
+
+# HuggingFace model cache (25+ GB locally — production containers mount or download models)
+# These dirs are gitignored but not dockerignored; COPY . /app/ would include them.
+model_cache/
+tmp_spkrec/
+
+# RVC training checkpoints and large voice model artifacts (mounted via volume in production)
+rvc_cpu/logs/
+
+# Large scratch and development files not needed in container
+*.txt
+*.log
+readme_unstaged_diff.txt
+unstaged_diff.txt
+staged_diff.txt
+git_diff.txt
+unity_direct_start.log
