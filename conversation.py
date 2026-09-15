@@ -497,9 +497,24 @@ def autonomous_search_decision(user, history, mem, categories):
         return False, ""
 
 # ===============================
-# CONFIG
-# ===============================
-MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", "Qwen3-8B-Q4_K_M.gguf")
+def _discover_model_path(model_filename: str = "Qwen3-8B-Q4_K_M.gguf") -> str:
+    default_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", model_filename)
+    if os.path.exists(default_path):
+        return default_path
+    env_dir = os.environ.get("VIVY_MODELS_DIR")
+    if env_dir:
+        cand = os.path.join(env_dir, model_filename)
+        if os.path.exists(cand):
+            return cand
+    for fallback in [
+        os.path.join(r"D:\Vivy\models", model_filename),
+        os.path.join(os.path.expanduser("~"), ".cache", "vivy", "models", model_filename),
+    ]:
+        if os.path.exists(fallback):
+            return fallback
+    return default_path
+
+MODEL_PATH = _discover_model_path()
 MEMORY_FILE = "vivy_memory.json"
 
 _llm_instance = None

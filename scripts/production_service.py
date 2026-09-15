@@ -146,33 +146,41 @@ def start_service(foreground: bool = False) -> int:
 
 def stop_service() -> int:
     proc = get_running_process()
-    if not proc:
-        print("[Service] Vivy is not currently running.")
-        if PID_FILE.exists():
-            PID_FILE.unlink(missing_ok=True)
-        return 0
-
-    print(f"[Service] Stopping Vivy AI (PID: {proc.pid})...")
-    try:
-        children = proc.children(recursive=True)
-        for child in children:
-            try:
-                child.terminate()
-            except Exception:
-                pass
-
-        proc.terminate()
+    if proc:
+        print(f"[Service] Stopping Vivy AI (PID: {proc.pid})...")
         try:
-            proc.wait(timeout=6)
-        except psutil.TimeoutExpired:
-            print("[Service] Process did not terminate within timeout. Forcing kill...")
+            children = proc.children(recursive=True)
             for child in children:
-                try: child.kill()
-                except Exception: pass
-            proc.kill()
-            proc.wait(timeout=3)
-    except Exception as e:
-        print(f"[Service] Exception while stopping process: {e}")
+                try:
+                    child.terminate()
+                except Exception:
+                    pass
+
+            proc.terminate()
+            try:
+                proc.wait(timeout=6)
+            except psutil.TimeoutExpired:
+                print("[Service] Process did not terminate within timeout. Forcing kill...")
+                for child in children:
+                    try: child.kill()
+                    except Exception: pass
+                proc.kill()
+                proc.wait(timeout=3)
+        except Exception as e:
+            print(f"[Service] Exception while stopping process: {e}")
+
+    # Also terminate any lingering service processes on ports 8080, 8800, 8765, 8766
+    for port in (8080, 8800, 8765, 8766):
+        try:
+            for conn in psutil.net_connections(kind="inet"):
+                if conn.laddr.port == port and conn.pid:
+                    try:
+                        p = psutil.Process(conn.pid)
+                        p.terminate()
+                    except Exception:
+                        pass
+        except Exception:
+            pass
 
     if PID_FILE.exists():
         PID_FILE.unlink(missing_ok=True)

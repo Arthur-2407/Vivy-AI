@@ -15,6 +15,11 @@ import urllib.request
 import urllib.error
 import xmlrpc.client
 
+try:
+    sys.stdout.reconfigure(line_buffering=True)
+except Exception:
+    pass
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
@@ -115,16 +120,18 @@ class SmokeTestRunner:
         return False
 
     def test_perception_health(self) -> bool:
-        status, data = self._http_get("/api/perception/health")
-        if status == 200 and isinstance(data, dict):
-            p_status = data.get("status", "unknown")
-            self.log("Perception Health", f"HTTP 200 OK — Perception status: {p_status}", "PASS")
-            self.results["perception"] = {"status": "PASS", "perception_status": p_status}
-            return True
-        elif status == 404:
-            self.log("Perception Health", "Endpoint not mounted (optional module)", "WARN")
-            self.results["perception"] = {"status": "WARN", "message": "not_mounted"}
-            return True
+        for attempt in range(1, self.retries + 1):
+            status, data = self._http_get("/api/perception/health")
+            if status == 200 and isinstance(data, dict):
+                p_status = data.get("status", "unknown")
+                self.log("Perception Health", f"HTTP 200 OK — Perception status: {p_status}", "PASS")
+                self.results["perception"] = {"status": "PASS", "perception_status": p_status}
+                return True
+            elif status == 404:
+                self.log("Perception Health", "Endpoint not mounted (optional module)", "WARN")
+                self.results["perception"] = {"status": "WARN", "message": "not_mounted"}
+                return True
+            time.sleep(self.retry_delay)
         self.log("Perception Health", f"Check returned status={status}", "WARN")
         self.results["perception"] = {"status": "WARN", "http_code": status}
         return True  # non-fatal

@@ -504,6 +504,18 @@ class TelemetryManager:
             model_path = os.path.join(BASE_DIR, "models", "Qwen3-8B-Q4_K_M.gguf")
         
         model_exists = os.path.exists(model_path)
+        if not model_exists:
+            fname = os.path.basename(model_path)
+            for cand in [
+                os.path.join(os.environ.get("VIVY_MODELS_DIR", ""), fname),
+                os.path.join(r"D:\Vivy\models", fname),
+                os.path.join(os.path.expanduser("~"), ".cache", "vivy", "models", fname)
+            ]:
+                if cand and os.path.exists(cand):
+                    model_path = cand
+                    model_exists = True
+                    break
+
         subsystems["LLM"] = _build_sub_obj(
             "GREEN" if model_exists else "RED",
             "READY" if model_exists else "FAILED",

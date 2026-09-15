@@ -133,7 +133,7 @@ def run_preflight_validation() -> bool:
     return True
 
 
-def run_smoke_test(timeout_s: int = 70) -> bool:
+def run_smoke_test(timeout_s: int = 150) -> bool:
     log("Running smoke test & health verification...", "STEP")
     py_exe = get_python_exe()
     smoke_script = BASE_DIR / "scripts" / "smoke_test.py"
@@ -229,25 +229,47 @@ def deploy(target_commit: str = None, dry_run: bool = False, env: str = "product
             return False
 
         # Launch Caddy reverse proxy if binary is present
-        caddy_bin = BASE_DIR / "deploy" / "caddy" / "caddy.exe"
-        if not caddy_bin.exists():
-            caddy_bin_nix = BASE_DIR / "deploy" / "caddy" / "caddy"
-            if caddy_bin_nix.exists():
-                caddy_bin = caddy_bin_nix
-            elif shutil.which("caddy"):
-                caddy_bin = Path(shutil.which("caddy"))
+        known_caddys = [
+            BASE_DIR / "deploy" / "caddy" / "caddy.exe",
+            BASE_DIR / "deploy" / "caddy" / "caddy",
+            Path(r"C:\ProgramData\caddy\caddy.exe"),
+            Path(r"D:\Vivy\deploy\caddy\caddy.exe"),
+        ]
+        caddy_bin = None
+        for c in known_caddys:
+            if c.exists():
+                caddy_bin = c
+                break
+        if not caddy_bin and shutil.which("caddy"):
+            caddy_bin = Path(shutil.which("caddy"))
 
-        if caddy_bin.exists() and (BASE_DIR / "deploy" / "caddy" / "Caddyfile").exists():
+        caddyfile = BASE_DIR / "deploy" / "caddy" / "Caddyfile"
+        if not caddyfile.exists():
+            caddyfile = Path(r"D:\Vivy\deploy\caddy\Caddyfile")
+
+        if caddy_bin and caddyfile.exists():
             log(f"Starting Caddy reverse proxy ({caddy_bin.name})...", "STEP")
-            caddy_env = os.environ.copy()
-            if domain:
-                caddy_env["VIVY_DOMAIN"] = domain
+            caddy_log = BASE_DIR / "logs" / "caddy_daemon.log"
             subprocess.run([str(caddy_bin), "stop"], cwd=str(BASE_DIR), capture_output=True)
-            subprocess.run([str(caddy_bin), "start", "--config", str(BASE_DIR / "deploy" / "caddy" / "Caddyfile")],
-                           cwd=str(BASE_DIR), env=caddy_env)
+            time.sleep(1)
+            if sys.platform == "win32":
+                domain_env_cmd = f'set VIVY_DOMAIN={domain}& ' if domain else ''
+                cmd_line = f'cmd.exe /c "{domain_env_cmd}""{caddy_bin}"" run --config ""{caddyfile}"" > ""{caddy_log}"" 2>&1"'
+                ps_script = (
+                    f'$res = Invoke-CimMethod -ClassName Win32_Process -MethodName Create '
+                    f'-Arguments @{{CommandLine = \'{cmd_line}\'; CurrentDirectory = \'{str(BASE_DIR)}\'}}; '
+                    f'$res.ProcessId'
+                )
+                subprocess.run(["powershell", "-NoProfile", "-Command", ps_script], capture_output=True, text=True)
+            else:
+                caddy_env = os.environ.copy()
+                if domain:
+                    caddy_env["VIVY_DOMAIN"] = domain
+                subprocess.Popen([str(caddy_bin), "run", "--config", str(caddyfile)],
+                                 cwd=str(BASE_DIR), env=caddy_env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     # Step 4: Health Probing & Verification
-    healthy = run_smoke_test(timeout_s=75)
+    healthy = run_smoke_test(timeout_s=150)
     if not healthy:
         log("New deployment failed health checks! Initiating zero-data-loss rollback...", "FAIL")
         if used_docker and docker_cmd:

@@ -686,10 +686,15 @@ if __name__ == "__main__":
     if not os.path.exists(avatar_disable_flag):
         avatar_script = os.path.join(BASE_DIR, "avatar_bridge.py")
         avatar_env = _env_mgr.get_environment("avatar")
+        avatar_python = None
         if avatar_env and avatar_env.is_available:
             avatar_python = avatar_env.python_executable
+        elif sys.executable:
+            avatar_python = sys.executable
+
+        if avatar_python and os.path.exists(avatar_script):
             _tracer.trace("PROCESS", "avatar_bridge", "START", details={"url": "ws://127.0.0.1:8765"})
-            print("Starting Avatar Bridge WebSocket server on ws://127.0.0.1:8765 ...")
+            print(f"Starting Avatar Bridge WebSocket server on ws://127.0.0.1:8765 using {os.path.basename(avatar_python)} ...")
             try:
                 avatar_process = subprocess.Popen(
                     [avatar_python, avatar_script],
@@ -702,8 +707,8 @@ if __name__ == "__main__":
                 print(f"Failed to start Avatar Bridge process: {e}")
                 _tracer.trace("PROCESS", "avatar_bridge", "ERROR", details={"error": str(e)})
         else:
-            print("- Avatar Bridge python env (venv_avatar) not found.")
-            _tracer.trace("PROCESS", "avatar_bridge", "SKIPPED", details={"reason": "venv_avatar not found"})
+            print("- Avatar Bridge python env not found or script missing.")
+            _tracer.trace("PROCESS", "avatar_bridge", "SKIPPED", details={"reason": "python env not found"})
 
     # Spawn the background microphone listener thread
     _tracer.trace("THREAD", "mic_thread", "START")
@@ -929,9 +934,8 @@ while _run_main_loop:
                 avatar_disable_flag = os.path.join(SHARED_DIR, "avatar_disable.txt")
                 if not os.path.exists(avatar_disable_flag):
                     avatar_script = os.path.join(BASE_DIR, "avatar_bridge.py")
-                    avatar_env = _env_mgr.get_environment("avatar")
-                    if avatar_env and avatar_env.is_available:
-                        avatar_python = avatar_env.python_executable
+                    avatar_python = avatar_env.python_executable if (avatar_env and avatar_env.is_available) else sys.executable
+                    if avatar_python and os.path.exists(avatar_script):
                         print(f"[run_vivy] Warning: Avatar bridge process (PID {avatar_process.pid}) exited with code {avatar_process.returncode}. Auto-restarting...")
                         try:
                             avatar_process = subprocess.Popen(
