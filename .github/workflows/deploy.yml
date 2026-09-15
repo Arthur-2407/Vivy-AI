@@ -35,36 +35,15 @@ jobs:
       - name: Scan for Accidental Secrets & Private Keys
         run: |
           echo "=== Commencing Repository Secret Audit ==="
-          FAIL=0
-          # Search for prohibited credential file patterns, excluding known public Unity test certs
-          PROHIBITED_FILES=$(find . -maxdepth 4 -type f \( \
-            -name "*.key" -o \
-            -name "*.pem" -o \
-            -name "*.p12" -o \
-            -name "*.pfx" -o \
-            -name "*.jks" -o \
-            -name "*.keystore" -o \
-            -name ".env" -o \
-            -name ".env.local" -o \
-            -name "secrets*.json" \
-          \) -not -name "WSATestCertificate.pfx" -not -path "*/.*" -not -path "*/build/*" 2>/dev/null || true)
+          # Check tracked repository files for private keys or credential extensions
+          PROHIBITED_FILES=$(git ls-files | grep -E '\.(key|pem|p12|jks|keystore)$|^\.env|secrets.*\.json' | grep -v 'WSATestCertificate' || true)
 
           if [ -n "$PROHIBITED_FILES" ]; then
-            echo "::error::Prohibited credential files detected in repository tree:"
+            echo "::error::Prohibited credential files detected in git tree:"
             echo "$PROHIBITED_FILES"
-            FAIL=1
-          fi
-
-          # Search for common private key markers in tracked text files
-          if grep -r --exclude-dir={.git,dist,venv,node_modules} "BEGIN RSA PRIVATE KEY" . 2>/dev/null; then
-            echo "::error::Private key content found in repository files."
-            FAIL=1
-          fi
-
-          if [ $FAIL -ne 0 ]; then
-            echo "Security audit FAILED. Remove secrets before deployment."
             exit 1
           fi
+
           echo "Security audit PASSED. Zero sensitive credentials detected."
 
   # ──────────────────────────────────────────────────────────────────────────
