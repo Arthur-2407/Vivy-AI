@@ -42,6 +42,10 @@ services:
       - "443:443"   # HTTPS
     environment:
       - VIVY_DOMAIN=${VIVY_DOMAIN:-localhost}
+      # VIVY_UPSTREAM must point to the vivy-core service name so Caddy can reach
+      # Flask via the Docker bridge network. The Caddyfile defaults to 127.0.0.1
+      # (bare-metal), but in Docker this must be the service container hostname.
+      - VIVY_UPSTREAM=vivy-core
     volumes:
       - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data

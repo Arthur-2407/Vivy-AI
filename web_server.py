@@ -3714,24 +3714,37 @@ if __name__ == "__main__":
     monitor_thread = threading.Thread(target=monitor_pipeline, daemon=True)
     monitor_thread.start()
     
-    # Determine bind host and port
+    # Determine bind host and port.
+    # Priority: VIVY_WEB_HOST env var > config file value > 127.0.0.1 default.
+    # VIVY_WEB_HOST=0.0.0.0 is valid inside Docker containers (where Caddy reaches
+    # Flask via the Docker bridge network by service name, not via the public internet).
+    # The security guard below only applies when 0.0.0.0 comes from the config file
+    # without an explicit env var override, preventing accidental direct exposure
+    # in non-containerised deployments.
+    env_host = os.environ.get("VIVY_WEB_HOST", "")  # explicit env var, empty = not set
     default_port = int(os.getenv("VIVY_WEB_PORT", str(8000 + 80)))
-    default_host = os.getenv("VIVY_WEB_HOST", "127.0.0.1")
+    default_host = env_host if env_host else "127.0.0.1"
     try:
         from config.config_manager import get_config_manager
         cfg = get_config_manager()
-        host = cfg.get("network.web_server_host", cfg.get("server.host", default_host))
+        if env_host:
+            # Explicit Docker/env override takes precedence over config file.
+            host = env_host
+        else:
+            host = cfg.get("network.web_server_host", cfg.get("server.host", default_host))
+            # Ensure Flask is strictly bound to localhost for security when no
+            # explicit env var override is present.  Remote nodes must use the
+            # authenticated Vivy Hub WebSocket proxy on port 8800.
+            if host == "0.0.0.0":
+                print("[web_server] Warning: Refusing to bind Flask to 0.0.0.0 (no VIVY_WEB_HOST env var). Enforcing 127.0.0.1.")
+                host = "127.0.0.1"
         port = int(cfg.get("network.web_server_port", cfg.get("server.web_port", default_port)))
         hub_enabled = cfg.get("hub.enabled", False)
-        # Ensure Flask is strictly bound to localhost for security.
-        # Remote nodes must use the authenticated Vivy Hub WebSocket proxy on port 8800.
-        if host == "0.0.0.0":
-            print("[web_server] Warning: Refusing to bind Flask to 0.0.0.0. Enforcing 127.0.0.1.")
-            host = "127.0.0.1"
     except Exception:
         host = default_host
         port = default_port
         hub_enabled = False
+    print(f"[web_server] Binding to {host}:{port}")
     app.run(host=host, port=port, debug=False)
 
 
