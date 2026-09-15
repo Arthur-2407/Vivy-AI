@@ -184,7 +184,6 @@ try:
     _TESS_PATHS = [
         r"C:\Program Files\Tesseract-OCR\tesseract.exe",
         r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
-        r"C:\Users\SATYAJEET\AppData\Local\Programs\Tesseract-OCR\tesseract.exe",
     ]
     for _tp in _TESS_PATHS:
         if _os.path.exists(_tp):

@@ -52,7 +52,6 @@ _DEFAULTS: dict = {
         "tesseract_paths": [
             r"C:\Program Files\Tesseract-OCR\tesseract.exe",
             r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
-            r"C:\Users\SATYAJEET\AppData\Local\Programs\Tesseract-OCR\tesseract.exe",
         ],
         "adaptive_sampling_enabled":    True,
         "min_sampling_delay_ms":        33,
