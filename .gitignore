@@ -71,6 +71,7 @@ pip_out.txt
 # Ignore all text files but keep requirements.txt and important configs
 *.txt
 !requirements.txt
+!requirements-production.txt
 !Retrieval-based-Voice-Conversion-WebUI-main/*.txt
 !Mate-Engine/ProjectSettings/ProjectVersion.txt
 !Mate-Engine/**/steam_appid.txt

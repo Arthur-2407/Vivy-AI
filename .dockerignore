@@ -1,0 +1,47 @@
+# Version control
+.git
+.gitignore
+.github
+
+# Python virtual environments & bytecode
+venv/
+venv_avatar/
+venv_rvc/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Unity / Mate-Engine caches (large binary assets not needed in core container)
+Mate-Engine/Library/
+Mate-Engine/Temp/
+Mate-Engine/Obj/
+Mate-Engine/Build/
+Mate-Engine/Builds/
+Mate-Engine/Logs/
+Mate-Engine/MemoryCaptures/
+Mate-Engine/UserSettings/
+Mate-Engine/*.csproj
+Mate-Engine/*.sln
+
+# Android Node build artifacts
+android_node/.gradle/
+android_node/.idea/
+android_node/app/build/
+android_node/build/
+android_node/local.properties
+
+# Logs and scratch files
+logs/
+*.log
+scratch/
+backup/
+Reports/
+dist/
+
+# Large test audio outputs
+recordings/
+vivy_recordings/
+transcripts/
+*.wav

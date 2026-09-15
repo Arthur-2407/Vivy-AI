@@ -1019,13 +1019,14 @@ while _run_main_loop:
                     print(f"\nUser: {user_input}")
                     console_print(f"\n  You: {user_input}", _ANSI_YELLOW)
                 
-                # Read input source
-                input_source = "text"
+                # Read input source (preserve "voice" if already established via text_queue)
                 source_file = os.path.join(SHARED_DIR, "input_source.txt")
                 if os.path.exists(source_file):
                     try:
                         with open(source_file, "r", encoding="utf-8") as sf_file:
-                            input_source = sf_file.read().strip().lower()
+                            sf_mode = sf_file.read().strip().lower()
+                        if sf_mode:
+                            input_source = sf_mode
                         with open(source_file, "w", encoding="utf-8") as sf_file:
                             sf_file.write("")
                     except Exception as e:
@@ -1399,15 +1400,20 @@ while _run_main_loop:
                     print(f"[Evolution] Loop trigger error (non-fatal): {_evo_trigger_err}")
 
                 
+                streamed_playback_completed = False
                 if is_voice_turn:
-                    # Async pipeline handles audio playback via workers.
-                    # We just wait for the playback queue to drain before resuming.
-                    from pipeline.queues import playback_queue
-                    set_status("speaking")
-                    playback_queue.join()
-                    stop_indicator("  ✓ Done speaking.")
-                    
-                    if False: pass # Skip legacy generation since pipeline handled it
+                    # Async pipeline handles audio playback via streaming workers.
+                    # Wait for the playback queue to drain before resuming.
+                    try:
+                        from pipeline.queues import playback_queue
+                        set_status("speaking")
+                        playback_queue.join()
+                        streamed_playback_completed = True
+                        stop_indicator("  ✓ Done speaking.")
+                    except Exception as _pq_err:
+                        print(f"[run_vivy] Playback queue join error: {_pq_err}")
+
+                    # Generate complete response audio files (TTS and RVC) for Web UI, REST API, and archiving
                     start_indicator("Generating voice")
                     print("Generating TTS output...")
 
@@ -1484,7 +1490,11 @@ while _run_main_loop:
                     # Play the cloned audio locally for confirmation if not muted
                     play_muted = os.path.exists(os.path.join(SHARED_DIR, "voice_output_mute.txt"))
                     if not play_muted:
-                        if os.path.exists(RVC_WAV):
+                        if streamed_playback_completed:
+                            # Streaming PlaybackWorker already played the audio chunks sequentially via sounddevice.
+                            # Local speaker playback is complete; skip duplicate playback.
+                            print("Streaming playback completed. Skipping duplicate local speaker playback.")
+                        elif os.path.exists(RVC_WAV):
                             set_status("speaking")
                             _telemetry_mgr.log_event("Speech Started", details={"mode": "cloned_rvc"})
                             start_indicator("Vivy is speaking")

@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  vivy-core:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: vivy-ai:latest
+    container_name: vivy_production_runtime
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+      - VIVY_PROCESS_ROLE=runner
+      - VIVY_WEB_PORT=8080
+      - VIVY_WEB_HOST=0.0.0.0
+      - VIVY_DOMAIN=${VIVY_DOMAIN:-localhost}
+    ports:
+      - "8080:8080"   # REST API & Web UI
+      - "8765:8765"   # Avatar Bridge WebSocket
+      - "8800:8800"   # Vivy Hub Ecosystem WebSocket
+      - "8766:8766"   # Voice Cloning RVC RPC Server
+    volumes:
+      - vivy_shared:/app/shared
+      - vivy_database:/app/database
+      - vivy_transcripts:/app/transcripts
+      - vivy_recordings:/app/recordings
+      - vivy_logs:/app/logs
+      - vivy_models:/app/models
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8080/api/status"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
+
+  caddy:
+    image: caddy:2.7-alpine
+    container_name: vivy_production_proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"     # HTTP
+      - "443:443"   # HTTPS
+    environment:
+      - VIVY_DOMAIN=${VIVY_DOMAIN:-localhost}
+    volumes:
+      - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      vivy-core:
+        condition: service_healthy
+
+volumes:
+  vivy_shared:
+    name: vivy_production_shared
+  vivy_database:
+    name: vivy_production_database
+  vivy_transcripts:
+    name: vivy_production_transcripts
+  vivy_recordings:
+    name: vivy_production_recordings
+  vivy_logs:
+    name: vivy_production_logs
+  vivy_models:
+    name: vivy_production_models
+  caddy_data:
+    name: vivy_caddy_data
+  caddy_config:
+    name: vivy_caddy_config

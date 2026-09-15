@@ -69,13 +69,18 @@ class VoicePreviewEngine:
                         import subprocess
                         import sys
                         exec_py = get_runtime_manager().get_python_executable("rvc")
-                        # Execute lightweight conversion
-                        subprocess.run([
-                            exec_py, rvc_script,
-                            "--input", tts_tmp,
-                            "--output", cloned_preview_path,
-                            "--model", model_filename
-                        ], check=False)
+                        # Execute lightweight conversion with timeout safety
+                        try:
+                            subprocess.run([
+                                exec_py, rvc_script,
+                                "--input", tts_tmp,
+                                "--output", cloned_preview_path,
+                                "--model", model_filename
+                            ], check=False, timeout=15)
+                        except subprocess.TimeoutExpired:
+                            print(f"[VoicePreview] RVC conversion timed out for {model_filename}. Falling back to TTS base.")
+                        except Exception as _proc_err:
+                            print(f"[VoicePreview] RVC conversion subprocess error: {_proc_err}")
                     
                     if not os.path.exists(cloned_preview_path):
                         # Fallback to copy synthesized base to guarantee UI preview playback

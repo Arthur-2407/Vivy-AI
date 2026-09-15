@@ -378,6 +378,14 @@ def run_whisper(wav_file, output_txt_path=None):
 
             with open(output_txt_path, "w", encoding="utf-8") as f:
                 f.write(text)
+
+            # Dispatch final transcription event into in-memory pipeline queue
+            try:
+                from pipeline.queues import text_queue as _final_text_queue
+                if _final_text_queue is not None:
+                    _final_text_queue.put_nowait({"type": "final", "text": text})
+            except Exception as _q_err:
+                pass
         except Exception as e:
             print(Fore.RED + f"Error writing to {output_txt_path}: {e}" + Style.RESET_ALL)
 

@@ -76,6 +76,32 @@ class TestPipelineChatConnection(unittest.TestCase):
 
         self.assertEqual(content_after, "User typed chat message")
 
+    @patch("perception.model_router.ModelRouter.get_speech_plugin")
+    def test_mic_input_pushes_final_to_text_queue(self, mock_plugin_getter):
+        from pipeline.queues import text_queue
+        while not text_queue.empty():
+            try: text_queue.get_nowait()
+            except Exception: break
+
+        mock_plugin = MagicMock()
+        mock_plugin.is_available.return_value = True
+        mock_plugin.transcribe.return_value = {"text": "Hello Vivy from microphone"}
+        mock_plugin_getter.return_value = mock_plugin
+
+        dummy_wav = os.path.join(BASE_DIR, "recordings", "dummy_voice.wav")
+        res = run_whisper(dummy_wav, output_txt_path=self.user_txt)
+
+        # Verify output written to file
+        self.assertEqual(res, "Hello Vivy from microphone")
+        with open(self.input_source, "r", encoding="utf-8") as sf:
+            self.assertEqual(sf.read().strip(), "voice")
+
+        # Verify event pushed to in-memory queue
+        self.assertFalse(text_queue.empty())
+        event = text_queue.get_nowait()
+        self.assertEqual(event.get("type"), "final")
+        self.assertEqual(event.get("text"), "Hello Vivy from microphone")
+
     def test_noise_filtering(self):
         self.assertTrue(is_blank_or_noise(""))
         self.assertTrue(is_blank_or_noise("   "))

@@ -208,10 +208,62 @@ jobs:
           files: release_files/*
 
   # ──────────────────────────────────────────────────────────────────────────
-  # 6. PRODUCTION LIVE DEPLOYMENT (GUARDED / PROTECTED)
+  # 6. PRODUCTION REMOTE CLOUD DEPLOYMENT (SSH / DOCKER COMPOSE)
   # ──────────────────────────────────────────────────────────────────────────
-  deploy_production:
-    name: Deploy to Live Production Runtime
+  deploy_remote_server:
+    name: Deploy to Remote Production Server (Cloud / SSH)
+    needs: [security_audit, python_validation, package_artifacts]
+    if: |
+      github.repository == 'Arthur-2407/Vivy-AI' &&
+      (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.deploy_to_production == true)) &&
+      (github.event_name != 'pull_request')
+    environment:
+      name: production
+      url: https://${{ vars.VIVY_DOMAIN || 'localhost' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify Execution Authorization & Security Boundary
+        run: |
+          echo "=== Commencing Remote Production Deployment ==="
+          echo "Repository : ${{ github.repository }}"
+          echo "Commit SHA : ${{ github.sha }}"
+          echo "Domain     : ${{ vars.VIVY_DOMAIN || 'Not configured (using fallback)' }}"
+
+      - name: Checkout Authoritative Source
+        uses: actions/checkout@v4
+
+      - name: Check Remote SSH Target Configuration
+        id: check_ssh
+        run: |
+          if [ -n "${{ secrets.DEPLOY_HOST }}" ] && [ -n "${{ secrets.DEPLOY_SSH_KEY }}" ]; then
+            echo "has_ssh=true" >> $GITHUB_OUTPUT
+            echo "Remote SSH host detected: ${{ secrets.DEPLOY_HOST }}"
+          else
+            echo "has_ssh=false" >> $GITHUB_OUTPUT
+            echo "DEPLOY_HOST or DEPLOY_SSH_KEY not configured in production environment secrets."
+          fi
+
+      - name: Execute Remote SSH Rollout & Health Checks
+        if: steps.check_ssh.outputs.has_ssh == 'true'
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER || 'ubuntu' }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          script: |
+            TARGET_PATH="${{ secrets.DEPLOY_PATH || '/opt/vivy' }}"
+            mkdir -p "$TARGET_PATH"
+            cd "$TARGET_PATH"
+            git fetch origin main --tags || true
+            git checkout ${{ github.sha }} || true
+            bash "$TARGET_PATH/scripts/deploy_remote.sh" "$TARGET_PATH" "${{ github.sha }}" "${{ vars.VIVY_DOMAIN || 'localhost' }}"
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # 7. PRODUCTION DEDICATED HARDWARE RUNNER (OPTIONAL SELF-HOSTED RUNNER)
+  # ──────────────────────────────────────────────────────────────────────────
+  deploy_production_runner:
+    name: Deploy to Dedicated Hardware Host (Self-Hosted Runner)
     needs: [security_audit, python_validation, package_artifacts]
     if: |
       github.repository == 'Arthur-2407/Vivy-AI' &&
@@ -221,14 +273,14 @@ jobs:
       name: production
       url: http://127.0.0.1:8080
     runs-on: [self-hosted, Windows, X64, vivy-production]
+    continue-on-error: true
     steps:
       - name: Verify Execution Authorization & Security Boundary
         run: |
-          echo "=== Commencing Protected Production Deployment ==="
+          echo "=== Commencing Protected Production Deployment on Hardware Runner ==="
           echo "Repository : ${{ github.repository }}"
           echo "Ref        : ${{ github.ref }}"
           echo "Commit SHA : ${{ github.sha }}"
-          echo "Trigger    : ${{ github.event_name }}"
 
       - name: Checkout Authoritative Source
         uses: actions/checkout@v4
@@ -240,4 +292,5 @@ jobs:
       - name: Execute End-to-End Production Smoke Test
         run: |
           python scripts/smoke_test.py --retries 5 --timeout 5
+
 
