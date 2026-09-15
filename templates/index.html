@@ -2447,7 +2447,7 @@
                     <div id="home-avatar-offline" class="avatar-offline-overlay">
                         <div class="avatar-status-badge" id="home-avatar-status-badge">STANDBY</div>
                         <span id="home-avatar-offline-title" style="margin-top:4px; font-size:15px; font-weight:700;">WebSocket Server Active</span>
-                        <span id="home-avatar-offline-reason" style="font-size:12px; opacity:0.85; max-width:85%; text-align:center;">ws://127.0.0.1:8765 ready — Launch MateEngine to stream avatar</span>
+                        <span id="home-avatar-offline-reason" style="font-size:12px; opacity:0.85; max-width:85%; text-align:center;">Avatar bridge ready — Launch MateEngine to stream avatar</span>
                         <div style="font-size:11px; opacity:0.6; margin-top:2px; display:flex; align-items:center; gap:6px;">
                             <span class="reconnect-pulse-dot"></span> Auto-reconnect listening
                         </div>
@@ -2760,7 +2760,7 @@
                 <div id="dashboard-avatar-offline" class="avatar-offline-overlay">
                     <div class="avatar-status-badge" id="dashboard-avatar-status-badge">STANDBY</div>
                     <span id="dashboard-avatar-offline-title" style="margin-top:4px; font-size:15px; font-weight:700;">WebSocket Server Active</span>
-                    <span id="dashboard-avatar-offline-reason" style="font-size:12px; opacity:0.85; max-width:85%; text-align:center;">ws://127.0.0.1:8765 ready — Launch MateEngine to stream avatar</span>
+                    <span id="dashboard-avatar-offline-reason" style="font-size:12px; opacity:0.85; max-width:85%; text-align:center;">Avatar bridge ready — Launch MateEngine to stream avatar</span>
                     <div style="font-size:11px; opacity:0.6; margin-top:2px; display:flex; align-items:center; gap:6px;">
                         <span class="reconnect-pulse-dot"></span> Auto-reconnect listening
                     </div>
@@ -4967,7 +4967,7 @@
                     if (dashOffline) dashOffline.style.display = "none";
                 } else {
                     const statusText = data.status || "STANDBY";
-                    const rootCause = data.root_cause || "ws://127.0.0.1:8765 ready — Launch MateEngine to stream avatar";
+                    const rootCause = data.root_cause || "Avatar bridge ready — Launch MateEngine to stream avatar";
 
                     if (linkStatus) {
                         linkStatus.innerText = statusText;
@@ -6707,7 +6707,12 @@
         // Direct WebSocket Tunneling to achieve zero-latency performance
         let wsCommand = null;
         function connectCommandWebSocket() {
-            wsCommand = new WebSocket("ws://127.0.0.1:8765");
+            // Use same-origin /avatar_ws path so Caddy proxies it correctly in
+            // production (wss://domain/avatar_ws) and local dev (ws://localhost:8080/avatar_ws).
+            // Direct ws://127.0.0.1:8765 cannot be reached from a public HTTPS page.
+            const wsScheme = (location.protocol === 'https:') ? 'wss:' : 'ws:';
+            const wsUrl = wsScheme + '//' + location.host + '/avatar_ws';
+            wsCommand = new WebSocket(wsUrl);
             wsCommand.onopen = () => {
                 console.log("[CommandWS] Connected directly to WebSocket bridge.");
                 // Immediately align Unity camera to browser on load
