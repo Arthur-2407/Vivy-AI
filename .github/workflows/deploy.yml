@@ -366,14 +366,18 @@ jobs:
     steps:
       - name: Verify Execution Authorization & Security Boundary
         run: |
-          Write-Output "=== Commencing Protected Production Deployment on Dedicated Hardware Runner ==="
+          Write-Output "=== Commencing Protected Production Deployment on Dedicated Hardware Host ==="
           Write-Output "Repository : ${{ github.repository }}"
           Write-Output "Ref        : ${{ github.ref }}"
           Write-Output "Commit SHA : ${{ github.sha }}"
           Write-Output "Domain     : ${{ vars.VIVY_DOMAIN }}"
+          # Release any file locks from previous background runs
+          Stop-Process -Name python, caddy -Force -ErrorAction SilentlyContinue
 
       - name: Checkout Authoritative Source
         uses: actions/checkout@v4
+        with:
+          clean: false
 
       - name: Execute Production Deployment & Rolling Update
         run: |
