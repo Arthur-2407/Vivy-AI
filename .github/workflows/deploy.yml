@@ -358,25 +358,49 @@ jobs:
     environment:
       name: production
       url: ${{ vars.VIVY_DOMAIN != '' && format('https://{0}', vars.VIVY_DOMAIN) || '' }}
-    runs-on: [self-hosted, vivy-production]
+    runs-on: [self-hosted, Windows, X64, vivy-production]
+    defaults:
+      run:
+        shell: powershell -ExecutionPolicy Bypass -Command "{0}"
     continue-on-error: true
     steps:
       - name: Verify Execution Authorization & Security Boundary
         run: |
-          echo "=== Commencing Protected Production Deployment on Dedicated Hardware Runner ==="
-          echo "Repository : ${{ github.repository }}"
-          echo "Ref        : ${{ github.ref }}"
-          echo "Commit SHA : ${{ github.sha }}"
-          echo "Domain     : ${{ vars.VIVY_DOMAIN }}"
+          Write-Output "=== Commencing Protected Production Deployment on Dedicated Hardware Runner ==="
+          Write-Output "Repository : ${{ github.repository }}"
+          Write-Output "Ref        : ${{ github.ref }}"
+          Write-Output "Commit SHA : ${{ github.sha }}"
+          Write-Output "Domain     : ${{ vars.VIVY_DOMAIN }}"
 
       - name: Checkout Authoritative Source
         uses: actions/checkout@v4
 
       - name: Execute Production Deployment & Rolling Update
         run: |
-          python3 scripts/deploy_production.py --commit ${{ github.sha }} --env production 2>/dev/null || python scripts/deploy_production.py --commit ${{ github.sha }} --env production
+          $py = (Get-Command python.exe -ErrorAction SilentlyContinue).Source
+          if (-not $py -or -not (Test-Path $py)) {
+              if (Test-Path "d:\Vivy\venv\Scripts\python.exe") {
+                  $py = "d:\Vivy\venv\Scripts\python.exe"
+              } elseif (Test-Path "C:\Users\SATYAJEET\AppData\Local\Programs\Python\Python310\python.exe") {
+                  $py = "C:\Users\SATYAJEET\AppData\Local\Programs\Python\Python310\python.exe"
+              } else {
+                  $py = "python"
+              }
+          }
+          Write-Output "Selected Python Runtime: $py"
+          & $py scripts/deploy_production.py --commit ${{ github.sha }} --env production
 
       - name: Execute End-to-End Production Smoke Test
         run: |
-          python3 scripts/smoke_test.py --host 127.0.0.1 --web-port 8080 --retries 5 --timeout 5 2>/dev/null || python scripts/smoke_test.py --host 127.0.0.1 --web-port 8080 --retries 5 --timeout 5
+          $py = (Get-Command python.exe -ErrorAction SilentlyContinue).Source
+          if (-not $py -or -not (Test-Path $py)) {
+              if (Test-Path "d:\Vivy\venv\Scripts\python.exe") {
+                  $py = "d:\Vivy\venv\Scripts\python.exe"
+              } elseif (Test-Path "C:\Users\SATYAJEET\AppData\Local\Programs\Python\Python310\python.exe") {
+                  $py = "C:\Users\SATYAJEET\AppData\Local\Programs\Python\Python310\python.exe"
+              } else {
+                  $py = "python"
+              }
+          }
+          & $py scripts/smoke_test.py --host 127.0.0.1 --web-port 8080 --retries 5 --timeout 5
 

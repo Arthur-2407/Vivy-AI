@@ -58,6 +58,8 @@ Reports/
 scratch/
 *.tmp
 *.lock
+deploy/caddy/caddy.exe
+deploy/caddy/caddy
 *.log
 *.wav
 *.mp3

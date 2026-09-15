@@ -3,7 +3,7 @@
 # Usage: caddy run --config deploy/caddy/Caddyfile
 
 {
-    admin off
+    admin localhost:2019
 }
 
 {$VIVY_DOMAIN:localhost} {

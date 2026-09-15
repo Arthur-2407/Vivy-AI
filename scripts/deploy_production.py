@@ -46,12 +46,15 @@ def log(msg: str, status: str = "INFO"):
 
 
 def get_python_exe() -> str:
-    venv_py_win = BASE_DIR / "venv" / "Scripts" / "python.exe"
-    if venv_py_win.exists():
-        return str(venv_py_win)
-    venv_py_nix = BASE_DIR / "venv" / "bin" / "python"
-    if venv_py_nix.exists():
-        return str(venv_py_nix)
+    known_venvs = [
+        BASE_DIR / "venv" / "Scripts" / "python.exe",
+        BASE_DIR / "venv" / "bin" / "python",
+        Path(r"D:\Vivy\venv\Scripts\python.exe"),
+        Path(r"C:\Users\SATYAJEET\AppData\Local\Programs\Python\Python310\python.exe"),
+    ]
+    for p in known_venvs:
+        if p.exists():
+            return str(p)
     return sys.executable
 
 
@@ -185,15 +188,18 @@ def deploy(target_commit: str = None, dry_run: bool = False, env: str = "product
 
     if shutil.which("docker"):
         try:
-            res_v2 = subprocess.run(["docker", "compose", "version"], capture_output=True, text=True)
-            if res_v2.returncode == 0:
-                has_docker = True
-                docker_cmd = ["docker", "compose"]
+            # Confirm Docker daemon is running and reachable
+            res_daemon = subprocess.run(["docker", "info"], capture_output=True, text=True, timeout=5)
+            if res_daemon.returncode == 0:
+                res_v2 = subprocess.run(["docker", "compose", "version"], capture_output=True, text=True)
+                if res_v2.returncode == 0:
+                    has_docker = True
+                    docker_cmd = ["docker", "compose"]
+                elif shutil.which("docker-compose"):
+                    has_docker = True
+                    docker_cmd = ["docker-compose"]
         except Exception:
-            pass
-        if not has_docker and shutil.which("docker-compose"):
-            has_docker = True
-            docker_cmd = ["docker-compose"]
+            has_docker = False
 
     used_docker = False
     if has_docker:
@@ -222,6 +228,24 @@ def deploy(target_commit: str = None, dry_run: bool = False, env: str = "product
             subprocess.run([py_exe, str(supervisor_script), "start"], cwd=str(BASE_DIR))
             return False
 
+        # Launch Caddy reverse proxy if binary is present
+        caddy_bin = BASE_DIR / "deploy" / "caddy" / "caddy.exe"
+        if not caddy_bin.exists():
+            caddy_bin_nix = BASE_DIR / "deploy" / "caddy" / "caddy"
+            if caddy_bin_nix.exists():
+                caddy_bin = caddy_bin_nix
+            elif shutil.which("caddy"):
+                caddy_bin = Path(shutil.which("caddy"))
+
+        if caddy_bin.exists() and (BASE_DIR / "deploy" / "caddy" / "Caddyfile").exists():
+            log(f"Starting Caddy reverse proxy ({caddy_bin.name})...", "STEP")
+            caddy_env = os.environ.copy()
+            if domain:
+                caddy_env["VIVY_DOMAIN"] = domain
+            subprocess.run([str(caddy_bin), "stop"], cwd=str(BASE_DIR), capture_output=True)
+            subprocess.run([str(caddy_bin), "start", "--config", str(BASE_DIR / "deploy" / "caddy" / "Caddyfile")],
+                           cwd=str(BASE_DIR), env=caddy_env)
+
     # Step 4: Health Probing & Verification
     healthy = run_smoke_test(timeout_s=75)
     if not healthy:
@@ -232,6 +256,9 @@ def deploy(target_commit: str = None, dry_run: bool = False, env: str = "product
             py_exe = get_python_exe()
             supervisor_script = BASE_DIR / "scripts" / "production_service.py"
             subprocess.run([py_exe, str(supervisor_script), "stop"], cwd=str(BASE_DIR))
+            caddy_bin = BASE_DIR / "deploy" / "caddy" / "caddy.exe"
+            if caddy_bin.exists():
+                subprocess.run([str(caddy_bin), "stop"], cwd=str(BASE_DIR), capture_output=True)
         restore_state_backup(backup_dir)
         if used_docker and docker_cmd:
             subprocess.run(docker_cmd + ["up", "-d"], cwd=str(BASE_DIR))
