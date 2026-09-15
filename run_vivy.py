@@ -196,9 +196,15 @@ if hasattr(sys, "__stdout__") and sys.__stdout__ is not None and hasattr(sys.__s
     try: sys.__stdout__.reconfigure(encoding='utf-8', errors='replace')
     except Exception: pass
 
+class _NullWriter:
+    def write(self, s): pass
+    def flush(self): pass
+
 # Retain reference to original system console output for clean info printing
 console_stdout = sys.__stdout__ if (hasattr(sys, "__stdout__") and sys.__stdout__ is not None) else sys.stdout
-log_file = sys.stdout
+if console_stdout is None:
+    console_stdout = _NullWriter()
+log_file = sys.stdout or _NullWriter()
 
 if __name__ == "__main__":
     import execution_context

@@ -49,6 +49,7 @@ user_voices/
 tmp_spkrec/
 
 # ── Runtime State, Audio Recordings & Shared IPC Buffers ──
+backup/
 shared/
 recordings/
 transcripts/

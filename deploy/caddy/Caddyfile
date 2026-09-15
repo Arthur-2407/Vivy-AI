@@ -1,0 +1,52 @@
+# Vivy-AI — Production Caddyfile Configuration
+# Automated HTTPS, Reverse Proxy, Security Headers & Hub WebSocket Routing
+# Usage: caddy run --config deploy/caddy/Caddyfile
+
+{
+    # Optional global options
+    admin off
+}
+
+# Replace :443 or your-domain.com with your actual public domain or local HTTPS binding
+:443, {$VIVY_DOMAIN:localhost} {
+    # Automatic TLS / HTTPS
+    tls internal
+
+    # Security Headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(self)"
+        -Server
+    }
+
+    # Hub WebSocket Endpoint proxy
+    @hub_ws {
+        path /hub/*
+    }
+    handle @hub_ws {
+        uri strip_prefix /hub
+        reverse_proxy 127.0.0.1:8800
+    }
+
+    # Main Web UI & REST API proxy
+    handle {
+        reverse_proxy 127.0.0.1:8080 {
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Real-IP {remote_host}
+        }
+    }
+
+    # Compression
+    encode gzip zstd
+
+    # Logging
+    log {
+        output file logs/caddy_access.log {
+            roll_size 20mb
+            roll_keep 5
+        }
+    }
+}

@@ -562,8 +562,6 @@ def start_mic_listening(output_txt_path=None, mic_index=None):
                 if time.time() - last_partial_time > 1.5 and len(audio_buffer) > 20:
                     last_partial_time = time.time()
                     try:
-                        import numpy as np
-                        import scipy.io.wavfile as wav
                         raw = (np.concatenate(audio_buffer, axis=0).reshape(-1).astype(np.float32) / 32768.0)
                         pcm16 = np.clip(raw * 32768, -32768, 32767).astype(np.int16)
                         tmp_wav = os.path.join(RECORD_DIR, "partial_tmp.wav")
