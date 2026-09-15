@@ -1,0 +1,227 @@
+name: Vivy AI — Validation, Build & Deployment Pipeline
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Publish a GitHub Release with build artifacts'
+        type: boolean
+        default: false
+      release_tag:
+        description: 'Release Tag Version (e.g., v2.0.0)'
+        type: string
+        default: 'v2.0.0'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  # ──────────────────────────────────────────────────────────────────────────
+  # 1. SECURITY & SECRET AUDIT
+  # ──────────────────────────────────────────────────────────────────────────
+  security_audit:
+    name: Security & Secret Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Scan for Accidental Secrets & Private Keys
+        run: |
+          echo "=== Commencing Repository Secret Audit ==="
+          FAIL=0
+          # Search for prohibited credential file patterns
+          PROHIBITED_FILES=$(find . -maxdepth 4 -type f \( \
+            -name "*.key" -o \
+            -name "*.pem" -o \
+            -name "*.p12" -o \
+            -name "*.pfx" -o \
+            -name "*.jks" -o \
+            -name "*.keystore" -o \
+            -name ".env" -o \
+            -name ".env.local" -o \
+            -name "secrets*.json" \
+          \) -not -path "*/.*" -not -path "*/build/*" 2>/dev/null || true)
+
+          if [ -n "$PROHIBITED_FILES" ]; then
+            echo "::error::Prohibited credential files detected in repository tree:"
+            echo "$PROHIBITED_FILES"
+            FAIL=1
+          fi
+
+          # Search for common private key markers in tracked text files
+          if grep -r --exclude-dir={.git,dist,venv,node_modules} "BEGIN RSA PRIVATE KEY" . 2>/dev/null; then
+            echo "::error::Private key content found in repository files."
+            FAIL=1
+          fi
+
+          if [ $FAIL -ne 0 ]; then
+            echo "Security audit FAILED. Remove secrets before deployment."
+            exit 1
+          fi
+          echo "Security audit PASSED. Zero sensitive credentials detected."
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # 2. PYTHON & ARCHITECTURE VALIDATION
+  # ──────────────────────────────────────────────────────────────────────────
+  python_validation:
+    name: Python Syntax & Architecture Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: Install Minimal Validation Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest anyio websockets requests
+
+      - name: Validate Python Syntax Compilation
+        run: |
+          echo "=== Compiling Core Python Modules ==="
+          python -m compileall hub contracts vivy_windows_node agi pipeline action evolution circadian database
+
+      - name: Execute Architecture Validator
+        run: |
+          echo "=== Running Canonical Architecture Validator ==="
+          python architecture_validator.py
+
+      - name: Run Headless Subsystem & Hub Unit Tests
+        run: |
+          echo "=== Running Headless Automated Tests ==="
+          pytest tests/test_hub_capability_negotiation.py \
+                 tests/test_hub_pairing.py \
+                 tests/test_hub_sync.py \
+                 tests/test_hub_transport.py \
+                 tests/test_hub_node_connection.py \
+                 tests/test_database_persistence.py \
+                 tests/test_cognitive_orchestrator.py \
+                 tests/test_conversation_planner.py \
+                 -v --durations=10
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # 3. ANDROID NODE BUILD & VALIDATION
+  # ──────────────────────────────────────────────────────────────────────────
+  android_validation:
+    name: Android Edge Node Validation & APK Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+          cache: "gradle"
+
+      - name: Grant Execute Permission for Gradle Wrapper
+        run: chmod +x android_node/gradlew
+
+      - name: Build Android Debug APK
+        working-directory: android_node
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Upload Android Debug APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vivy-android-node-debug-apk
+          path: android_node/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: warn
+          retention-days: 14
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # 4. PACKAGING & DISTRIBUTION ARTIFACTS
+  # ──────────────────────────────────────────────────────────────────────────
+  package_artifacts:
+    name: Package Deployment Artifacts
+    needs: [security_audit, python_validation, android_validation]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Build Distributable Archives
+        run: |
+          python scripts/package_release.py --output-dir dist
+
+      - name: Upload Vivy Core Distribution Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vivy-core-distribution
+          path: dist/vivy-core-distribution.zip
+          retention-days: 30
+
+      - name: Upload Vivy Windows Node Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vivy-windows-node
+          path: dist/vivy-windows-node.zip
+          retention-days: 30
+
+      - name: Upload Deployment Manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-manifest
+          path: dist/deployment-manifest.json
+          retention-days: 30
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # 5. GITHUB RELEASE CREATION (ON TAG OR WORKFLOW DISPATCH)
+  # ──────────────────────────────────────────────────────────────────────────
+  create_release:
+    name: Create GitHub Release
+    needs: [package_artifacts]
+    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.create_release == true)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Packaged Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release_artifacts
+
+      - name: Determine Release Tag
+        id: vars
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ inputs.release_tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Flatten Artifact Files for Release
+        run: |
+          mkdir -p release_files
+          find release_artifacts -type f -exec cp {} release_files/ \;
+          ls -la release_files/
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.vars.outputs.tag }}
+          name: "Vivy AI Release ${{ steps.vars.outputs.tag }}"
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: release_files/*

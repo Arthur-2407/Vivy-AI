@@ -16,6 +16,7 @@
   <img src="https://img.shields.io/badge/Memory-Semantic%20Search%20%7C%20Knowledge%20Graph-10b981?style=for-the-badge" alt="Memory"/>
   <img src="https://img.shields.io/badge/Avatar-MateEngine%20%7C%20VRM-ec4899?style=for-the-badge" alt="Avatar"/>
   <img src="https://img.shields.io/badge/Architecture-v2.0-6366f1?style=for-the-badge" alt="Architecture v2.0"/>
+  <img src="https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088ff?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI/CD"/>
   <img src="https://img.shields.io/badge/License-Vivy%20AI%20License-f97316?style=for-the-badge" alt="License"/>
 </p>
 
@@ -1780,6 +1781,52 @@ Vivy AI is licensed under the **Vivy AI License**. Please see the [`LICENSE`](./
 For a comprehensive list of third-party dependencies, open-source libraries, and their respective licenses, please refer to the [`NOTICE`](./NOTICE) file.
 
 This repository also contains **MateEngine**, located in the `Mate-Engine/` directory. MateEngine and any files derived from it are licensed separately under the **MateEngine Pro License**. See `Mate-Engine/LICENSE` for details.
+
+---
+
+## GitHub CI/CD & Automated Deployment Pipeline
+
+Vivy AI uses an automated GitHub Actions CI/CD pipeline (`.github/workflows/deploy.yml`) to guarantee repository integrity, execute security scans, compile and validate architectural contracts, test headless subsystems, build Android edge node APKs, and produce downloadable distribution artifacts for local deployment.
+
+```
+Local Source (D:\Vivy) ──> GitHub Repository ──> GitHub Actions CI/CD
+                                                       │
+         ┌──────────────────┬──────────────────────────┼─────────────────────────┐
+         ▼                  ▼                          ▼                         ▼
+   Security Audit   Python & Architecture Tests   Android Node APK Build   Distribution Packaging
+  (Secret scanning)   (compileall + validator)       (Gradle / Java 17)      (Core Zip + Edge Node)
+                                                                                 │
+                                                                                 ▼
+                                                                     GitHub Artifacts & Releases
+```
+
+### Automated Stages
+1. **Security & Secret Audit**: Scans tracked files for accidental API keys, tokens, private keys, `.env` files, or Android signing secrets.
+2. **Python & Architecture Validation**:
+   - Validates bytecode compilation across core subsystems (`hub`, `contracts`, `agi`, `pipeline`, `action`, `evolution`, etc.).
+   - Executes canonical `architecture_validator.py` pre-flight checks to guarantee zero pipeline breakage.
+3. **Headless Unit & Subsystem Tests**: Runs automated pytest suites for hub capability negotiation, transport protocol, node pairing, database persistence, and cognitive planning.
+4. **Android Edge Node Build**: Validates Gradle Kotlin compilation and builds `app-debug.apk` in `android_node/`.
+5. **Distribution Packaging & Release**:
+   - Generates `vivy-core-distribution.zip` (clean runtime without large weights or caches).
+   - Generates `vivy-windows-node.zip` (standalone Windows edge node).
+   - Generates `deployment-manifest.json` with SHA-256 hashes, commit SHA, and model prerequisites.
+   - Publishes versioned GitHub Releases on Git tags or manual dispatch.
+
+### Local Deployment from Artifacts
+Vivy remains **strictly local-first**. GitHub provides automated testing and distribution; the AI inference, avatar rendering, and multimodal sensory loops run entirely on your local machine:
+1. Download `vivy-core-distribution.zip` from the latest GitHub Release or Actions Artifact.
+2. Extract to a local folder and initialize your virtual environment:
+   ```bash
+   python -m venv venv
+   .\venv\Scripts\activate
+   ```
+3. Place model weights in `models/` and `rvc_cpu/assets/weights/` as described in [Model Requirements](#prerequisites--hardware-requirements).
+4. Launch the local runtime:
+   ```bash
+   python run_vivy.py
+   ```
+5. Access your local dashboard at `http://127.0.0.1:8080`.
 
 ---
 
