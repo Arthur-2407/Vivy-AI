@@ -46,9 +46,12 @@ def log(msg: str, status: str = "INFO"):
 
 
 def get_python_exe() -> str:
-    venv_py = BASE_DIR / "venv" / "Scripts" / "python.exe"
-    if venv_py.exists():
-        return str(venv_py)
+    venv_py_win = BASE_DIR / "venv" / "Scripts" / "python.exe"
+    if venv_py_win.exists():
+        return str(venv_py_win)
+    venv_py_nix = BASE_DIR / "venv" / "bin" / "python"
+    if venv_py_nix.exists():
+        return str(venv_py_nix)
     return sys.executable
 
 
@@ -201,23 +204,24 @@ def deploy(target_commit: str = None, dry_run: bool = False, env: str = "product
         return False
 
     # Step 5: Save Deployment Manifest
+    domain = os.environ.get("VIVY_DOMAIN", "").strip()
+    manifest_url = f"https://{domain}" if domain else ""
     manifest = {
         "environment": env,
         "commit_sha": commit,
         "deployed_at": datetime.now(timezone.utc).isoformat(),
         "backup_snapshot": backup_dir.name,
         "status": "HEALTHY",
-        "url": "http://127.0.0.1:8080"
+        "url": manifest_url
     }
     SHARED_DIR.mkdir(parents=True, exist_ok=True)
     DEPLOY_MANIFEST.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
     print("\n" + "=" * 65)
     log("PRODUCTION DEPLOYMENT COMPLETED SUCCESSFULLY!", "PASS")
-    print(f"  Live Dashboard : http://127.0.0.1:8080")
-    print(f"  Avatar Bridge  : ws://127.0.0.1:8765")
-    print(f"  Vivy Hub       : ws://0.0.0.0:8800")
-    print(f"  Deployment SHA : {commit}")
+    if manifest_url:
+        print(f"  Live Public URL : {manifest_url}")
+    print(f"  Deployment SHA  : {commit}")
     print("=" * 65 + "\n")
     return True
 
