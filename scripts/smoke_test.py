@@ -28,7 +28,9 @@ if BASE_DIR not in sys.path:
 class SmokeTestRunner:
     def __init__(self, host: str = "127.0.0.1", web_port: int = 8080,
                  avatar_port: int = 8765, hub_port: int = 8800, rvc_port: int = 8766,
-                 timeout: float = 5.0, retries: int = 3, retry_delay: float = 2.0):
+                 timeout: float = 5.0, retries: int = 3, retry_delay: float = 2.0,
+                 scheme: str = "http"):
+        self.scheme = scheme
         self.host = host
         self.web_port = web_port
         self.avatar_port = avatar_port
@@ -49,7 +51,10 @@ class SmokeTestRunner:
         print(f"{prefix} {category:<20} {message}")
 
     def _http_get(self, path: str) -> tuple[int, dict | str]:
-        url = f"http://{self.host}:{self.web_port}{path}"
+        if (self.scheme == "https" and self.web_port == 443) or (self.scheme == "http" and self.web_port == 80):
+            url = f"{self.scheme}://{self.host}{path}"
+        else:
+            url = f"{self.scheme}://{self.host}:{self.web_port}{path}"
         req = urllib.request.Request(url, headers={"User-Agent": "Vivy-SmokeTest/2.0"})
         try:
             with urllib.request.urlopen(req, timeout=self.timeout) as resp:
@@ -234,6 +239,7 @@ if __name__ == "__main__":
     parser.add_argument("--rvc-port", type=int, default=8766, help="RVC RPC port")
     parser.add_argument("--timeout", type=float, default=5.0, help="Connection timeout in seconds")
     parser.add_argument("--retries", type=int, default=3, help="Max retry count per check")
+    parser.add_argument("--scheme", default="http", choices=["http", "https"], help="Protocol scheme (http/https)")
     parser.add_argument("--json-out", default=None, help="Optional file path to output JSON results")
 
     args = parser.parse_args()
@@ -244,7 +250,8 @@ if __name__ == "__main__":
         hub_port=args.hub_port,
         rvc_port=args.rvc_port,
         timeout=args.timeout,
-        retries=args.retries
+        retries=args.retries,
+        scheme=args.scheme
     )
 
     success = runner.run_all()

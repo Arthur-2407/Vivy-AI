@@ -38,6 +38,7 @@ def test_database_manager_operations():
         assert len(rem_history) == 1
 
     finally:
+        db.close()
         if os.path.exists(db_path):
             try:
                 os.remove(db_path)

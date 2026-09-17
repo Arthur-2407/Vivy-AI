@@ -46,11 +46,16 @@ def log(msg: str, status: str = "INFO"):
 
 
 def get_python_exe() -> str:
+    env_py = os.environ.get("VIVY_PYTHON_EXE")
+    if env_py and Path(env_py).exists():
+        return str(Path(env_py))
+
     known_venvs = [
         BASE_DIR / "venv" / "Scripts" / "python.exe",
         BASE_DIR / "venv" / "bin" / "python",
-        Path(r"D:\Vivy\venv\Scripts\python.exe"),
-        Path(r"C:\Users\SATYAJEET\AppData\Local\Programs\Python\Python310\python.exe"),
+        BASE_DIR.parent / "venv" / "Scripts" / "python.exe",
+        BASE_DIR.parent.parent / "venv" / "Scripts" / "python.exe",
+        Path(sys.executable),
     ]
     for p in known_venvs:
         if p.exists():
@@ -233,7 +238,6 @@ def deploy(target_commit: str = None, dry_run: bool = False, env: str = "product
             BASE_DIR / "deploy" / "caddy" / "caddy.exe",
             BASE_DIR / "deploy" / "caddy" / "caddy",
             Path(r"C:\ProgramData\caddy\caddy.exe"),
-            Path(r"D:\Vivy\deploy\caddy\caddy.exe"),
         ]
         caddy_bin = None
         for c in known_caddys:
@@ -244,8 +248,6 @@ def deploy(target_commit: str = None, dry_run: bool = False, env: str = "product
             caddy_bin = Path(shutil.which("caddy"))
 
         caddyfile = BASE_DIR / "deploy" / "caddy" / "Caddyfile"
-        if not caddyfile.exists():
-            caddyfile = Path(r"D:\Vivy\deploy\caddy\Caddyfile")
 
         if caddy_bin and caddyfile.exists():
             log(f"Starting Caddy reverse proxy ({caddy_bin.name})...", "STEP")

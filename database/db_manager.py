@@ -253,7 +253,7 @@ class DatabaseManager:
     def get_recent_affection_history(self, limit: int = 20) -> list:
         try:
             conn = self._get_connection()
-            cursor = conn.execute("SELECT * FROM affection_history ORDER BY timestamp DESC LIMIT ?", (limit,))
+            cursor = conn.execute("SELECT * FROM affection_history ORDER BY timestamp DESC, id DESC LIMIT ?", (limit,))
             return [dict(row) for row in cursor.fetchall()]
         except Exception as e:
             print(f"[DatabaseManager] Failed to fetch affection history: {e}")
@@ -262,7 +262,7 @@ class DatabaseManager:
     def get_recent_emotion_snapshots(self, limit: int = 20) -> list:
         try:
             conn = self._get_connection()
-            cursor = conn.execute("SELECT * FROM emotion_snapshots ORDER BY timestamp DESC LIMIT ?", (limit,))
+            cursor = conn.execute("SELECT * FROM emotion_snapshots ORDER BY timestamp DESC, id DESC LIMIT ?", (limit,))
             return [dict(row) for row in cursor.fetchall()]
         except Exception as e:
             print(f"[DatabaseManager] Failed to fetch emotion snapshots: {e}")
@@ -308,12 +308,21 @@ class DatabaseManager:
         except Exception as e:
             print(f"[DatabaseManager] Failed to log orchestrator turn: {e}")
 
+    def close(self):
+        """Close connection for current thread."""
+        if hasattr(self._local, "conn") and self._local.conn is not None:
+            try:
+                self._local.conn.close()
+            except Exception:
+                pass
+            self._local.conn = None
+
     def rollback_last_affection(self) -> dict:
         """Rollback helper: restores previous affection snapshot if available."""
         try:
             conn = self._get_connection()
             with conn:
-                cursor = conn.execute("SELECT * FROM affection_history ORDER BY timestamp DESC LIMIT 2")
+                cursor = conn.execute("SELECT * FROM affection_history ORDER BY timestamp DESC, id DESC LIMIT 2")
                 rows = cursor.fetchall()
                 if len(rows) >= 2:
                     conn.execute("DELETE FROM affection_history WHERE id = ?", (rows[0]["id"],))
