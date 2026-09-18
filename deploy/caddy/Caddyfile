@@ -1,47 +1,46 @@
 # Vivy-AI — Production Caddyfile Configuration
 # Automated HTTPS, Reverse Proxy, Security Headers & Hub WebSocket Routing
 # Usage: caddy run --config deploy/caddy/Caddyfile
-
 {
-    admin localhost:2019
+	admin localhost:2019
 }
 
 {$VIVY_DOMAIN:vivy-ai.duckdns.org}, localhost {
-    # Security Headers (enables browser camera, mic, and screen sharing over HTTPS)
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-        X-Content-Type-Options "nosniff"
-        X-Frame-Options "SAMEORIGIN"
-        Referrer-Policy "strict-origin-when-cross-origin"
-        Permissions-Policy "camera=(self), microphone=(self), display-capture=(self)"
-        -Server
-    }
+	# Security Headers (enables browser camera, mic, and screen sharing over HTTPS)
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(self), microphone=(self), display-capture=(self)"
+		-Server
+	}
 
-    # Avatar Bridge WebSocket proxy
-    @avatar_ws {
-        path /avatar_ws*
-    }
-    handle @avatar_ws {
-        reverse_proxy {$VIVY_UPSTREAM:127.0.0.1}:8765
-    }
+	# Avatar Bridge WebSocket proxy
+	@avatar_ws {
+		path /avatar_ws*
+	}
+	handle @avatar_ws {
+		reverse_proxy {$VIVY_UPSTREAM:127.0.0.1}:8765
+	}
 
-    # Hub WebSocket Endpoint proxy
-    @hub_ws {
-        path /hub/*
-    }
-    handle @hub_ws {
-        uri strip_prefix /hub
-        reverse_proxy {$VIVY_UPSTREAM:127.0.0.1}:8800
-    }
+	# Hub WebSocket Endpoint proxy
+	@hub_ws {
+		path /hub/*
+	}
+	handle @hub_ws {
+		uri strip_prefix /hub
+		reverse_proxy {$VIVY_UPSTREAM:127.0.0.1}:8800
+	}
 
-    # Main Web UI & REST API proxy
-    handle {
-        reverse_proxy {$VIVY_UPSTREAM:127.0.0.1}:8080 {
-            header_up X-Forwarded-Proto {scheme}
-            header_up X-Real-IP {remote_host}
-        }
-    }
+	# Main Web UI & REST API proxy
+	handle {
+		reverse_proxy {$VIVY_UPSTREAM:127.0.0.1}:8080 {
+			header_up X-Forwarded-Proto {scheme}
+			header_up X-Real-IP {remote_host}
+		}
+	}
 
-    # Compression
-    encode gzip zstd
+	# Compression
+	encode gzip zstd
 }
