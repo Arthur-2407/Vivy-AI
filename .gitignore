@@ -60,6 +60,7 @@ scratch/
 *.lock
 deploy/caddy/caddy.exe
 deploy/caddy/caddy
+deploy/tunnel/
 *.log
 *.wav
 *.mp3
