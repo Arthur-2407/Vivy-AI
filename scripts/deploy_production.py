@@ -247,6 +247,19 @@ def deploy(target_commit: str = None, dry_run: bool = False, env: str = "product
         if not caddy_bin and shutil.which("caddy"):
             caddy_bin = Path(shutil.which("caddy"))
 
+        if not caddy_bin and sys.platform == "win32":
+            target_caddy = BASE_DIR / "deploy" / "caddy" / "caddy.exe"
+            try:
+                target_caddy.parent.mkdir(parents=True, exist_ok=True)
+                log("Caddy binary missing on Windows host. Acquiring official release...", "STEP")
+                import urllib.request
+                urllib.request.urlretrieve("https://caddyserver.com/api/download?os=windows&arch=amd64", str(target_caddy))
+                if target_caddy.exists() and target_caddy.stat().st_size > 1000000:
+                    caddy_bin = target_caddy
+                    log("Acquired official Caddy Windows binary successfully.", "PASS")
+            except Exception as e:
+                log(f"Automated acquisition of Caddy failed: {e}", "WARN")
+
         caddyfile = BASE_DIR / "deploy" / "caddy" / "Caddyfile"
 
         if caddy_bin and caddyfile.exists():
