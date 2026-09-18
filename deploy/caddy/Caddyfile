@@ -6,7 +6,7 @@
     admin localhost:2019
 }
 
-{$VIVY_DOMAIN:localhost} {
+{$VIVY_DOMAIN:vivy-ai.duckdns.org}, localhost {
     # Security Headers (enables browser camera, mic, and screen sharing over HTTPS)
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"

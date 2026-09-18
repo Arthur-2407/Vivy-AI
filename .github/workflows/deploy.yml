@@ -220,7 +220,7 @@ jobs:
       (github.event_name != 'pull_request')
     environment:
       name: production
-      url: ${{ vars.VIVY_DOMAIN != '' && format('https://{0}', vars.VIVY_DOMAIN) || '' }}
+      url: ${{ vars.VIVY_DOMAIN != '' && format('https://{0}', vars.VIVY_DOMAIN) || 'https://vivy-ai.duckdns.org' }}
     runs-on: ubuntu-latest
     steps:
       - name: Infrastructure Configuration Report
@@ -357,7 +357,7 @@ jobs:
       (github.event_name != 'pull_request')
     environment:
       name: production
-      url: ${{ vars.VIVY_DOMAIN != '' && format('https://{0}', vars.VIVY_DOMAIN) || '' }}
+      url: ${{ vars.VIVY_DOMAIN != '' && format('https://{0}', vars.VIVY_DOMAIN) || 'https://vivy-ai.duckdns.org' }}
     runs-on: [self-hosted, Windows, X64, vivy-production]
     defaults:
       run:
@@ -380,6 +380,8 @@ jobs:
           clean: false
 
       - name: Execute Production Deployment & Rolling Update
+        env:
+          VIVY_DOMAIN: ${{ vars.VIVY_DOMAIN || 'vivy-ai.duckdns.org' }}
         run: |
           $candidates = @(
               $env:VIVY_PYTHON_EXE,
